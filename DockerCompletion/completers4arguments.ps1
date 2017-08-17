@@ -3,6 +3,22 @@ $containerRunning = { docker container ls --format '{{ .Names }}' --filter 'stat
 
 $formatBasic = @("'{{json .}}'")
 
+$logDriver = {
+	'awslogs'
+	'etwlogs'
+	'fluentd'
+	'gcplogs'
+	'gelf'
+	'journald'
+	'json-file'
+	'logentries'
+	'none'
+	'splunk'
+	'syslog'
+}
+
+$networkAll = { docker network ls --format '{{ .Name }}' }
+
 $repositoryWithTag = {
 	docker image ls --format '{{ .Repository }}' | Sort-Object
 	docker image ls --format '{{ .Repository }}:{{ .Tag }}' | Sort-Object
@@ -22,6 +38,7 @@ Register-Completer 'docker_image_tag' $repositoryWithTag
 
 Register-Completer 'docker_container_attach' $containerRunning
 Register-Completer 'docker_container_create' $repositoryWithTag
+Register-Completer 'docker_container_create_--log-driver' $logDriver
 Register-Completer 'docker_container_diff' $containerAll
 Register-Completer 'docker_container_exec' $containerRunning
 Register-Completer 'docker_container_export' $containerAll
@@ -51,6 +68,7 @@ Register-Completer 'docker_container_rm' {
 	}
 }
 Register-Completer 'docker_container_run' $repositoryWithTag
+Register-Completer 'docker_container_run_--log-driver' $logDriver
 Register-Completer 'docker_container_start' {
 	docker container ls --format '{{ .Names }}' --filter 'status=created' --filter 'status=exited'
 }
@@ -59,8 +77,13 @@ Register-Completer 'docker_container_stop' $containerRunning
 Register-Completer 'docker_container_top' $containerRunning
 Register-Completer 'docker_container_wait' $containerAll
 
-Register-Completer 'docker_network_inspect' { docker network ls --format '{{ .Name }}' }
+Register-Completer 'docker_network_inspect' $networkAll
 Register-Completer 'docker_network_rm' { docker network ls --format '{{ .Name }}' --filter type=custom }
+
+Register-Completer 'docker_service_create_--log-driver' $logDriver
+Register-Completer 'docker_service_update_--log-driver' $logDriver
+Register-Completer 'docker_service_update_--network-add' $networkAll
+Register-Completer 'docker_service_update_--network-rm' $networkAll
 
 Register-Completer 'docker_system_df_--format' $formatBasic
 Register-Completer 'docker_system_events_--format' $formatBasic
@@ -72,6 +95,7 @@ if ($env:DOCKER_HIDE_LEGACY_COMMANDS) {
 
 Register-Completer 'docker_attach' (Get-Completer 'docker_container_attach')
 Register-Completer 'docker_create' (Get-Completer 'docker_container_create')
+Register-Completer 'docker_create_--log-driver' (Get-Completer 'docker_container_create_--log-driver')
 Register-Completer 'docker_diff' (Get-Completer 'docker_container_diff')
 Register-Completer 'docker_events_--format' (Get-Completer 'docker_system_events_--format')
 Register-Completer 'docker_exec' (Get-Completer 'docker_container_exec')
@@ -91,6 +115,7 @@ Register-Completer 'docker_rm' (Get-Completer 'docker_container_rm')
 Register-Completer 'docker_rmi' (Get-Completer 'docker_image_rm')
 Register-Completer 'docker_restart' (Get-Completer 'docker_container_restart')
 Register-Completer 'docker_run' (Get-Completer 'docker_container_run')
+Register-Completer 'docker_run_--log-driver' (Get-Completer 'docker_container_run_--log-driver')
 Register-Completer 'docker_save' (Get-Completer 'docker_image_save')
 Register-Completer 'docker_start' (Get-Completer 'docker_container_start')
 Register-Completer 'docker_stats' (Get-Completer 'docker_container_stats')
