@@ -16,10 +16,10 @@ function Select-CompletionResult {
 			$CompletionResult = $CompletionResult | Where-Object { $_.CompletionText -Like '-*' -and $_.TextType -NE 'Switch' }
 		}
 		if ($LegacyCommand) {
-			$CompletionResult = $CompletionResult | Where-Object TextType -EQ 'legacyCommand'
+			$CompletionResult = $CompletionResult | Where-Object TextType -EQ 'LegacyCommand'
 		}
 		if ($SubCommand) {
-			$CompletionResult = $CompletionResult | Where-Object TextType -EQ 'subCommand'
+			$CompletionResult = $CompletionResult | Where-Object TextType -EQ 'SubCommand'
 		}
 		$CompletionResult
 	}
@@ -38,6 +38,7 @@ $argumentCompleter = {
 	$managementCommand = $null
 	$subCommand = $null
 	$legacyCommand = $null
+	$indexOfFirstArg = -1
 	$counter = 1
 
 	for (; $counter -lt $commandAst.CommandElements.Count; $counter++) {
@@ -73,6 +74,8 @@ $argumentCompleter = {
 				$subCommand = $text
 				$completerName += "_$subCommand"
 			}
+		} elseif ($indexOfFirstArg -lt 0) {
+			$indexOfFirstArg = $counter
 		}
 	}
 
@@ -94,7 +97,7 @@ $argumentCompleter = {
 	if ($wordToComplete.StartsWith('-')) {
 		$completionResult = Invoke-Completer $completerName -Option -ArgumentList $wordToComplete, $commandAst, $cursorPosition
 	} else {
-		$completionResult = Invoke-Completer $completerName -Completer -ArgumentList $wordToComplete, $commandAst, $cursorPosition
+		$completionResult = Invoke-Completer $completerName -Completer -ArgumentList $wordToComplete, $commandAst, $cursorPosition, $indexOfFirstArg
 	}
 
 	$completionResult | Where-Object CompletionText -Like "$wordToCompleteSubstring*"
