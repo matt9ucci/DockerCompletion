@@ -24,6 +24,8 @@ $repositoryWithTag = {
 	docker image ls --format '{{.Repository}}:{{.Tag}}' | Sort-Object
 }
 
+$volumeAll = { docker volume ls --quiet }
+
 Register-Completer 'docker_--log-level' { 'debug', 'info', 'warn', 'error', 'fatal' }
 Register-Completer 'docker_-l' (Get-Completer 'docker_--log-level')
 
@@ -45,6 +47,9 @@ Register-Completer 'docker_container_commit' {
 }
 Register-Completer 'docker_container_create' $repositoryWithTag
 Register-Completer 'docker_container_create_--log-driver' $logDriver
+Register-Completer 'docker_container_create_--volume' $volumeAll
+Register-Completer 'docker_container_create_-v' (Get-Completer 'docker_container_create_--volume')
+Register-Completer 'docker_container_create_--volumes-from' $containerAll
 Register-Completer 'docker_container_diff' $containerAll
 Register-Completer 'docker_container_exec' $containerRunning
 Register-Completer 'docker_container_export' $containerAll
@@ -75,7 +80,7 @@ Register-Completer 'docker_container_ls_--filter' {
 		return
 	}
 
-	$key, $valueToComplete = $wordToComplete -split '='
+	$key = ($wordToComplete -split '=')[0]
 	$values = switch ($key) {
 		'ancestor' {
 			docker image ls --format '{{.Repository}}' | Sort-Object
@@ -104,7 +109,7 @@ Register-Completer 'docker_container_ls_--filter' {
 	}
 
 	foreach ($v in $values) {
-		COMPGEN ($key + '=' + $v) 'string' $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+		COMPGEN "$key=$v" 'string' $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
 	}
 }
 Register-Completer 'docker_container_ls_-f' (Get-Completer 'docker_container_ls_--filter')
@@ -135,6 +140,9 @@ Register-Completer 'docker_container_run_--log-driver' $logDriver
 Register-Completer 'docker_container_start' {
 	docker container ls --format '{{.Names}}' --filter 'status=created' --filter 'status=exited'
 }
+Register-Completer 'docker_container_run_--volume' $volumeAll
+Register-Completer 'docker_container_run_-v' (Get-Completer 'docker_container_run_--volume')
+Register-Completer 'docker_container_run_--volumes-from' $containerAll
 Register-Completer 'docker_container_stats' $containerRunning
 Register-Completer 'docker_container_stop' $containerRunning
 Register-Completer 'docker_container_top' $containerRunning
@@ -168,7 +176,7 @@ Register-Completer 'docker_image_ls_--filter' {
 		return
 	}
 	
-	$key, $valueToComplete = $wordToComplete -split '='
+	$key = ($wordToComplete -split '=')[0]
 	$values = switch ($key) {
 		{ 'before', 'since', 'reference' -contains $_ } {
 			docker image ls --format '{{.Repository}}' | Sort-Object
@@ -178,7 +186,7 @@ Register-Completer 'docker_image_ls_--filter' {
 	}
 	
 	foreach ($v in $values) {
-		COMPGEN ($key + '=' + $v) 'string' $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+		COMPGEN "$key=$v" 'string' $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
 	}
 }
 Register-Completer 'docker_image_ls_-f' (Get-Completer 'docker_image_ls_--filter')
@@ -188,6 +196,25 @@ Register-Completer 'docker_image_rm' $repositoryWithTag
 Register-Completer 'docker_image_save' $repositoryWithTag
 Register-Completer 'docker_image_tag' $repositoryWithTag
 
+Register-Completer 'docker_network_connect' {
+	Param([string]$wordToComplete, $commandAst, $cursorPosition, $indexOfFirstArg)
+	
+	if ($indexOfFirstArg -lt 0) {
+		docker network ls --format '{{.Name}}'
+	} else {
+		$extent = $commandAst.CommandElements[$indexOfFirstArg].Extent
+		if (($extent.StartOffset -le $cursorPosition) -and ($cursorPosition -le $extent.EndOffset)) {
+			docker network ls --format '{{.Name}}'
+		} else {
+			docker container ls --format '{{.Names}}' --all
+		}
+	}
+}
+Register-Completer 'docker_network_create_--driver' {
+	(docker system info --format '{{json .Plugins.Network}}' | ConvertFrom-Json) |
+		Where-Object { $_ -notin @('host', 'null') }
+}
+Register-Completer 'docker_network_create_-d' (Get-Completer 'docker_network_create_--driver')
 Register-Completer 'docker_network_inspect' $networkAll
 Register-Completer 'docker_network_rm' { docker network ls --format '{{.Name}}' --filter type=custom }
 
@@ -202,8 +229,30 @@ Register-Completer 'docker_system_df_--format' $formatBasic
 Register-Completer 'docker_system_events_--format' $formatBasic
 Register-Completer 'docker_system_info_--format' $formatBasic
 
-Register-Completer 'docker_volume_inspect' { docker volume ls --quiet }
-Register-Completer 'docker_volume_rm' { docker volume ls --quiet }
+Register-Completer 'docker_volume_inspect' $volumeAll
+Register-Completer 'docker_volume_ls_--filter' {
+	Param([string]$wordToComplete)
+	
+	if ($wordToComplete -notlike '*=*') {
+		COMPGEN 'dangling' 'string' 'Referenced or not'
+		COMPGEN 'driver' 'string' 'Volume''s driver name'
+		COMPGEN 'label' 'string' '<key> or <key>=<value>'
+		COMPGEN 'name' 'string' 'Volume''s name'
+		return
+	}
+	
+	$key = ($wordToComplete -split '=')[0]
+	$values = switch ($key) {
+		'dangling' { 'true', 'false' }
+		'driver' { docker system info --format '{{json .Plugins.Volume}}' | ConvertFrom-Json }
+		'name' { docker volume ls --quiet }
+	}
+
+	foreach ($v in $values) {
+		COMPGEN "$key=$v" 'string' $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+	}
+}
+Register-Completer 'docker_volume_rm' $volumeAll
 
 if ($env:DOCKER_HIDE_LEGACY_COMMANDS) {
 	return
@@ -213,6 +262,9 @@ Register-Completer 'docker_attach' (Get-Completer 'docker_container_attach')
 Register-Completer 'docker_commit' (Get-Completer 'docker_container_commit')
 Register-Completer 'docker_create' (Get-Completer 'docker_container_create')
 Register-Completer 'docker_create_--log-driver' (Get-Completer 'docker_container_create_--log-driver')
+Register-Completer 'docker_create_--volume' (Get-Completer 'docker_container_create_--volume')
+Register-Completer 'docker_create_-v' (Get-Completer 'docker_create_--volume')
+Register-Completer 'docker_create_--volumes-from' (Get-Completer 'docker_container_create_--volumes-from')
 Register-Completer 'docker_diff' (Get-Completer 'docker_container_diff')
 Register-Completer 'docker_events_--format' (Get-Completer 'docker_system_events_--format')
 Register-Completer 'docker_exec' (Get-Completer 'docker_container_exec')
@@ -221,7 +273,7 @@ Register-Completer 'docker_history' (Get-Completer 'docker_image_history')
 Register-Completer 'docker_images' (Get-Completer 'docker_image_ls')
 Register-Completer 'docker_import' (Get-Completer 'docker_image_import')
 Register-Completer 'docker_images_--filter' (Get-Completer 'docker_image_ls_--filter')
-Register-Completer 'docker_images_-f' (Get-Completer 'docker_image_ls_-f')
+Register-Completer 'docker_images_-f' (Get-Completer 'docker_images_--filter')
 Register-Completer 'docker_images_--format' (Get-Completer 'docker_image_ls_--format')
 Register-Completer 'docker_info_--format' (Get-Completer 'docker_system_info_--format')
 Register-Completer 'docker_inspect_--type' { 'container', 'image', 'network', 'node', 'plugin', 'secret', 'service', 'volume'}
@@ -230,15 +282,18 @@ Register-Completer 'docker_logs' (Get-Completer 'docker_container_logs')
 Register-Completer 'docker_pause' (Get-Completer 'docker_container_pause')
 Register-Completer 'docker_port' (Get-Completer 'docker_container_port')
 Register-Completer 'docker_ps_--filter' (Get-Completer 'docker_container_ls_--filter')
-Register-Completer 'docker_ps_-f' (Get-Completer 'docker_container_ls_-f')
+Register-Completer 'docker_ps_-f' (Get-Completer 'docker_ps_--filter')
 Register-Completer 'docker_ps_--format' (Get-Completer 'docker_container_ls_--format')
 Register-Completer 'docker_push' (Get-Completer 'docker_image_push')
 Register-Completer 'docker_rename' (Get-Completer 'docker_container_rename')
+Register-Completer 'docker_restart' (Get-Completer 'docker_container_restart')
 Register-Completer 'docker_rm' (Get-Completer 'docker_container_rm')
 Register-Completer 'docker_rmi' (Get-Completer 'docker_image_rm')
-Register-Completer 'docker_restart' (Get-Completer 'docker_container_restart')
 Register-Completer 'docker_run' (Get-Completer 'docker_container_run')
 Register-Completer 'docker_run_--log-driver' (Get-Completer 'docker_container_run_--log-driver')
+Register-Completer 'docker_run_--volume' (Get-Completer 'docker_container_run_--volume')
+Register-Completer 'docker_run_-v' (Get-Completer 'docker_run_--volume')
+Register-Completer 'docker_run_--volumes-from' (Get-Completer 'docker_container_run_--volumes-from')
 Register-Completer 'docker_save' (Get-Completer 'docker_image_save')
 Register-Completer 'docker_start' (Get-Completer 'docker_container_start')
 Register-Completer 'docker_stats' (Get-Completer 'docker_container_stats')

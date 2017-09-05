@@ -37,9 +37,15 @@ C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules
 
 If your target path is `C:\Users\matt9ucci\Documents\WindowsPowerShell\Modules`, execute the following commands:
 ```powershell
+# Uninstall
+Remove-Item $HOME\Documents\WindowsPowerShell\Modules\DockerCompletion -Recurse -Force
+# Download and Install
 Invoke-WebRequest https://github.com/matt9ucci/DockerCompletion/archive/master.zip -OutFile master.zip
 Expand-Archive master.zip
-Copy-Item master\DockerCompletion-master\DockerCompletion "$HOME\Documents\WindowsPowerShell\Modules" -Recurse
+Move-Item master\DockerCompletion-master\DockerCompletion "$HOME\Documents\WindowsPowerShell\Modules"
+# Clean up
+Remove-Item master.zip
+Remove-Item master -Recurse -Force
 ```
 `$HOME` is a PowerShell's automatic variable containing the full path of the user's home directory (in this case `C:\Users\matt9ucci`). 
 
