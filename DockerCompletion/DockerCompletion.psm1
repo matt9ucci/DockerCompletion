@@ -16,12 +16,25 @@ function Select-CompletionResult {
 			$CompletionResult = $CompletionResult | Where-Object { $_.CompletionText -Like '-*' -and $_.TextType -NE 'Switch' }
 		}
 		if ($LegacyCommand) {
-			$CompletionResult = $CompletionResult | Where-Object TextType -EQ 'LegacyCommand'
+			$CompletionResult = $CompletionResult | Where-Object TextType -EQ LegacyCommand
 		}
 		if ($SubCommand) {
-			$CompletionResult = $CompletionResult | Where-Object TextType -EQ 'SubCommand'
+			$CompletionResult = $CompletionResult | Where-Object TextType -EQ SubCommand
 		}
 		$CompletionResult
+	}
+}
+
+function Invoke-CompletionCustomScript {
+	Param(
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+		[string[]]$Path
+	)
+
+	Process {
+		foreach ($p in $Path) {
+			. $p
+		}
 	}
 }
 
@@ -103,4 +116,4 @@ $argumentCompleter = {
 	$completionResult | Where-Object CompletionText -Like "$wordToCompleteSubstring*"
 }
 
-Register-NativeCommandArgumentCompleter 'docker' $argumentCompleter
+Register-NativeCommandArgumentCompleter docker $argumentCompleter

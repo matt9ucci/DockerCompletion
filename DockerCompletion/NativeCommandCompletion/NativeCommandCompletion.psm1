@@ -89,8 +89,8 @@ function Invoke-Completer {
 	)
 
 	$cmpltr = switch ($PSCmdlet.ParameterSetName) {
-		'Completer' { $nativeCommandCompleters[$Name].completer }
-		'Parameter' { $nativeCommandCompleters[$Name].parameter }
+		Completer { $nativeCommandCompleters[$Name].completer }
+		Parameter { $nativeCommandCompleters[$Name].parameter }
 	}
 
 	if ($cmpltr -is [scriptblock]) {
@@ -101,7 +101,7 @@ function Invoke-Completer {
 		if ($c -is [NativeCommandCompletionResult]) {
 			$c
 		} else {
-			New-CompletionResult -CompletionText $c -TextType 'Text' -ResultType ([System.Management.Automation.CompletionResultType]::Text)
+			New-CompletionResult -CompletionText $c -TextType Text -ResultType ([System.Management.Automation.CompletionResultType]::Text)
 		}
 	}
 }
@@ -115,19 +115,8 @@ function Register-NativeCommandArgumentCompleter {
 	)
 
 	$CommandName, (Get-Alias -Definition $CommandName -ErrorAction SilentlyContinue).Name | ForEach-Object {
-		Register-ArgumentCompleter -CommandName $_ -ScriptBlock $ScriptBlock -Native
-	}
-}
-
-function Invoke-CompletionCustomScript {
-	Param(
-		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-		[string[]]$Path
-	)
-
-	Process {
-		foreach ($p in $Path) {
-			. $p
+		if ($_) {
+			Register-ArgumentCompleter -CommandName $_ -ScriptBlock $ScriptBlock -Native
 		}
 	}
 }

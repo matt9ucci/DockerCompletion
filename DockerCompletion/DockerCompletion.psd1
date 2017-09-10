@@ -4,7 +4,7 @@
 RootModule = 'DockerCompletion'
 
 # Version number of this module.
-ModuleVersion = '1.1708.0.170909'
+ModuleVersion = '1.1708.0.170915'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -58,7 +58,7 @@ PowerShellVersion = '5.0'
 # FormatsToProcess = @()
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-NestedModules = @('NativeCommandCompletion')
+NestedModules = @('NativeCommandCompletion', 'DockerCompletionUtility')
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = @()
@@ -99,7 +99,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'Add completers.'
+        ReleaseNotes = 'Fix error when there is no alias.'
 
     } # End of PSData hashtable
 
