@@ -15,9 +15,17 @@ $managementCommands = @(
 	COMPGEN volume ManagementCommand 'Manage volumes'
 )
 
+$topLevelCommands = @(
+	COMPGEN build TopLevelCommand 'Build an image from a Dockerfile'
+	COMPGEN login TopLevelCommand 'Log in to a Docker registry'
+	COMPGEN logout TopLevelCommand 'Log out from a Docker registry'
+	COMPGEN run TopLevelCommand 'Run a command in a new container'
+	COMPGEN search TopLevelCommand 'Search the Docker Hub for images'
+	COMPGEN version TopLevelCommand 'Show the Docker version information'
+)
+
 $legacyCommands = @(
 	COMPGEN attach LegacyCommand 'Attach local standard input, output, and error streams to a running container'
-	COMPGEN build LegacyCommand 'Build an image from a Dockerfile'
 	COMPGEN commit LegacyCommand 'Create a new image from a container''s changes'
 	COMPGEN cp LegacyCommand 'Copy files/folders between a container and the local filesystem'
 	COMPGEN create LegacyCommand 'Create a new container'
@@ -33,8 +41,6 @@ $legacyCommands = @(
 	COMPGEN inspect LegacyCommand 'Return low-level information on Docker objects'
 	COMPGEN kill LegacyCommand 'Kill one or more running containers'
 	COMPGEN load LegacyCommand 'Load an image from a tar archive or STDIN'
-	COMPGEN login LegacyCommand 'Log in to a Docker registry'
-	COMPGEN logout LegacyCommand 'Log out from a Docker registry'
 	COMPGEN logs LegacyCommand 'Fetch the logs of a container'
 	COMPGEN pause LegacyCommand 'Pause all processes within one or more containers'
 	COMPGEN port LegacyCommand 'List port mappings or a specific mapping for the container'
@@ -45,9 +51,7 @@ $legacyCommands = @(
 	COMPGEN restart LegacyCommand 'Restart one or more containers'
 	COMPGEN rm LegacyCommand 'Remove one or more containers'
 	COMPGEN rmi LegacyCommand 'Remove one or more images'
-	COMPGEN run LegacyCommand 'Run a command in a new container'
 	COMPGEN save LegacyCommand 'Save one or more images to a tar archive (streamed to STDOUT by default)'
-	COMPGEN search LegacyCommand 'Search the Docker Hub for images'
 	COMPGEN start LegacyCommand 'Start one or more stopped containers'
 	COMPGEN stats LegacyCommand 'Display a live stream of container(s) resource usage statistics'
 	COMPGEN stop LegacyCommand 'Stop one or more running containers'
@@ -55,14 +59,13 @@ $legacyCommands = @(
 	COMPGEN top LegacyCommand 'Display the running processes of a container'
 	COMPGEN unpause LegacyCommand 'Unpause all processes within one or more containers'
 	COMPGEN update LegacyCommand 'Update configuration of one or more containers'
-	COMPGEN version LegacyCommand 'Show the Docker version information'
 	COMPGEN wait LegacyCommand 'Block until one or more containers stop, then print their exit codes'
 )
 
 if ($env:DOCKER_HIDE_LEGACY_COMMANDS) {
-	Register-Completer docker $managementCommands
+	Register-Completer docker ($managementCommands + $topLevelCommands)
 } else {
-	Register-Completer docker ($managementCommands + $legacyCommands)
+	Register-Completer docker ($managementCommands + $topLevelCommands + $legacyCommands)
 }
 
 Register-Completer docker -Option {
@@ -1249,16 +1252,6 @@ Register-Completer docker_volume_rm -Option {
 	COMPGEN --force Switch 'Force the removal of one or more volumes'
 }
 
-if ($env:DOCKER_HIDE_LEGACY_COMMANDS) {
-	return
-}
-
-Register-Completer docker_attach -Option {
-	COMPGEN --detach-keys string 'Override the key sequence for detaching a container'
-	COMPGEN --no-stdin Switch 'Do not attach STDIN'
-	COMPGEN --sig-proxy Switch 'Proxy all received signals to the process'
-}
-
 Register-Completer docker_build -Option {
 	COMPGEN --add-host list 'Add a custom host-to-IP mapping (host:ip)'
 	COMPGEN --build-arg list 'Set build-time variables'
@@ -1295,6 +1288,149 @@ Register-Completer docker_build -Option {
 	COMPGEN --tag list 'Name and optionally a tag in the ''name:tag'' format'
 	COMPGEN --target string 'Set the target build stage to build.'
 	COMPGEN --ulimit ulimit 'Ulimit options'
+}
+
+Register-Completer docker_login -Option {
+	COMPGEN '-p' string 'Password'
+	COMPGEN --password string 'Password'
+	COMPGEN --password-stdin Switch 'Take the password from stdin'
+	COMPGEN '-u' string 'Username'
+	COMPGEN --username string 'Username'
+}
+
+Register-Completer docker_run -Option {
+	COMPGEN --add-host list 'Add a custom host-to-IP mapping (host:ip)'
+	COMPGEN '-a' list 'Attach to STDIN, STDOUT or STDERR'
+	COMPGEN --attach list 'Attach to STDIN, STDOUT or STDERR'
+	COMPGEN --blkio-weight uint16 'Block IO (relative weight), between 10 and 1000, or 0 to disable (default 0)'
+	COMPGEN --blkio-weight-device list 'Block IO weight (relative device weight)'
+	COMPGEN --cap-add list 'Add Linux capabilities'
+	COMPGEN --cap-drop list 'Drop Linux capabilities'
+	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
+	COMPGEN --cidfile string 'Write the container ID to the file'
+	COMPGEN --cpu-count int 'CPU count (Windows only)'
+	COMPGEN --cpu-percent int 'CPU percent (Windows only)'
+	COMPGEN --cpu-period int 'Limit CPU CFS (Completely Fair Scheduler) period'
+	COMPGEN --cpu-quota int 'Limit CPU CFS (Completely Fair Scheduler) quota'
+	COMPGEN --cpu-rt-period int 'Limit CPU real-time period in microseconds'
+	COMPGEN --cpu-rt-runtime int 'Limit CPU real-time runtime in microseconds'
+	COMPGEN '-c' int 'CPU shares (relative weight)'
+	COMPGEN --cpu-shares int 'CPU shares (relative weight)'
+	COMPGEN --cpus decimal 'Number of CPUs'
+	COMPGEN --cpuset-cpus string 'CPUs in which to allow execution (0-3, 0,1)'
+	COMPGEN --cpuset-mems string 'MEMs in which to allow execution (0-3, 0,1)'
+	COMPGEN '-d' Switch 'Run container in background and print container ID'
+	COMPGEN --detach Switch 'Run container in background and print container ID'
+	COMPGEN --detach-keys string 'Override the key sequence for detaching a container'
+	COMPGEN --device list 'Add a host device to the container'
+	COMPGEN --device-cgroup-rule list 'Add a rule to the cgroup allowed devices list'
+	COMPGEN --device-read-bps list 'Limit read rate (bytes per second) from a device'
+	COMPGEN --device-read-iops list 'Limit read rate (IO per second) from a device'
+	COMPGEN --device-write-bps list 'Limit write rate (bytes per second) to a device'
+	COMPGEN --device-write-iops list 'Limit write rate (IO per second) to a device'
+	COMPGEN --disable-content-trust Switch 'Skip image verification'
+	COMPGEN --dns list 'Set custom DNS servers'
+	COMPGEN --dns-option list 'Set DNS options'
+	COMPGEN --dns-search list 'Set custom DNS search domains'
+	COMPGEN --entrypoint string 'Overwrite the default ENTRYPOINT of the image'
+	COMPGEN '-e' list 'Set environment variables'
+	COMPGEN --env list 'Set environment variables'
+	COMPGEN --env-file list 'Read in a file of environment variables'
+	COMPGEN --expose list 'Expose a port or a range of ports'
+	COMPGEN --group-add list 'Add additional groups to join'
+	COMPGEN --health-cmd string 'Command to run to check health'
+	COMPGEN --health-interval duration 'Time between running the check (ms|s|m|h) (default 0s)'
+	COMPGEN --health-retries int 'Consecutive failures needed to report unhealthy'
+	COMPGEN --health-start-period duration 'Start period for the container to initialize before starting health-retries countdown (ms|s|m|h) (default 0s)'
+	COMPGEN --health-timeout duration 'Maximum time to allow one check to run (ms|s|m|h) (default 0s)'
+	COMPGEN --help Switch 'Print usage'
+	COMPGEN '-h' string 'Container host name'
+	COMPGEN --hostname string 'Container host name'
+	COMPGEN --init Switch 'Run an init inside the container that forwards signals and reaps processes'
+	COMPGEN '-i' Switch 'Keep STDIN open even if not attached'
+	COMPGEN --interactive Switch 'Keep STDIN open even if not attached'
+	COMPGEN --io-maxbandwidth bytes 'Maximum IO bandwidth limit for the system drive (Windows only)'
+	COMPGEN --io-maxiops uint 'Maximum IOps limit for the system drive (Windows only)'
+	COMPGEN --ip string 'IPv4 address (e.g., 172.30.100.104)'
+	COMPGEN --ip6 string 'IPv6 address (e.g., 2001:db8::33)'
+	COMPGEN --ipc string 'IPC mode to use'
+	COMPGEN --isolation string 'Container isolation technology'
+	COMPGEN --kernel-memory bytes 'Kernel memory limit'
+	COMPGEN '-l' list 'Set meta data on a container'
+	COMPGEN --label list 'Set meta data on a container'
+	COMPGEN --label-file list 'Read in a line delimited file of labels'
+	COMPGEN --link list 'Add link to another container'
+	COMPGEN --link-local-ip list 'Container IPv4/IPv6 link-local addresses'
+	COMPGEN --log-driver string 'Logging driver for the container'
+	COMPGEN --log-opt list 'Log driver options'
+	COMPGEN --mac-address string 'Container MAC address (e.g., 92:d0:c6:0a:29:33)'
+	COMPGEN '-m' bytes 'Memory limit'
+	COMPGEN --memory bytes 'Memory limit'
+	COMPGEN --memory-reservation bytes 'Memory soft limit'
+	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: ''-1'' to enable unlimited swap'
+	COMPGEN --memory-swappiness int 'Tune container memory swappiness (0 to 100)'
+	COMPGEN --mount mount 'Attach a filesystem mount to the container'
+	COMPGEN --name string 'Assign a name to the container'
+	COMPGEN --network string 'Connect a container to a network'
+	COMPGEN --network-alias list 'Add network-scoped alias for the container'
+	COMPGEN --no-healthcheck Switch 'Disable any container-specified HEALTHCHECK'
+	COMPGEN --oom-kill-disable Switch 'Disable OOM Killer'
+	COMPGEN --oom-score-adj int 'Tune host''s OOM preferences (-1000 to 1000)'
+	COMPGEN --pid string 'PID namespace to use'
+	COMPGEN --pids-limit int 'Tune container pids limit (set -1 for unlimited)'
+	COMPGEN --privileged Switch 'Give extended privileges to this container'
+	COMPGEN '-p' list 'Publish a container''s port(s) to the host'
+	COMPGEN --publish list 'Publish a container''s port(s) to the host'
+	COMPGEN '-P' Switch 'Publish all exposed ports to random ports'
+	COMPGEN --publish-all Switch 'Publish all exposed ports to random ports'
+	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
+	COMPGEN --restart string 'Restart policy to apply when a container exits'
+	COMPGEN --rm Switch 'Automatically remove the container when it exits'
+	COMPGEN --runtime string 'Runtime to use for this container'
+	COMPGEN --security-opt list 'Security Options'
+	COMPGEN --shm-size bytes 'Size of /dev/shm'
+	COMPGEN --sig-proxy Switch 'Proxy received signals to the process'
+	COMPGEN --stop-signal string 'Signal to stop a container'
+	COMPGEN --stop-timeout int 'Timeout (in seconds) to stop a container'
+	COMPGEN --storage-opt list 'Storage driver options for the container'
+	COMPGEN --sysctl map 'Sysctl options'
+	COMPGEN --tmpfs list 'Mount a tmpfs directory'
+	COMPGEN '-t' Switch 'Allocate a pseudo-TTY'
+	COMPGEN --tty Switch 'Allocate a pseudo-TTY'
+	COMPGEN --ulimit ulimit 'Ulimit options'
+	COMPGEN '-u' string 'Username or UID (format: <name|uid>[:<group|gid>])'
+	COMPGEN --user string 'Username or UID (format: <name|uid>[:<group|gid>])'
+	COMPGEN --userns string 'User namespace to use'
+	COMPGEN --uts string 'UTS namespace to use'
+	COMPGEN '-v' list 'Bind mount a volume'
+	COMPGEN --volume list 'Bind mount a volume'
+	COMPGEN --volume-driver string 'Optional volume driver for the container'
+	COMPGEN --volumes-from list 'Mount volumes from the specified container(s)'
+	COMPGEN '-w' string 'Working directory inside the container'
+	COMPGEN --workdir string 'Working directory inside the container'
+}
+
+Register-Completer docker_search -Option {
+	COMPGEN '-f' filter 'Filter output based on conditions provided'
+	COMPGEN --filter filter 'Filter output based on conditions provided'
+	COMPGEN --format string 'Pretty-print search using a Go template'
+	COMPGEN --limit int 'Max number of search results'
+	COMPGEN --no-trunc Switch 'Don''t truncate output'
+}
+
+Register-Completer docker_version -Option {
+	COMPGEN '-f' string 'Format the output using the given Go template'
+	COMPGEN --format string 'Format the output using the given Go template'
+}
+
+if ($env:DOCKER_HIDE_LEGACY_COMMANDS) {
+	return
+}
+
+Register-Completer docker_attach -Option {
+	COMPGEN --detach-keys string 'Override the key sequence for detaching a container'
+	COMPGEN --no-stdin Switch 'Do not attach STDIN'
+	COMPGEN --sig-proxy Switch 'Proxy all received signals to the process'
 }
 
 Register-Completer docker_commit -Option {
@@ -1513,14 +1649,6 @@ Register-Completer docker_load -Option {
 	COMPGEN --quiet Switch 'Suppress the load output'
 }
 
-Register-Completer docker_login -Option {
-	COMPGEN '-p' string 'Password'
-	COMPGEN --password string 'Password'
-	COMPGEN --password-stdin Switch 'Take the password from stdin'
-	COMPGEN '-u' string 'Username'
-	COMPGEN --username string 'Username'
-}
-
 Register-Completer docker_logs -Option {
 	COMPGEN --details Switch 'Show extra details provided to logs'
 	COMPGEN '-f' Switch 'Follow log output'
@@ -1578,129 +1706,9 @@ Register-Completer docker_rmi -Option {
 	COMPGEN --no-prune Switch 'Do not delete untagged parents'
 }
 
-Register-Completer docker_run -Option {
-	COMPGEN --add-host list 'Add a custom host-to-IP mapping (host:ip)'
-	COMPGEN '-a' list 'Attach to STDIN, STDOUT or STDERR'
-	COMPGEN --attach list 'Attach to STDIN, STDOUT or STDERR'
-	COMPGEN --blkio-weight uint16 'Block IO (relative weight), between 10 and 1000, or 0 to disable (default 0)'
-	COMPGEN --blkio-weight-device list 'Block IO weight (relative device weight)'
-	COMPGEN --cap-add list 'Add Linux capabilities'
-	COMPGEN --cap-drop list 'Drop Linux capabilities'
-	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
-	COMPGEN --cidfile string 'Write the container ID to the file'
-	COMPGEN --cpu-count int 'CPU count (Windows only)'
-	COMPGEN --cpu-percent int 'CPU percent (Windows only)'
-	COMPGEN --cpu-period int 'Limit CPU CFS (Completely Fair Scheduler) period'
-	COMPGEN --cpu-quota int 'Limit CPU CFS (Completely Fair Scheduler) quota'
-	COMPGEN --cpu-rt-period int 'Limit CPU real-time period in microseconds'
-	COMPGEN --cpu-rt-runtime int 'Limit CPU real-time runtime in microseconds'
-	COMPGEN '-c' int 'CPU shares (relative weight)'
-	COMPGEN --cpu-shares int 'CPU shares (relative weight)'
-	COMPGEN --cpus decimal 'Number of CPUs'
-	COMPGEN --cpuset-cpus string 'CPUs in which to allow execution (0-3, 0,1)'
-	COMPGEN --cpuset-mems string 'MEMs in which to allow execution (0-3, 0,1)'
-	COMPGEN '-d' Switch 'Run container in background and print container ID'
-	COMPGEN --detach Switch 'Run container in background and print container ID'
-	COMPGEN --detach-keys string 'Override the key sequence for detaching a container'
-	COMPGEN --device list 'Add a host device to the container'
-	COMPGEN --device-cgroup-rule list 'Add a rule to the cgroup allowed devices list'
-	COMPGEN --device-read-bps list 'Limit read rate (bytes per second) from a device'
-	COMPGEN --device-read-iops list 'Limit read rate (IO per second) from a device'
-	COMPGEN --device-write-bps list 'Limit write rate (bytes per second) to a device'
-	COMPGEN --device-write-iops list 'Limit write rate (IO per second) to a device'
-	COMPGEN --disable-content-trust Switch 'Skip image verification'
-	COMPGEN --dns list 'Set custom DNS servers'
-	COMPGEN --dns-option list 'Set DNS options'
-	COMPGEN --dns-search list 'Set custom DNS search domains'
-	COMPGEN --entrypoint string 'Overwrite the default ENTRYPOINT of the image'
-	COMPGEN '-e' list 'Set environment variables'
-	COMPGEN --env list 'Set environment variables'
-	COMPGEN --env-file list 'Read in a file of environment variables'
-	COMPGEN --expose list 'Expose a port or a range of ports'
-	COMPGEN --group-add list 'Add additional groups to join'
-	COMPGEN --health-cmd string 'Command to run to check health'
-	COMPGEN --health-interval duration 'Time between running the check (ms|s|m|h) (default 0s)'
-	COMPGEN --health-retries int 'Consecutive failures needed to report unhealthy'
-	COMPGEN --health-start-period duration 'Start period for the container to initialize before starting health-retries countdown (ms|s|m|h) (default 0s)'
-	COMPGEN --health-timeout duration 'Maximum time to allow one check to run (ms|s|m|h) (default 0s)'
-	COMPGEN --help Switch 'Print usage'
-	COMPGEN '-h' string 'Container host name'
-	COMPGEN --hostname string 'Container host name'
-	COMPGEN --init Switch 'Run an init inside the container that forwards signals and reaps processes'
-	COMPGEN '-i' Switch 'Keep STDIN open even if not attached'
-	COMPGEN --interactive Switch 'Keep STDIN open even if not attached'
-	COMPGEN --io-maxbandwidth bytes 'Maximum IO bandwidth limit for the system drive (Windows only)'
-	COMPGEN --io-maxiops uint 'Maximum IOps limit for the system drive (Windows only)'
-	COMPGEN --ip string 'IPv4 address (e.g., 172.30.100.104)'
-	COMPGEN --ip6 string 'IPv6 address (e.g., 2001:db8::33)'
-	COMPGEN --ipc string 'IPC mode to use'
-	COMPGEN --isolation string 'Container isolation technology'
-	COMPGEN --kernel-memory bytes 'Kernel memory limit'
-	COMPGEN '-l' list 'Set meta data on a container'
-	COMPGEN --label list 'Set meta data on a container'
-	COMPGEN --label-file list 'Read in a line delimited file of labels'
-	COMPGEN --link list 'Add link to another container'
-	COMPGEN --link-local-ip list 'Container IPv4/IPv6 link-local addresses'
-	COMPGEN --log-driver string 'Logging driver for the container'
-	COMPGEN --log-opt list 'Log driver options'
-	COMPGEN --mac-address string 'Container MAC address (e.g., 92:d0:c6:0a:29:33)'
-	COMPGEN '-m' bytes 'Memory limit'
-	COMPGEN --memory bytes 'Memory limit'
-	COMPGEN --memory-reservation bytes 'Memory soft limit'
-	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: ''-1'' to enable unlimited swap'
-	COMPGEN --memory-swappiness int 'Tune container memory swappiness (0 to 100)'
-	COMPGEN --mount mount 'Attach a filesystem mount to the container'
-	COMPGEN --name string 'Assign a name to the container'
-	COMPGEN --network string 'Connect a container to a network'
-	COMPGEN --network-alias list 'Add network-scoped alias for the container'
-	COMPGEN --no-healthcheck Switch 'Disable any container-specified HEALTHCHECK'
-	COMPGEN --oom-kill-disable Switch 'Disable OOM Killer'
-	COMPGEN --oom-score-adj int 'Tune host''s OOM preferences (-1000 to 1000)'
-	COMPGEN --pid string 'PID namespace to use'
-	COMPGEN --pids-limit int 'Tune container pids limit (set -1 for unlimited)'
-	COMPGEN --privileged Switch 'Give extended privileges to this container'
-	COMPGEN '-p' list 'Publish a container''s port(s) to the host'
-	COMPGEN --publish list 'Publish a container''s port(s) to the host'
-	COMPGEN '-P' Switch 'Publish all exposed ports to random ports'
-	COMPGEN --publish-all Switch 'Publish all exposed ports to random ports'
-	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
-	COMPGEN --restart string 'Restart policy to apply when a container exits'
-	COMPGEN --rm Switch 'Automatically remove the container when it exits'
-	COMPGEN --runtime string 'Runtime to use for this container'
-	COMPGEN --security-opt list 'Security Options'
-	COMPGEN --shm-size bytes 'Size of /dev/shm'
-	COMPGEN --sig-proxy Switch 'Proxy received signals to the process'
-	COMPGEN --stop-signal string 'Signal to stop a container'
-	COMPGEN --stop-timeout int 'Timeout (in seconds) to stop a container'
-	COMPGEN --storage-opt list 'Storage driver options for the container'
-	COMPGEN --sysctl map 'Sysctl options'
-	COMPGEN --tmpfs list 'Mount a tmpfs directory'
-	COMPGEN '-t' Switch 'Allocate a pseudo-TTY'
-	COMPGEN --tty Switch 'Allocate a pseudo-TTY'
-	COMPGEN --ulimit ulimit 'Ulimit options'
-	COMPGEN '-u' string 'Username or UID (format: <name|uid>[:<group|gid>])'
-	COMPGEN --user string 'Username or UID (format: <name|uid>[:<group|gid>])'
-	COMPGEN --userns string 'User namespace to use'
-	COMPGEN --uts string 'UTS namespace to use'
-	COMPGEN '-v' list 'Bind mount a volume'
-	COMPGEN --volume list 'Bind mount a volume'
-	COMPGEN --volume-driver string 'Optional volume driver for the container'
-	COMPGEN --volumes-from list 'Mount volumes from the specified container(s)'
-	COMPGEN '-w' string 'Working directory inside the container'
-	COMPGEN --workdir string 'Working directory inside the container'
-}
-
 Register-Completer docker_save -Option {
 	COMPGEN '-o' string 'Write to a file, instead of STDOUT'
 	COMPGEN --output string 'Write to a file, instead of STDOUT'
-}
-
-Register-Completer docker_search -Option {
-	COMPGEN '-f' filter 'Filter output based on conditions provided'
-	COMPGEN --filter filter 'Filter output based on conditions provided'
-	COMPGEN --format string 'Pretty-print search using a Go template'
-	COMPGEN --limit int 'Max number of search results'
-	COMPGEN --no-trunc Switch 'Don''t truncate output'
 }
 
 Register-Completer docker_start -Option {
@@ -1744,7 +1752,3 @@ Register-Completer docker_update -Option {
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
 }
 
-Register-Completer docker_version -Option {
-	COMPGEN '-f' string 'Format the output using the given Go template'
-	COMPGEN --format string 'Format the output using the given Go template'
-}

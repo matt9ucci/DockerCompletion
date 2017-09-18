@@ -16,3 +16,8 @@ function Get-Container {
 	$command = "docker container ls --format '{{{{.Names}}}}' {0}" -f ($options -join ' ')
 	Invoke-Expression -Command $command
 }
+
+function Get-Image {
+	docker image ls --format '{{.Repository}}' | Sort-Object
+	docker image ls --format '{{.Repository}}:{{.Tag}}' | Sort-Object
+}

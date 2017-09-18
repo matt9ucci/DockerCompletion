@@ -7,7 +7,7 @@ function Select-CompletionResult {
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[NativeCommandCompletionResult[]]$CompletionResult,
 		[switch]$OptionWithArg,
-		[switch]$LegacyCommand,
+		[switch]$LegacyOrTopLevelCommand,
 		[switch]$SubCommand
 	)
 
@@ -15,8 +15,8 @@ function Select-CompletionResult {
 		if ($OptionWithArg) {
 			$CompletionResult = $CompletionResult | Where-Object { $_.CompletionText -Like '-*' -and $_.TextType -NE 'Switch' }
 		}
-		if ($LegacyCommand) {
-			$CompletionResult = $CompletionResult | Where-Object TextType -EQ LegacyCommand
+		if ($LegacyOrTopLevelCommand) {
+			$CompletionResult = $CompletionResult | Where-Object { $_.TextType -eq 'LegacyCommand' -or $_.TextType -eq 'TopLevelCommand' }
 		}
 		if ($SubCommand) {
 			$CompletionResult = $CompletionResult | Where-Object TextType -EQ SubCommand
@@ -50,7 +50,7 @@ $argumentCompleter = {
 	$optionWithArg = $null
 	$managementCommand = $null
 	$subCommand = $null
-	$legacyCommand = $null
+	$legacyOrTopLevelCommand = $null
 	$indexOfFirstArg = -1
 	$counter = 1
 
@@ -72,11 +72,11 @@ $argumentCompleter = {
 						Select-CompletionResult -OptionWithArg).CompletionText) {
 				$optionWithArg = $text
 			}
-		} elseif (!$managementCommand -and !$legacyCommand) {
+		} elseif (!$managementCommand -and !$legacyOrTopLevelCommand) {
 			if ($text -in (Invoke-Completer $completerName -Completer -ArgumentList $wordToComplete, $commandAst, $cursorPosition |
-						Select-CompletionResult -LegacyCommand).CompletionText) {
-				$legacyCommand = $text
-				$completerName += "_$legacyCommand"
+						Select-CompletionResult -LegacyOrTopLevelCommand).CompletionText) {
+				$legacyOrTopLevelCommand = $text
+				$completerName += "_$legacyOrTopLevelCommand"
 			} else {
 				$managementCommand = $text
 				$completerName += "_$managementCommand"
@@ -99,6 +99,8 @@ $argumentCompleter = {
 	# At this point, $completerName is any of the following:
 	# 'docker'
 	# 'docker_optionWithArg'
+	# 'docker_legacyOrTopLevelCommand'
+	# 'docker_legacyOrTopLevelCommand_optionWithArg'
 	# 'docker_managementCommand'
 	# 'docker_managementCommand_subCommand'
 	# 'docker_managementCommand_subCommand_optionWithArg'
