@@ -18,6 +18,24 @@ function Get-Container {
 }
 
 function Get-Image {
-	docker image ls --format '{{.Repository}}' | Sort-Object
-	docker image ls --format '{{.Repository}}:{{.Tag}}' | Sort-Object
+	$sorted = docker image ls --format '{{.Repository}}:{{.Tag}}' | Sort-Object
+	$sorted | Where-Object { $_ -like '*:latest' } | ForEach-Object { $_ -replace ':latest$' } | Get-Unique
+	$sorted | Where-Object { $_ -notlike '*:<none>' }
+}
+
+function Get-Node {
+	Param(
+		[ValidateSet('manager', 'worker')]
+		[string[]]$Role
+	)
+
+	$options = New-Object System.Collections.ArrayList
+	if ($Role) {
+		foreach ($r in $Role) {
+			$options.Add("--filter 'role=$r'") > $null
+		}
+	}
+
+	$command = "docker node ls --format '{{{{.Hostname}}}}' {0}" -f ($options -join ' ')
+	Invoke-Expression -Command $command
 }

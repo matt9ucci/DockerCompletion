@@ -28,6 +28,29 @@ $volumeAll = { docker volume ls --quiet }
 Register-Completer docker_--log-level { 'debug', 'info', 'warn', 'error', 'fatal' }
 Register-Completer docker_-l (Get-Completer docker_--log-level)
 
+Register-Completer docker_config_inspect { docker config ls --format '{{.Name}}' }
+Register-Completer docker_config_ls_--filter {
+	Param([string]$wordToComplete)
+
+	if ($wordToComplete -notlike '*=*') {
+		COMPGEN id string 'Config ID'
+		COMPGEN name string 'Config name'
+		COMPGEN label string 'Config label'
+		return
+	}
+
+	$key = ($wordToComplete -split '=')[0]
+	$values = switch ($key) {
+		id { docker config ls --quiet }
+		name { docker config ls --format '{{.Name}}' }
+	}
+
+	foreach ($v in $values) {
+		COMPGEN "$key=$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+	}
+}
+Register-Completer docker_config_rm { docker config ls --format '{{.Name}}' }
+
 Register-Completer docker_container_attach $containerRunning
 Register-Completer docker_container_commit {
 	Param([string]$wordToComplete, $commandAst, $cursorPosition, $indexOfFirstArg)
@@ -140,19 +163,19 @@ Register-Completer docker_container_wait $containerAll
 Register-Completer docker_image_history $repositoryWithTag
 Register-Completer docker_image_import {
 	Param([string]$wordToComplete, $commandAst, $cursorPosition, $indexOfFirstArg)
-	
+
 	if ($indexOfFirstArg -ge 0) {
 		if ($commandAst.CommandElements[$indexOfFirstArg].Extent.EndOffset -lt $cursorPosition) {
 			# 2nd arg
 			Get-Image
 		}
-	}	
+	}
 }
 Register-Completer docker_image_inspect $repositoryWithTag
 Register-Completer docker_image_ls $repositoryWithTag
 Register-Completer docker_image_ls_--filter {
 	Param([string]$wordToComplete)
-	
+
 	if ($wordToComplete -notlike '*=*') {
 		COMPGEN before string 'Filter images created before a given container ID or name'
 		COMPGEN dangling string 'Show untagged images'
@@ -161,7 +184,7 @@ Register-Completer docker_image_ls_--filter {
 		COMPGEN since string 'Filter images created after a given container ID or name'
 		return
 	}
-	
+
 	$key = ($wordToComplete -split '=')[0]
 	$values = switch ($key) {
 		{ 'before', 'since', 'reference' -contains $_ } {
@@ -169,7 +192,7 @@ Register-Completer docker_image_ls_--filter {
 		}
 		dangling { 'true', 'false' }
 	}
-	
+
 	foreach ($v in $values) {
 		COMPGEN "$key=$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
 	}
@@ -183,7 +206,7 @@ Register-Completer docker_image_tag $repositoryWithTag
 
 Register-Completer docker_network_connect {
 	Param([string]$wordToComplete, $commandAst, $cursorPosition, $indexOfFirstArg)
-	
+
 	if ($indexOfFirstArg -lt 0) {
 		docker network ls --format '{{.Name}}'
 	} else {
@@ -203,7 +226,158 @@ Register-Completer docker_network_create_-d (Get-Completer docker_network_create
 Register-Completer docker_network_inspect $networkAll
 Register-Completer docker_network_rm { docker network ls --format '{{.Name}}' --filter type=custom }
 
+Register-Completer docker_node_demote { Get-Node -Role manager }
+Register-Completer docker_node_inspect {
+	Get-Node
+	'self'
+}
+Register-Completer docker_node_ls_--filter {
+	Param([string]$wordToComplete)
+	
+	if ($wordToComplete -notlike '*=*') {
+		COMPGEN id string 'Node id'
+		COMPGEN label string '<key> or <key>=<value>'
+		COMPGEN membership string 'accepted or pending'
+		COMPGEN name string 'Node hostname'
+		COMPGEN role string 'manager or worker'
+		return
+	}
+
+	$key = ($wordToComplete -split '=')[0]
+	$values = switch ($key) {
+		id { docker node ls --quiet }
+		membership { 'accepted', 'pending' }
+		name { docker node ls --format '{{.Hostname}}' }
+		role { 'manager', 'worker' }
+	}
+
+	foreach ($v in $values) {
+		COMPGEN "$key=$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+	}
+}
+Register-Completer docker_node_ls_-f (Get-Completer docker_node_ls_--filter)
+Register-Completer docker_node_ls_--format {
+	"'{{.Availability}}'"
+	"'{{.Hostname}}'"
+	"'{{.ID}}'"
+	"'{{.ManagerStatus}}'"
+	"'{{.Self}}'"
+	"'{{.Status}}'"
+	"'{{.TLSStatus}}'"
+}
+Register-Completer docker_node_promote { Get-Node -Role worker }
+Register-Completer docker_node_ps {
+	Get-Node
+	'self'
+}
+Register-Completer docker_node_ps_--filter {
+	Param([string]$wordToComplete)
+
+	if ($wordToComplete -notlike '*=*') {
+		COMPGEN desired-state string 'Desired state of the task'
+		COMPGEN id string 'Task id'
+		COMPGEN label string '<key> or <key>=<value>'
+		COMPGEN name string 'Task name'
+		return
+	}
+
+	$key = ($wordToComplete -split '=')[0]
+	$values = switch ($key) {
+		desired-state { 'accepted', 'running', 'shutdown' }
+		id { docker node ps --quiet }
+		name { docker node ps --format '{{.Name}}' }
+	}
+
+	foreach ($v in $values) {
+		COMPGEN "$key=$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+	}
+}
+Register-Completer docker_node_ps_-f (Get-Completer docker_node_ps_--filter)
+Register-Completer docker_node_ps_--format {
+	"'{{.CurrentState}}'"
+	"'{{.DesiredState}}'"
+	"'{{.Error}}'"
+	"'{{.Image}}'"
+	"'{{.Name}}'"
+	"'{{.Node}}'"
+	"'{{.Ports}}'"
+}
+Register-Completer docker_node_rm { Get-Node }
+Register-Completer docker_node_update { Get-Node }
 Register-Completer docker_node_update_--availability { 'active', 'drain', 'pause' }
+Register-Completer docker_node_update_--role { 'manager', 'worker' }
+
+Register-Completer docker_plugin_ls_--filter {
+	Param([string]$wordToComplete)
+
+	if ($wordToComplete -notlike '*=*') {
+		COMPGEN capability string 'Plugin capabilities'
+		COMPGEN enabled boolean 'True or false'
+		return
+	}
+
+	$key = ($wordToComplete -split '=')[0]
+	$values = switch ($key) {
+		capability { 'authz', 'ipamdriver', 'logdriver', 'metricscollector', 'networkdriver', 'volumedriver' }
+		enabled { 'true', 'false' }
+	}
+
+	foreach ($v in $values) {
+		COMPGEN "$key=$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+	}
+}
+
+Register-Completer docker_secret_inspect { docker secret ls --format '{{.Name}}' }
+Register-Completer docker_secret_ls_--filter {
+	Param([string]$wordToComplete)
+
+	if ($wordToComplete -notlike '*=*') {
+		COMPGEN id string 'Secret id'
+		COMPGEN label string '<key> or <key>=<value>'
+		COMPGEN name string 'Secret name'
+		return
+	}
+
+	$key = ($wordToComplete -split '=')[0]
+	$values = switch ($key) {
+		id { docker secret ls --quiet }
+		name { docker secret ls --format '{{.Name}}' }
+	}
+
+	foreach ($v in $values) {
+		COMPGEN "$key=$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+	}
+}
+Register-Completer docker_secret_ls_-f (Get-Completer docker_secret_ls_--filter)
+Register-Completer docker_secret_ls_--format {
+	"'{{.CreatedAt}}'"
+	"'{{.ID}}'"
+	"'{{.Labels}}'"
+	"'{{.Name}}'"
+	"'{{.UpdatedAt}}'"
+}
+Register-Completer docker_secret_rm { docker secret ls --format '{{.Name}}' }
+
+Register-Completer docker_search_--filter {
+	Param([string]$wordToComplete)
+
+	if ($wordToComplete -notlike '*=*') {
+		COMPGEN is-automated boolean 'Autobuild or not'
+		COMPGEN is-official boolean 'Official repository or not'
+		COMPGEN stars int 'Number of stars'
+		return
+	}
+
+	$key = ($wordToComplete -split '=')[0]
+	$values = switch ($key) {
+		is-automated { 'true', 'false' }
+		is-official { 'true', 'false' }
+	}
+
+	foreach ($v in $values) {
+		COMPGEN "$key=$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+	}
+}
 
 Register-Completer docker_service_create $repositoryWithTag
 Register-Completer docker_service_create_--log-driver $logDriver
@@ -216,7 +390,7 @@ Register-Completer docker_service_create_--update-order { 'start-first', 'stop-f
 Register-Completer docker_service_inspect $serviceAll
 Register-Completer docker_service_ls_--filter {
 	Param([string]$wordToComplete)
-	
+
 	if ($wordToComplete -notlike '*=*') {
 		COMPGEN id string 'Service id'
 		COMPGEN label string '<key> or <key>=<value>'
@@ -224,14 +398,14 @@ Register-Completer docker_service_ls_--filter {
 		COMPGEN name string 'Service name'
 		return
 	}
-	
+
 	$key = ($wordToComplete -split '=')[0]
 	$values = switch ($key) {
 		id { docker service ls --quiet }
 		mode { 'global', 'replicated' }
 		name { docker service ls --format '{{.Name}}' }
 	}
-	
+
 	foreach ($v in $values) {
 		COMPGEN "$key=$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
 	}
@@ -254,6 +428,56 @@ Register-Completer docker_service_update_--rollback-order (Get-Completer docker_
 Register-Completer docker_service_update_--update-failure-action (Get-Completer docker_service_create_--update-failure-action)
 Register-Completer docker_service_update_--update-order (Get-Completer docker_service_create_--update-order)
 
+Register-Completer docker_stack_deploy { docker stack ls --format '{{.Name}}' }
+Register-Completer docker_stack_ps { docker stack ls --format '{{.Name}}' }
+Register-Completer docker_stack_ps_--filter {
+	Param([string]$wordToComplete)
+
+	if ($wordToComplete -notlike '*=*') {
+		COMPGEN desired-state string 'Desired state of the task'
+		COMPGEN id string 'Task id'
+		COMPGEN name string 'Task name'
+		COMPGEN node string 'Node name or id'
+		return
+	}
+
+	$key = ($wordToComplete -split '=')[0]
+	$values = switch ($key) {
+		desired-state { 'accepted', 'running', 'shutdown' }
+		id { docker node ps --quiet }
+		name { docker node ps --format '{{.Name}}' }
+		node { Get-Node }
+	}
+
+	foreach ($v in $values) {
+		COMPGEN "$key=$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+	}
+}
+Register-Completer docker_stack_ps_-f (Get-Completer docker_stack_ps_--filter)
+Register-Completer docker_stack_rm { docker stack ls --format '{{.Name}}' }
+Register-Completer docker_stack_services { docker stack ls --format '{{.Name}}' }
+Register-Completer docker_stack_services_--filter {
+	Param([string]$wordToComplete)
+
+	if ($wordToComplete -notlike '*=*') {
+		COMPGEN id string 'Service id'
+		COMPGEN label string '<key> or <key>=<value>'
+		COMPGEN name string 'Service name'
+		return
+	}
+
+	$key = ($wordToComplete -split '=')[0]
+	$values = switch ($key) {
+		id { docker service ls --quiet }
+		name { docker service ls --format '{{.Name}}' }
+	}
+
+	foreach ($v in $values) {
+		COMPGEN "$key=$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+	}
+}
+Register-Completer docker_stack_services_-f (Get-Completer docker_stack_services_--filter)
+
 Register-Completer docker_swarm_init_--availability { 'active', 'drain', 'pause' }
 Register-Completer docker_swarm_join_--availability { 'active', 'drain', 'pause' }
 Register-Completer docker_swarm_join-token { 'manager', 'worker' }
@@ -265,7 +489,7 @@ Register-Completer docker_system_info_--format $formatBasic
 Register-Completer docker_volume_inspect $volumeAll
 Register-Completer docker_volume_ls_--filter {
 	Param([string]$wordToComplete)
-	
+
 	if ($wordToComplete -notlike '*=*') {
 		COMPGEN dangling string 'Referenced or not'
 		COMPGEN driver string 'Volume''s driver name'
@@ -273,7 +497,7 @@ Register-Completer docker_volume_ls_--filter {
 		COMPGEN name string 'Volume''s name'
 		return
 	}
-	
+
 	$key = ($wordToComplete -split '=')[0]
 	$values = switch ($key) {
 		dangling { 'true', 'false' }
@@ -315,6 +539,39 @@ Register-Completer docker_images_--filter (Get-Completer docker_image_ls_--filte
 Register-Completer docker_images_-f (Get-Completer docker_images_--filter)
 Register-Completer docker_images_--format (Get-Completer docker_image_ls_--format)
 Register-Completer docker_info_--format (Get-Completer docker_system_info_--format)
+Register-Completer docker_inspect {
+	Param($wordToComplete, $commandAst, $cursorPosition)
+
+	$type = $null
+	for ($i = 2; $i -lt $commandAst.CommandElements.Count; $i++) {
+		$ce = $commandAst.CommandElements[$i]
+		if ('--type' -eq $ce.Extent.Text) {
+			$type = $commandAst.CommandElements[$i + 1].Extent.Text
+			break
+		}
+	}
+
+	switch ($type) {
+		'' {
+			Get-Container
+			Get-Image
+			docker network ls --format '{{.Name}}'
+			Get-Node
+			docker plugin ls --format '{{.Name}}'
+			docker secret ls --format '{{.Name}}'
+			docker service ls --format '{{.Name}}'
+			docker volume ls --format '{{.Name}}'
+		}
+		container { Get-Container }
+		image { Get-Image }
+		network { docker network ls --format '{{.Name}}' }
+		node { Get-Node }
+		plugin { docker plugin ls --format '{{.Name}}' }
+		secret { docker secret ls --format '{{.Name}}' }
+		service { docker service ls --format '{{.Name}}' }
+		volume { docker volume ls --format '{{.Name}}' }
+	}
+}
 Register-Completer docker_inspect_--type { 'container', 'image', 'network', 'node', 'plugin', 'secret', 'service', 'volume' }
 Register-Completer docker_kill (Get-Completer docker_container_kill)
 Register-Completer docker_logs (Get-Completer docker_container_logs)

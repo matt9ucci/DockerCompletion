@@ -4,7 +4,7 @@
 RootModule = 'DockerCompletion'
 
 # Version number of this module.
-ModuleVersion = '1.1708.0.170923'
+ModuleVersion = '1.1708.0.170929'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -99,7 +99,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'Add TopLevelCommand TextType.'
+        ReleaseNotes = 'Fix Get-Image'
 
     } # End of PSData hashtable
 
