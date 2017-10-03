@@ -23,6 +23,23 @@ function Get-Image {
 	$sorted | Where-Object { $_ -notlike '*:<none>' }
 }
 
+function Get-Network {
+	Param(
+		[ValidateSet('builtin', 'custom')]
+		[string[]]$Type
+	)
+
+	$options = New-Object System.Collections.ArrayList
+	if ($Type) {
+		foreach ($t in $Type) {
+			$options.Add("--filter 'type=$t'") > $null
+		}
+	}
+
+	$command = "docker network ls --format '{{{{.Name}}}}' {0}" -f ($options -join ' ')
+	Invoke-Expression -Command $command
+}
+
 function Get-Node {
 	Param(
 		[ValidateSet('manager', 'worker')]
@@ -38,4 +55,8 @@ function Get-Node {
 
 	$command = "docker node ls --format '{{{{.Hostname}}}}' {0}" -f ($options -join ' ')
 	Invoke-Expression -Command $command
+}
+
+function Get-Secret {
+	docker secret ls --format '{{.Name}}'
 }

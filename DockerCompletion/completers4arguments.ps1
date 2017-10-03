@@ -17,7 +17,7 @@ $logDriver = {
 	'syslog'
 }
 
-$networkAll = { docker network ls --format '{{.Name}}' }
+$networkAll = { Get-Network }
 
 $repositoryWithTag = { Get-Image }
 
@@ -109,7 +109,7 @@ Register-Completer docker_container_ls_--filter {
 		id { docker container ls --format '{{.ID}}' --all }
 		isolation { 'default', 'process', 'hyperv' }
 		is-task { 'true', 'false' }
-		network { docker network ls --format '{{.Name}}' }
+		network { Get-Network }
 		status {
 			'created'
 			'dead'
@@ -208,11 +208,11 @@ Register-Completer docker_network_connect {
 	Param([string]$wordToComplete, $commandAst, $cursorPosition, $indexOfFirstArg)
 
 	if ($indexOfFirstArg -lt 0) {
-		docker network ls --format '{{.Name}}'
+		Get-Network
 	} else {
 		$extent = $commandAst.CommandElements[$indexOfFirstArg].Extent
 		if (($extent.StartOffset -le $cursorPosition) -and ($cursorPosition -le $extent.EndOffset)) {
-			docker network ls --format '{{.Name}}'
+			Get-Network
 		} else {
 			Get-Container
 		}
@@ -224,7 +224,34 @@ Register-Completer docker_network_create_--driver {
 }
 Register-Completer docker_network_create_-d (Get-Completer docker_network_create_--driver)
 Register-Completer docker_network_inspect $networkAll
-Register-Completer docker_network_rm { docker network ls --format '{{.Name}}' --filter type=custom }
+Register-Completer docker_network_ls_--filter {
+	Param([string]$wordToComplete)
+	
+	if ($wordToComplete -notlike '*=*') {
+		COMPGEN driver string 'Network driver'
+		COMPGEN id string 'Network id'
+		COMPGEN label string '<key> or <key>=<value>'
+		COMPGEN name string 'Network name'
+		COMPGEN scope string 'Scope name'
+		COMPGEN type string 'Type name'
+		return
+	}
+
+	$key = ($wordToComplete -split '=')[0]
+	$values = switch ($key) {
+		driver { docker system info --format '{{json .Plugins.Network}}' | ConvertFrom-Json }
+		id { docker network ls --format '{{.ID}}' }
+		name { docker network ls --format '{{.Name}}' }
+		scope { 'global', 'local', 'swarm' }
+		type { 'builtin', 'custom' }
+	}
+
+	foreach ($v in $values) {
+		COMPGEN "$key=$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+	}
+}
+Register-Completer docker_network_ls_-f (Get-Completer docker_network_ls_--filter)
+Register-Completer docker_network_rm { Get-Network -Type custom }
 
 Register-Completer docker_node_demote { Get-Node -Role manager }
 Register-Completer docker_node_inspect {
@@ -326,8 +353,9 @@ Register-Completer docker_plugin_ls_--filter {
 		COMPGEN "$key=$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
 	}
 }
+Register-Completer docker_plugin_ls_-f (Get-Completer docker_plugin_ls_--filter)
 
-Register-Completer docker_secret_inspect { docker secret ls --format '{{.Name}}' }
+Register-Completer docker_secret_inspect { Get-Secret }
 Register-Completer docker_secret_ls_--filter {
 	Param([string]$wordToComplete)
 
@@ -356,7 +384,7 @@ Register-Completer docker_secret_ls_--format {
 	"'{{.Name}}'"
 	"'{{.UpdatedAt}}'"
 }
-Register-Completer docker_secret_rm { docker secret ls --format '{{.Name}}' }
+Register-Completer docker_secret_rm { Get-Secret }
 
 Register-Completer docker_search_--filter {
 	Param([string]$wordToComplete)
@@ -380,14 +408,23 @@ Register-Completer docker_search_--filter {
 }
 
 Register-Completer docker_service_create $repositoryWithTag
+Register-Completer docker_service_create_--config { docker config ls --format '{{.Name}}' }
 Register-Completer docker_service_create_--log-driver $logDriver
 Register-Completer docker_service_create_--mode { 'global', 'replicated' }
 Register-Completer docker_service_create_--restart-condition { 'any', 'none', 'on-failure' }
 Register-Completer docker_service_create_--rollback-failure-action { 'continue', 'pause' }
 Register-Completer docker_service_create_--rollback-order { 'start-first', 'stop-first' }
+Register-Completer docker_service_create_--secret { Get-Secret }
 Register-Completer docker_service_create_--update-failure-action { 'continue', 'pause', 'rollback' }
 Register-Completer docker_service_create_--update-order { 'start-first', 'stop-first' }
 Register-Completer docker_service_inspect $serviceAll
+Register-Completer docker_service_logs {
+	$services = docker service ls --format '{{.Name}}'
+	$services
+	foreach ($s in $services) {
+		docker service ps --format '{{.ID}}' $s
+	}
+}
 Register-Completer docker_service_ls_--filter {
 	Param([string]$wordToComplete)
 
@@ -411,6 +448,33 @@ Register-Completer docker_service_ls_--filter {
 	}
 }
 Register-Completer docker_service_ps $serviceAll
+Register-Completer docker_service_ps_--filter {
+	Param([string]$wordToComplete)
+
+	if ($wordToComplete -notlike '*=*') {
+		COMPGEN desired-state string 'Desired state of the task'
+		COMPGEN id string 'Task id'
+		COMPGEN name string 'Task name'
+		COMPGEN node string 'Node name or id'
+		return
+	}
+
+	$key = ($wordToComplete -split '=')[0]
+	$values = switch ($key) {
+		desired-state { 'accepted', 'running', 'shutdown' }
+		id { docker node ps --quiet }
+		name { docker node ps --format '{{.Name}}' }
+		node  {
+			Get-Node
+			'self'
+		}
+	}
+
+	foreach ($v in $values) {
+		COMPGEN "$key=$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+	}
+}
+Register-Completer docker_service_ps_-f (Get-Completer docker_service_ps_--filter)
 Register-Completer docker_service_rm $serviceAll
 Register-Completer docker_service_scale {
 	docker service ls --format '{{.Name}}' | ForEach-Object {
@@ -418,6 +482,8 @@ Register-Completer docker_service_scale {
 	}
 }
 Register-Completer docker_service_update $serviceAll
+Register-Completer docker_service_update_--config-add { docker config ls --format '{{.Name}}' }
+Register-Completer docker_service_update_--config-rm { docker config ls --format '{{.Name}}' }
 Register-Completer docker_service_update_--image $repositoryWithTag
 Register-Completer docker_service_update_--log-driver (Get-Completer docker_service_create_--log-driver)
 Register-Completer docker_service_update_--network-add $networkAll
@@ -425,6 +491,8 @@ Register-Completer docker_service_update_--network-rm $networkAll
 Register-Completer docker_service_update_--restart-condition (Get-Completer docker_service_create_--restart-condition)
 Register-Completer docker_service_update_--rollback-failure-action (Get-Completer docker_service_create_--rollback-failure-action)
 Register-Completer docker_service_update_--rollback-order (Get-Completer docker_service_create_--rollback-order)
+Register-Completer docker_service_update_--secret-add { Get-Secret }
+Register-Completer docker_service_update_--secret-rm { Get-Secret }
 Register-Completer docker_service_update_--update-failure-action (Get-Completer docker_service_create_--update-failure-action)
 Register-Completer docker_service_update_--update-order (Get-Completer docker_service_create_--update-order)
 
@@ -483,6 +551,85 @@ Register-Completer docker_swarm_join_--availability { 'active', 'drain', 'pause'
 Register-Completer docker_swarm_join-token { 'manager', 'worker' }
 
 Register-Completer docker_system_df_--format $formatBasic
+Register-Completer docker_system_events_--filter {
+	Param([string]$wordToComplete)
+
+		if ($wordToComplete -notlike '*=*') {
+			COMPGEN container string 'Container name or id'
+			COMPGEN daemon string 'Daemon name or id'
+			COMPGEN event string 'Event name'
+			COMPGEN image string 'Image name or id'
+			COMPGEN label string '<key> or <key>=<value>'
+			COMPGEN network string 'Network name or id'
+			COMPGEN plugin string 'Plugin name or id'
+			COMPGEN scope string 'local or swarm'
+			COMPGEN type string 'Object type'
+			COMPGEN volume string 'Volume name or id'
+			return
+		}
+
+		$key = ($wordToComplete -split '=')[0]
+		$values = switch ($key) {
+			container { Get-Container }
+			daemon {
+				docker system info --format '{{.Name}}'
+				docker system info --format '{{.ID}}'
+			}
+			event {
+				'attach'
+				'commit'
+				'connect'
+				'copy'
+				'create'
+				'delete'
+				'destroy'
+				'detach'
+				'die'
+				'disable'
+				'disconnect'
+				'enable'
+				'exec_create'
+				'exec_detach'
+				'exec_start'
+				'export'
+				'health_status'
+				'import'
+				'install'
+				'kill'
+				'load'
+				'mount'
+				'oom'
+				'pause'
+				'pull'
+				'push'
+				'reload'
+				'remove'
+				'rename'
+				'resize'
+				'restart'
+				'save'
+				'start'
+				'stop'
+				'tag'
+				'top'
+				'unmount'
+				'unpause'
+				'untag'
+				'update'
+			}
+			image { Get-Image }
+			network { Get-Network }
+			plugin { docker plugin ls --format '{{.Name}}' }
+			scope { 'local', 'swarm' }
+			type { 'config', 'container', 'daemon', 'image', 'network', 'node', 'plugin', 'secret', 'service', 'volume' }
+			volume { docker volume ls --format '{{.Name}}' }
+		}
+
+		foreach ($v in $values) {
+			COMPGEN "$key=$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+		}
+}
+Register-Completer docker_system_events_-f (Get-Completer docker_system_events_--filter)
 Register-Completer docker_system_events_--format $formatBasic
 Register-Completer docker_system_info_--format $formatBasic
 
@@ -529,6 +676,8 @@ Register-Completer docker_create_--volume (Get-Completer docker_container_create
 Register-Completer docker_create_-v (Get-Completer docker_create_--volume)
 Register-Completer docker_create_--volumes-from (Get-Completer docker_container_create_--volumes-from)
 Register-Completer docker_diff (Get-Completer docker_container_diff)
+Register-Completer docker_events_--filter (Get-Completer docker_system_events_--filter)
+Register-Completer docker_events_-f (Get-Completer docker_events_--filter)
 Register-Completer docker_events_--format (Get-Completer docker_system_events_--format)
 Register-Completer docker_exec (Get-Completer docker_container_exec)
 Register-Completer docker_export (Get-Completer docker_container_export)
@@ -555,19 +704,19 @@ Register-Completer docker_inspect {
 		'' {
 			Get-Container
 			Get-Image
-			docker network ls --format '{{.Name}}'
+			Get-Network
 			Get-Node
 			docker plugin ls --format '{{.Name}}'
-			docker secret ls --format '{{.Name}}'
+			Get-Secret
 			docker service ls --format '{{.Name}}'
 			docker volume ls --format '{{.Name}}'
 		}
 		container { Get-Container }
 		image { Get-Image }
-		network { docker network ls --format '{{.Name}}' }
+		network { Get-Network }
 		node { Get-Node }
 		plugin { docker plugin ls --format '{{.Name}}' }
-		secret { docker secret ls --format '{{.Name}}' }
+		secret { Get-Secret }
 		service { docker service ls --format '{{.Name}}' }
 		volume { docker volume ls --format '{{.Name}}' }
 	}
