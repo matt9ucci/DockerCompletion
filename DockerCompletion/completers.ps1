@@ -1,4 +1,4 @@
-# Docker CLI v17.08.0-dev
+# docker-ce v17.09.0-ce https://github.com/docker/docker-ce/tree/v17.09.0-ce
 $managementCommands = @(
 	COMPGEN checkpoint ManagementCommand 'Manage checkpoints'
 	COMPGEN config ManagementCommand 'Manage Docker configs'
@@ -1751,4 +1751,3 @@ Register-Completer docker_update -Option {
 	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: ''-1'' to enable unlimited swap'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
 }
-

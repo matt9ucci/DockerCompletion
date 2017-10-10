@@ -4,7 +4,7 @@
 RootModule = 'DockerCompletion'
 
 # Version number of this module.
-ModuleVersion = '1.1708.0.171005'
+ModuleVersion = '1.1709.0.171011'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -99,7 +99,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'Add completers'
+        ReleaseNotes = 'First release for docker-ce v17.09.0-ce'
 
     } # End of PSData hashtable
 

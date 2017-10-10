@@ -1,3 +1,7 @@
+function Get-Config {
+	docker config ls --format '{{.Name}}'
+}
+
 function Get-Container {
 	Param(
 		[ValidateSet('created', 'dead', 'exited', 'paused', 'removing', 'restarting', 'running')]
@@ -57,6 +61,18 @@ function Get-Node {
 	Invoke-Expression -Command $command
 }
 
+function Get-Plugin {
+	docker plugin ls --format '{{.Name}}'
+}
+
 function Get-Secret {
 	docker secret ls --format '{{.Name}}'
+}
+
+function Get-Service {
+	docker service ls --format '{{.Name}}'
+}
+
+function Get-Volume {
+	docker volume ls --quiet
 }
