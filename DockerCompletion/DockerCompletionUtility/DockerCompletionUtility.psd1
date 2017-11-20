@@ -4,7 +4,7 @@
 RootModule = 'DockerCompletionUtility'
 
 # Version number of this module.
-ModuleVersion = '1.171011'
+ModuleVersion = '1.171125'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()

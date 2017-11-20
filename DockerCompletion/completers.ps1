@@ -626,8 +626,8 @@ Register-Completer docker_image_prune -Option {
 }
 
 Register-Completer docker_image_pull -Option {
-	COMPGEN '-a' Switch 'Download all tagged images in the repository'
-	COMPGEN --all-tags Switch 'Download all tagged images in the repository'
+	COMPGEN '-a' string 'Download all tagged images in the repository'
+	COMPGEN --all-tags string 'Download all tagged images in the repository'
 	COMPGEN --disable-content-trust Switch 'Skip image verification'
 }
 

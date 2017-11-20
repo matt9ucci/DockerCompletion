@@ -27,6 +27,11 @@ function Get-Image {
 	$sorted | Where-Object { $_ -notlike '*:<none>' }
 }
 
+function Get-ImageRepository {
+	$sorted = docker image ls --format '{{.Repository}}:{{.Tag}}' | Sort-Object
+	$sorted | Where-Object { $_ -notlike '*:<none>' } | ForEach-Object { $_ -replace ':.*?$' } | Get-Unique
+}
+
 function Get-Network {
 	Param(
 		[ValidateSet('builtin', 'custom')]

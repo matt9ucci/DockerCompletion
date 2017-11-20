@@ -155,6 +155,24 @@ Register-Completer docker_container_rm {
 }
 Register-Completer docker_container_run $repositoryWithTag
 Register-Completer docker_container_run_--log-driver $logDriver
+Register-Completer docker_container_run_--network {
+	Param([string]$wordToComplete)
+	
+	if ($wordToComplete -notlike 'container:*') {
+		@(
+			(docker system info --format '{{json .Plugins.Network}}' | ConvertFrom-Json)
+			'container'
+			Get-Network
+		) | Sort-Object -Unique
+		return
+	}
+
+	$values = Get-Container
+
+	foreach ($v in $values) {
+		COMPGEN "container:$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+	}
+}
 Register-Completer docker_container_start { Get-Container -Status created, exited }
 Register-Completer docker_container_run_--volume $volumeAll
 Register-Completer docker_container_run_-v (Get-Completer docker_container_run_--volume)
@@ -164,6 +182,27 @@ Register-Completer docker_container_stop $containerRunning
 Register-Completer docker_container_top $containerRunning
 Register-Completer docker_container_wait $containerAll
 
+Register-Completer docker_image_build_--cache-from $repositoryWithTag
+Register-Completer docker_image_build_--network {
+	Param([string]$wordToComplete)
+	
+	if ($wordToComplete -notlike 'container:*') {
+		@(
+			(docker system info --format '{{json .Plugins.Network}}' | ConvertFrom-Json)
+			'container'
+			Get-Network
+		) | Sort-Object -Unique
+		return
+	}
+
+	$values = Get-Container
+
+	foreach ($v in $values) {
+		COMPGEN "container:$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+	}
+}
+Register-Completer docker_image_build_--tag $repositoryWithTag
+Register-Completer docker_image_build_-t (Get-Completer docker_image_build_--tag)
 Register-Completer docker_image_history $repositoryWithTag
 Register-Completer docker_image_import {
 	Param([string]$wordToComplete, $commandAst, $cursorPosition, $indexOfFirstArg)
@@ -203,6 +242,9 @@ Register-Completer docker_image_ls_--filter {
 }
 Register-Completer docker_image_ls_-f (Get-Completer docker_image_ls_--filter)
 Register-Completer docker_image_ls_--format $formatBasic
+Register-Completer docker_image_pull $repositoryWithTag
+Register-Completer docker_image_pull_--all-tags { Get-ImageRepository }
+Register-Completer docker_image_pull_-a { Get-ImageRepository }
 Register-Completer docker_image_push $repositoryWithTag
 Register-Completer docker_image_rm $repositoryWithTag
 Register-Completer docker_image_save $repositoryWithTag
@@ -672,7 +714,13 @@ Register-Completer docker_volume_ls_--format {
 
 Register-Completer docker_volume_rm $volumeAll
 
+Register-Completer docker_build_--cache-from (Get-Completer docker_image_build_--cache-from)
+Register-Completer docker_build_--network (Get-Completer docker_image_build_--network)
+Register-Completer docker_build_--tag (Get-Completer docker_image_build_--tag)
+Register-Completer docker_build_-t (Get-Completer docker_build_--tag)
+
 Register-Completer docker_run (Get-Completer docker_container_run)
+Register-Completer docker_run_--network (Get-Completer docker_container_run_--network)
 Register-Completer docker_run_--log-driver (Get-Completer docker_container_run_--log-driver)
 Register-Completer docker_run_--volume (Get-Completer docker_container_run_--volume)
 Register-Completer docker_run_-v (Get-Completer docker_run_--volume)
@@ -743,6 +791,9 @@ Register-Completer docker_port (Get-Completer docker_container_port)
 Register-Completer docker_ps_--filter (Get-Completer docker_container_ls_--filter)
 Register-Completer docker_ps_-f (Get-Completer docker_ps_--filter)
 Register-Completer docker_ps_--format (Get-Completer docker_container_ls_--format)
+Register-Completer docker_pull (Get-Completer docker_image_pull)
+Register-Completer docker_pull_--all-tags (Get-Completer docker_image_pull_--all-tags)
+Register-Completer docker_pull_-a (Get-Completer docker_pull_--all-tags)
 Register-Completer docker_push (Get-Completer docker_image_push)
 Register-Completer docker_rename (Get-Completer docker_container_rename)
 Register-Completer docker_restart (Get-Completer docker_container_restart)
