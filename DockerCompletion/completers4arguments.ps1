@@ -29,6 +29,51 @@ $stackAll = { docker stack ls --format '{{.Name}}' }
 
 $volumeAll = { Get-Volume }
 
+$capAddable = {
+	COMPGEN ALL string 'All capabilities'
+	COMPGEN AUDIT_CONTROL string 'Enable and disable kernel auditing; change auditing filter rules; retrieve auditing status and filtering rules'
+	COMPGEN BLOCK_SUSPEND string 'Employ features that can block system suspend'
+	COMPGEN DAC_READ_SEARCH string 'Bypass file read permission checks and directory read and execute permission checks'
+	COMPGEN IPC_LOCK string 'Lock memory (mlock(2), mlockall(2), mmap(2), shmctl(2))'
+	COMPGEN IPC_OWNER string 'Bypass permission checks for operations on System V IPC objects'
+	COMPGEN LEASE string 'Establish leases on arbitrary files (see fcntl(2))'
+	COMPGEN LINUX_IMMUTABLE string 'Set the FS_APPEND_FL and FS_IMMUTABLE_FL i-node flags'
+	COMPGEN MAC_ADMIN string 'Override Mandatory Access Control (MAC). Implemented for the Smack Linux Security Module (LSM)'
+	COMPGEN MAC_OVERRIDE string 'Allow MAC configuration or state changes. Implemented for the Smack LSM'
+	COMPGEN NET_ADMIN string 'Perform various network-related operations'
+	COMPGEN NET_BROADCAST string 'Make socket broadcasts, and listen to multicasts'
+	COMPGEN SYS_ADMIN string 'Perform a range of system administration operations'
+	COMPGEN SYS_BOOT string 'Use reboot(2) and kexec_load(2), reboot and load a new kernel for later execution'
+	COMPGEN SYS_MODULE string 'Load and unload kernel modules'
+	COMPGEN SYS_NICE string 'Raise process nice value (nice(2), setpriority(2)) and change the nice value for arbitrary processes'
+	COMPGEN SYS_PACCT string 'Use acct(2), switch process accounting on or off'
+	COMPGEN SYS_PTRACE string 'Trace arbitrary processes using ptrace(2)'
+	COMPGEN SYS_RAWIO string 'Perform I/O port operations (iopl(2) and ioperm(2))'
+	COMPGEN SYS_RESOURCE string 'Override resource Limits'
+	COMPGEN SYS_TIME string 'Set system clock (settimeofday(2), stime(2), adjtimex(2)); set real-time (hardware) clock'
+	COMPGEN SYS_TTY_CONFIG string 'Use vhangup(2); employ various privileged ioctl(2) operations on virtual terminals'
+	COMPGEN SYSLOG string 'Perform privileged syslog(2) operations'
+	COMPGEN WAKE_ALARM string 'Trigger something that will wake up the system'
+}
+
+$capDroppable = {
+	COMPGEN ALL string 'All capabilities'
+	COMPGEN AUDIT_WRITE string 'Write records to kernel auditing log'
+	COMPGEN CHOWN string 'Make arbitrary changes to file UIDs and GIDs (see chown(2))'
+	COMPGEN DAC_OVERRIDE string 'Bypass file read, write, and execute permission checks'
+	COMPGEN FOWNER string 'Bypass permission checks on operations that normally require the file system UID of the process to match the UID of the file'
+	COMPGEN FSETID string 'Don''t clear set-user-ID and set-group-ID permission bits when a file is modified'
+	COMPGEN KILL string 'Bypass permission checks for sending signals'
+	COMPGEN MKNOD string 'Create special files using mknod(2)'
+	COMPGEN NET_BIND_SERVICE string 'Bind a socket to internet domain privileged ports (port numbers less than 1024)'
+	COMPGEN NET_RAW string 'Use RAW and PACKET sockets'
+	COMPGEN SETFCAP string 'Set file capabilities'
+	COMPGEN SETGID string 'Make arbitrary manipulations of process GIDs and supplementary GID list'
+	COMPGEN SETPCAP string 'Modify process capabilities'
+	COMPGEN SETUID string 'Make arbitrary manipulations of process UIDs'
+	COMPGEN SYS_CHROOT string 'Use chroot(2), change root directory'
+}
+
 Register-Completer docker_--log-level { 'debug', 'info', 'warn', 'error', 'fatal' }
 Register-Completer docker_-l (Get-Completer docker_--log-level)
 
@@ -71,6 +116,8 @@ Register-Completer docker_container_commit {
 	}
 }
 Register-Completer docker_container_create $repositoryWithTag
+Register-Completer docker_container_create_--cap-add $capAddable
+Register-Completer docker_container_create_--cap-drop $capDroppable
 Register-Completer docker_container_create_--log-driver $logDriver
 Register-Completer docker_container_create_--volume $volumeAll
 Register-Completer docker_container_create_-v (Get-Completer docker_container_create_--volume)
@@ -154,10 +201,12 @@ Register-Completer docker_container_rm {
 	}
 }
 Register-Completer docker_container_run $repositoryWithTag
+Register-Completer docker_container_run_--cap-add $capAddable
+Register-Completer docker_container_run_--cap-drop $capDroppable
 Register-Completer docker_container_run_--log-driver $logDriver
 Register-Completer docker_container_run_--network {
 	Param([string]$wordToComplete)
-	
+
 	if ($wordToComplete -notlike 'container:*') {
 		@(
 			(docker system info --format '{{json .Plugins.Network}}' | ConvertFrom-Json)
@@ -185,7 +234,7 @@ Register-Completer docker_container_wait $containerAll
 Register-Completer docker_image_build_--cache-from $repositoryWithTag
 Register-Completer docker_image_build_--network {
 	Param([string]$wordToComplete)
-	
+
 	if ($wordToComplete -notlike 'container:*') {
 		@(
 			(docker system info --format '{{json .Plugins.Network}}' | ConvertFrom-Json)
@@ -272,7 +321,7 @@ Register-Completer docker_network_create_-d (Get-Completer docker_network_create
 Register-Completer docker_network_inspect $networkAll
 Register-Completer docker_network_ls_--filter {
 	Param([string]$wordToComplete)
-	
+
 	if ($wordToComplete -notlike '*=*') {
 		COMPGEN driver string 'Network driver'
 		COMPGEN id string 'Network id'
@@ -306,7 +355,7 @@ Register-Completer docker_node_inspect {
 }
 Register-Completer docker_node_ls_--filter {
 	Param([string]$wordToComplete)
-	
+
 	if ($wordToComplete -notlike '*=*') {
 		COMPGEN id string 'Node id'
 		COMPGEN label string '<key> or <key>=<value>'
@@ -720,6 +769,8 @@ Register-Completer docker_build_--tag (Get-Completer docker_image_build_--tag)
 Register-Completer docker_build_-t (Get-Completer docker_build_--tag)
 
 Register-Completer docker_run (Get-Completer docker_container_run)
+Register-Completer docker_run_--cap-add (Get-Completer docker_container_run_--cap-add)
+Register-Completer docker_run_--cap-drop (Get-Completer docker_container_run_--cap-drop)
 Register-Completer docker_run_--network (Get-Completer docker_container_run_--network)
 Register-Completer docker_run_--log-driver (Get-Completer docker_container_run_--log-driver)
 Register-Completer docker_run_--volume (Get-Completer docker_container_run_--volume)
@@ -733,6 +784,8 @@ if ($env:DOCKER_HIDE_LEGACY_COMMANDS) {
 Register-Completer docker_attach (Get-Completer docker_container_attach)
 Register-Completer docker_commit (Get-Completer docker_container_commit)
 Register-Completer docker_create (Get-Completer docker_container_create)
+Register-Completer docker_create_--cap-add (Get-Completer docker_container_create_--cap-add)
+Register-Completer docker_create_--cap-drop (Get-Completer docker_container_create_--cap-drop)
 Register-Completer docker_create_--log-driver (Get-Completer docker_container_create_--log-driver)
 Register-Completer docker_create_--volume (Get-Completer docker_container_create_--volume)
 Register-Completer docker_create_-v (Get-Completer docker_create_--volume)
