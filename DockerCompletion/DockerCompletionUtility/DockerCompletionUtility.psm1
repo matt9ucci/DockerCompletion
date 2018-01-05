@@ -22,8 +22,14 @@ function Get-Container {
 }
 
 function Get-Image {
+	Param(
+		[switch]$WithTag
+	)
+
 	$sorted = docker image ls --format '{{.Repository}}:{{.Tag}}' | Sort-Object
-	$sorted | Where-Object { $_ -like '*:latest' } | ForEach-Object { $_ -replace ':latest$' } | Get-Unique
+	if (!$WithTag) {
+		$sorted | Where-Object { $_ -like '*:latest' } | ForEach-Object { $_ -replace ':latest$' } | Get-Unique
+	}
 	$sorted | Where-Object { $_ -notlike '*:<none>' }
 }
 

@@ -8,7 +8,8 @@ function Select-CompletionResult {
 		[NativeCommandCompletionResult[]]$CompletionResult,
 		[switch]$OptionWithArg,
 		[switch]$LegacyOrTopLevelCommand,
-		[switch]$SubCommand
+		[switch]$SubCommand,
+		[switch]$ManagementCommand
 	)
 
 	Process {
@@ -20,6 +21,9 @@ function Select-CompletionResult {
 		}
 		if ($SubCommand) {
 			$CompletionResult = $CompletionResult | Where-Object TextType -EQ SubCommand
+		}
+		if ($ManagementCommand) {
+			$CompletionResult = $CompletionResult | Where-Object TextType -EQ ManagementCommand
 		}
 		$CompletionResult
 	}
@@ -82,10 +86,13 @@ $argumentCompleter = {
 				$completerName += "_$managementCommand"
 			}
 		} elseif ($managementCommand -and !$subCommand) {
-			if ($text -in (Invoke-Completer $completerName -Completer -ArgumentList $wordToComplete, $commandAst, $cursorPosition |
-						Select-CompletionResult -SubCommand).CompletionText) {
+			$results = Invoke-Completer $completerName -Completer -ArgumentList $wordToComplete, $commandAst, $cursorPosition
+			if ($text -in ($results | Select-CompletionResult -SubCommand).CompletionText) {
 				$subCommand = $text
 				$completerName += "_$subCommand"
+			} elseif ($text -in ($results | Select-CompletionResult -ManagementCommand).CompletionText) {
+				$managementCommand = $text
+				$completerName += "_$managementCommand"
 			}
 		} elseif ($indexOfFirstArg -lt 0) {
 			$indexOfFirstArg = $counter
@@ -104,6 +111,7 @@ $argumentCompleter = {
 	# 'docker_managementCommand'
 	# 'docker_managementCommand_subCommand'
 	# 'docker_managementCommand_subCommand_optionWithArg'
+	# These managementCommand can be followed by managementCommand (`trust` command)
 
 	if ($wordToComplete) {
 		$wordToCompleteSubstring = $wordToComplete.Substring(0, $cursorPosition - $commandAst.CommandElements[$counter].Extent.StartOffset)

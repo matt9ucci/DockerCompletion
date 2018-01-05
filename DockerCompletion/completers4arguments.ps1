@@ -21,7 +21,7 @@ $logDriver = {
 
 $networkAll = { Get-Network }
 
-$repositoryWithTag = { Get-Image }
+$imageAll = { Get-Image }
 
 $serviceAll = { Get-Service }
 
@@ -115,7 +115,7 @@ Register-Completer docker_container_commit {
 		}
 	}
 }
-Register-Completer docker_container_create $repositoryWithTag
+Register-Completer docker_container_create $imageAll
 Register-Completer docker_container_create_--cap-add $capAddable
 Register-Completer docker_container_create_--cap-drop $capDroppable
 Register-Completer docker_container_create_--log-driver $logDriver
@@ -200,7 +200,7 @@ Register-Completer docker_container_rm {
 		Get-Container -Status created, exited
 	}
 }
-Register-Completer docker_container_run $repositoryWithTag
+Register-Completer docker_container_run $imageAll
 Register-Completer docker_container_run_--cap-add $capAddable
 Register-Completer docker_container_run_--cap-drop $capDroppable
 Register-Completer docker_container_run_--log-driver $logDriver
@@ -231,7 +231,7 @@ Register-Completer docker_container_stop $containerRunning
 Register-Completer docker_container_top $containerRunning
 Register-Completer docker_container_wait $containerAll
 
-Register-Completer docker_image_build_--cache-from $repositoryWithTag
+Register-Completer docker_image_build_--cache-from $imageAll
 Register-Completer docker_image_build_--network {
 	Param([string]$wordToComplete)
 
@@ -250,9 +250,9 @@ Register-Completer docker_image_build_--network {
 		COMPGEN "container:$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
 	}
 }
-Register-Completer docker_image_build_--tag $repositoryWithTag
+Register-Completer docker_image_build_--tag $imageAll
 Register-Completer docker_image_build_-t (Get-Completer docker_image_build_--tag)
-Register-Completer docker_image_history $repositoryWithTag
+Register-Completer docker_image_history $imageAll
 Register-Completer docker_image_import {
 	Param([string]$wordToComplete, $commandAst, $cursorPosition, $indexOfFirstArg)
 
@@ -263,8 +263,8 @@ Register-Completer docker_image_import {
 		}
 	}
 }
-Register-Completer docker_image_inspect $repositoryWithTag
-Register-Completer docker_image_ls $repositoryWithTag
+Register-Completer docker_image_inspect $imageAll
+Register-Completer docker_image_ls $imageAll
 Register-Completer docker_image_ls_--filter {
 	Param([string]$wordToComplete)
 
@@ -291,13 +291,13 @@ Register-Completer docker_image_ls_--filter {
 }
 Register-Completer docker_image_ls_-f (Get-Completer docker_image_ls_--filter)
 Register-Completer docker_image_ls_--format $formatBasic
-Register-Completer docker_image_pull $repositoryWithTag
+Register-Completer docker_image_pull $imageAll
 Register-Completer docker_image_pull_--all-tags { Get-ImageRepository }
 Register-Completer docker_image_pull_-a { Get-ImageRepository }
-Register-Completer docker_image_push $repositoryWithTag
-Register-Completer docker_image_rm $repositoryWithTag
-Register-Completer docker_image_save $repositoryWithTag
-Register-Completer docker_image_tag $repositoryWithTag
+Register-Completer docker_image_push $imageAll
+Register-Completer docker_image_rm $imageAll
+Register-Completer docker_image_save $imageAll
+Register-Completer docker_image_tag $imageAll
 
 Register-Completer docker_network_connect {
 	Param([string]$wordToComplete, $commandAst, $cursorPosition, $indexOfFirstArg)
@@ -502,7 +502,7 @@ Register-Completer docker_search_--filter {
 	}
 }
 
-Register-Completer docker_service_create $repositoryWithTag
+Register-Completer docker_service_create $imageAll
 Register-Completer docker_service_create_--config $configAll
 Register-Completer docker_service_create_--log-driver $logDriver
 Register-Completer docker_service_create_--mode { 'global', 'replicated' }
@@ -579,7 +579,7 @@ Register-Completer docker_service_scale {
 Register-Completer docker_service_update $serviceAll
 Register-Completer docker_service_update_--config-add $configAll
 Register-Completer docker_service_update_--config-rm $configAll
-Register-Completer docker_service_update_--image $repositoryWithTag
+Register-Completer docker_service_update_--image $imageAll
 Register-Completer docker_service_update_--log-driver (Get-Completer docker_service_create_--log-driver)
 Register-Completer docker_service_update_--network-add $networkAll
 Register-Completer docker_service_update_--network-rm $networkAll
@@ -727,6 +727,11 @@ Register-Completer docker_system_events_--filter {
 Register-Completer docker_system_events_-f (Get-Completer docker_system_events_--filter)
 Register-Completer docker_system_events_--format $formatBasic
 Register-Completer docker_system_info_--format $formatBasic
+
+Register-Completer docker_trust_inspect $imageAll
+Register-Completer docker_trust_revoke $imageAll
+Register-Completer docker_trust_sign { Get-Image -WithTag }
+Register-Completer docker_trust_view $imageAll
 
 Register-Completer docker_volume_inspect $volumeAll
 Register-Completer docker_volume_ls_--filter {

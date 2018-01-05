@@ -4,7 +4,7 @@
 RootModule = 'DockerCompletionUtility'
 
 # Version number of this module.
-ModuleVersion = '1.171125'
+ModuleVersion = '1.180105'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -19,7 +19,7 @@ Author = 'Masatoshi Higuchi'
 CompanyName = 'N/A'
 
 # Copyright statement for this module
-Copyright = '(c) 2017 Masatoshi Higuchi. All rights reserved.'
+Copyright = '(c) 2018 Masatoshi Higuchi. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'Utility for DockerCompletion.'
