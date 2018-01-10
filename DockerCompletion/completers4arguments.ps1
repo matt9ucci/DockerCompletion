@@ -74,6 +74,77 @@ $capDroppable = {
 	COMPGEN SYS_CHROOT string 'Use chroot(2), change root directory'
 }
 
+$mount = {
+	Param($wordToComplete, $commandAst, $cursorPosition)
+
+	# Get type
+	foreach ($keyValue in ($commandAst.CommandElements[-1] -split ',')) {
+		$key, $value = $keyValue -split '='
+		if ($key -eq 'type') {
+			$type = $value
+		}
+	}
+
+	if (!$type) {
+		$type = 'volume' # Default type
+		COMPGEN type string 'The type of mount'
+	}
+
+	if ($wordToComplete -notlike '*=*') {
+		switch ($type) {
+			bind {
+				COMPGEN source string 'The source of mount'
+				COMPGEN src string 'The abbreviation of "source"'
+				COMPGEN destination string 'The destination of mount'
+				COMPGEN dst string 'The abbreviation of "destination"'
+				COMPGEN target string 'The alias of "destination"'
+				COMPGEN readonly string 'true or 1 or no value: readonly, false or 0: read-write'
+				COMPGEN ro string 'The abbreviation of "readonly"'
+				COMPGEN consistency string 'The consistency requirements for the mount'
+				COMPGEN bind-propagation string 'Refers to whether or not mounts created within a given bind mount or named volume can be propagated to replicas of that mount'
+			}
+			volume {
+				COMPGEN source string 'The source of mount'
+				COMPGEN src string 'The abbreviation of "source"'
+				COMPGEN destination string 'The destination of mount'
+				COMPGEN dst string 'The abbreviation of "destination"'
+				COMPGEN target string 'The alias of "destination"'
+				COMPGEN readonly string 'true or 1 or no value: readonly, false or 0: read-write'
+				COMPGEN ro string 'The abbreviation of "readonly"'
+				COMPGEN consistency string 'The consistency requirements for the mount'
+				COMPGEN volume-driver string 'Name of the volume-driver plugin to use for the volume'
+				COMPGEN volume-label string 'One or more custom metadata ("labels") to apply to the volume upon creation'
+				COMPGEN volume-nocopy string 'To disable copying files from the container''s filesystem to the volume and mount the empty volume'
+				COMPGEN volume-opt string 'Options specific to a given volume driver, which will be passed to the driver when creating the volume'
+			}
+			tmpfs {
+				COMPGEN destination string 'The destination of mount'
+				COMPGEN dst string 'The abbreviation of "destination"'
+				COMPGEN target string 'The alias of "destination"'
+				COMPGEN readonly string 'true or 1 or no value: readonly, false or 0: read-write'
+				COMPGEN ro string 'The abbreviation of "readonly"'
+				COMPGEN consistency string 'The consistency requirements for the mount'
+				COMPGEN tmpfs-size string 'Size of the tmpfs mount in bytes'
+				COMPGEN tmpfs-mode string 'File mode of the tmpfs in octal (e.g. "700" or "0700".)'
+			}
+		}
+		return
+	}
+
+	$key = ($wordToComplete -split '=')[0]
+	$values = switch ($key) {
+		type { 'bind', 'volume', 'tmpfs' }
+		{ 'readonly', 'ro' -contains $_ } { 'true', 'false', 1, 0 }
+		consistency {'default', 'consistent', 'cached', 'delegated'}
+		bind-propagation { 'shared', 'slave', 'private', 'rshared', 'rslave', 'rprivate' }
+		volume-nocopy { 'true', 'false' }
+	}
+
+	foreach ($v in $values) {
+		COMPGEN "$key=$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+	}
+}
+
 Register-Completer docker_--log-level { 'debug', 'info', 'warn', 'error', 'fatal' }
 Register-Completer docker_-l (Get-Completer docker_--log-level)
 
@@ -223,6 +294,7 @@ Register-Completer docker_container_run_--network {
 	}
 }
 Register-Completer docker_container_start { Get-Container -Status created, exited }
+Register-Completer docker_container_run_--mount $mount
 Register-Completer docker_container_run_--volume $volumeAll
 Register-Completer docker_container_run_-v (Get-Completer docker_container_run_--volume)
 Register-Completer docker_container_run_--volumes-from $containerAll
@@ -506,6 +578,7 @@ Register-Completer docker_service_create $imageAll
 Register-Completer docker_service_create_--config $configAll
 Register-Completer docker_service_create_--log-driver $logDriver
 Register-Completer docker_service_create_--mode { 'global', 'replicated' }
+Register-Completer docker_service_create_--mount $mount
 Register-Completer docker_service_create_--restart-condition { 'any', 'none', 'on-failure' }
 Register-Completer docker_service_create_--rollback-failure-action { 'continue', 'pause' }
 Register-Completer docker_service_create_--rollback-order { 'start-first', 'stop-first' }
@@ -581,6 +654,7 @@ Register-Completer docker_service_update_--config-add $configAll
 Register-Completer docker_service_update_--config-rm $configAll
 Register-Completer docker_service_update_--image $imageAll
 Register-Completer docker_service_update_--log-driver (Get-Completer docker_service_create_--log-driver)
+Register-Completer docker_service_update_--mount-add $mount
 Register-Completer docker_service_update_--network-add $networkAll
 Register-Completer docker_service_update_--network-rm $networkAll
 Register-Completer docker_service_update_--restart-condition (Get-Completer docker_service_create_--restart-condition)
@@ -776,6 +850,7 @@ Register-Completer docker_build_-t (Get-Completer docker_build_--tag)
 Register-Completer docker_run (Get-Completer docker_container_run)
 Register-Completer docker_run_--cap-add (Get-Completer docker_container_run_--cap-add)
 Register-Completer docker_run_--cap-drop (Get-Completer docker_container_run_--cap-drop)
+Register-Completer docker_run_--mount (Get-Completer docker_container_run_--mount)
 Register-Completer docker_run_--network (Get-Completer docker_container_run_--network)
 Register-Completer docker_run_--log-driver (Get-Completer docker_container_run_--log-driver)
 Register-Completer docker_run_--volume (Get-Completer docker_container_run_--volume)

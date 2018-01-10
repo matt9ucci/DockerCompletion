@@ -114,7 +114,18 @@ $argumentCompleter = {
 	# These managementCommand can be followed by managementCommand (`trust` command)
 
 	if ($wordToComplete) {
-		$wordToCompleteSubstring = $wordToComplete.Substring(0, $cursorPosition - $commandAst.CommandElements[$counter].Extent.StartOffset)
+		$ceElements = $commandAst.CommandElements[$counter].Elements
+		if ($ceElements) {
+			# comma-separated args (e.g. `--mount type=bind,src=/c/Users/matt9ucci,dst=/root`)
+			foreach ($cee in $ceElements) {
+				if (($wordToComplete -eq $cee.Value) -and ($cursorPosition -ge $cee.Extent.StartOffset)) {
+					$wordToCompleteSubstring = $wordToComplete.Substring(0, $cursorPosition - $cee.Extent.StartOffset)
+				}
+			}
+			$wordToComplete = $wordToCompleteSubstring
+		} else {
+			$wordToCompleteSubstring = $wordToComplete.Substring(0, $cursorPosition - $commandAst.CommandElements[$counter].Extent.StartOffset)
+		}
 	}
 
 	if ($wordToComplete.StartsWith('-')) {
