@@ -147,6 +147,7 @@ $mount = {
 
 Register-Completer docker_--log-level { 'debug', 'info', 'warn', 'error', 'fatal' }
 Register-Completer docker_-l (Get-Completer docker_--log-level)
+Register-Completer docker_--orchestrator { 'swarm', 'kubernetes' }
 
 Register-Completer docker_config_inspect $configAll
 Register-Completer docker_config_ls_--filter {
@@ -805,7 +806,6 @@ Register-Completer docker_system_info_--format $formatBasic
 Register-Completer docker_trust_inspect $imageAll
 Register-Completer docker_trust_revoke $imageAll
 Register-Completer docker_trust_sign { Get-Image -WithTag }
-Register-Completer docker_trust_view $imageAll
 
 Register-Completer docker_volume_inspect $volumeAll
 Register-Completer docker_volume_ls_--filter {

@@ -1,9 +1,10 @@
-# docker-ce v17.12.0-ce https://github.com/docker/docker-ce/tree/v17.12.0-ce
+# docker-ce v18.03.0-ce https://github.com/docker/docker-ce/tree/v18.03.0-ce
 $managementCommands = @(
 	COMPGEN checkpoint ManagementCommand 'Manage checkpoints'
 	COMPGEN config ManagementCommand 'Manage Docker configs'
 	COMPGEN container ManagementCommand 'Manage containers'
 	COMPGEN image ManagementCommand 'Manage images'
+	COMPGEN manifest ManagementCommand 'Manage Docker image manifests and manifest lists'
 	COMPGEN network ManagementCommand 'Manage networks'
 	COMPGEN node ManagementCommand 'Manage Swarm nodes'
 	COMPGEN plugin ManagementCommand 'Manage plugins'
@@ -12,7 +13,7 @@ $managementCommands = @(
 	COMPGEN stack ManagementCommand 'Manage Docker stacks'
 	COMPGEN swarm ManagementCommand 'Manage Swarm'
 	COMPGEN system ManagementCommand 'Manage Docker'
-	COMPGEN trust ManagementCommand 'Manage trust on Docker images (experimental)'
+	COMPGEN trust ManagementCommand 'Manage trust on Docker images'
 	COMPGEN volume ManagementCommand 'Manage volumes'
 )
 
@@ -79,6 +80,7 @@ Register-Completer docker -Option {
 	COMPGEN --host list 'Daemon socket(s) to connect to'
 	COMPGEN '-l' string 'Set the logging level ("debug"|"info"|"warn"|"error"|"fatal")'
 	COMPGEN --log-level string 'Set the logging level ("debug"|"info"|"warn"|"error"|"fatal")'
+	COMPGEN --orchestrator string 'Which orchestrator to use with the docker cli (swarm|kubernetes) (default swarm) (experimental)'
 	COMPGEN --tls Switch 'Use TLS; implied by --tlsverify'
 	COMPGEN --tlscacert string 'Trust certs signed only by this CA'
 	COMPGEN --tlscert string 'Path to TLS certificate file'
@@ -108,15 +110,16 @@ Register-Completer docker_checkpoint_rm -Option {
 }
 
 Register-Completer docker_config {
-	COMPGEN create SubCommand 'Create a configuration file from a file or STDIN as content'
-	COMPGEN inspect SubCommand 'Display detailed information on one or more configuration files'
+	COMPGEN create SubCommand 'Create a config from a file or STDIN'
+	COMPGEN inspect SubCommand 'Display detailed information on one or more configs'
 	COMPGEN ls SubCommand 'List configs'
-	COMPGEN rm SubCommand 'Remove one or more configuration files'
+	COMPGEN rm SubCommand 'Remove one or more configs'
 }
 
 Register-Completer docker_config_create -Option {
 	COMPGEN '-l' list 'Config labels'
 	COMPGEN --label list 'Config labels'
+	COMPGEN --template-driver string 'Template driver'
 }
 
 Register-Completer docker_config_inspect -Option {
@@ -632,8 +635,8 @@ Register-Completer docker_image_prune -Option {
 }
 
 Register-Completer docker_image_pull -Option {
-	COMPGEN '-a' string 'Download all tagged images in the repository'
-	COMPGEN --all-tags string 'Download all tagged images in the repository'
+	COMPGEN '-a' Switch 'Download all tagged images in the repository'
+	COMPGEN --all-tags Switch 'Download all tagged images in the repository'
 	COMPGEN --disable-content-trust Switch 'Skip image verification'
 	COMPGEN --platform string 'Set platform if server is multi-platform capable'
 }
@@ -651,6 +654,38 @@ Register-Completer docker_image_rm -Option {
 Register-Completer docker_image_save -Option {
 	COMPGEN '-o' string 'Write to a file, instead of STDOUT'
 	COMPGEN --output string 'Write to a file, instead of STDOUT'
+}
+
+Register-Completer docker_manifest {
+	COMPGEN annotate SubCommand 'Add additional information to a local image manifest'
+	COMPGEN create SubCommand 'Create a local manifest list for annotating and pushing to a registry'
+	COMPGEN inspect SubCommand 'Display an image manifest, or manifest list'
+	COMPGEN push SubCommand 'Push a manifest list to a repository'
+}
+
+Register-Completer docker_manifest_annotate -Option {
+	COMPGEN --arch string 'Set architecture'
+	COMPGEN --os string 'Set operating system'
+	COMPGEN --os-features strings 'Set operating system feature'
+	COMPGEN --variant string 'Set architecture variant'
+}
+
+Register-Completer docker_manifest_create -Option {
+	COMPGEN '-a' Switch 'Amend an existing manifest list'
+	COMPGEN --amend Switch 'Amend an existing manifest list'
+	COMPGEN --insecure Switch 'allow communication with an insecure registry'
+}
+
+Register-Completer docker_manifest_inspect -Option {
+	COMPGEN --insecure Switch 'allow communication with an insecure registry'
+	COMPGEN '-v' Switch 'Output additional info including layers and platform'
+	COMPGEN --verbose Switch 'Output additional info including layers and platform'
+}
+
+Register-Completer docker_manifest_push -Option {
+	COMPGEN --insecure Switch 'Allow push to an insecure registry'
+	COMPGEN '-p' Switch 'Remove the local manifest list after push'
+	COMPGEN --purge Switch 'Remove the local manifest list after push'
 }
 
 Register-Completer docker_network {
@@ -839,6 +874,7 @@ Register-Completer docker_secret_create -Option {
 	COMPGEN --driver string 'Secret driver'
 	COMPGEN '-l' list 'Secret labels'
 	COMPGEN --label list 'Secret labels'
+	COMPGEN --template-driver string 'Template driver'
 }
 
 Register-Completer docker_secret_inspect -Option {
@@ -1086,11 +1122,15 @@ Register-Completer docker_stack {
 	COMPGEN rm SubCommand 'Remove one or more stacks'
 	COMPGEN services SubCommand 'List the services in the stack'
 }
+Register-Completer docker_stack -Option {
+	COMPGEN --kubeconfig string 'Kubernetes config file'
+	COMPGEN --namespace string 'Kubernetes namespace to use'
+}
 
 Register-Completer docker_stack_deploy -Option {
 	COMPGEN --bundle-file string 'Path to a Distributed Application Bundle file'
-	COMPGEN '-c' string 'Path to a Compose file'
-	COMPGEN --compose-file string 'Path to a Compose file'
+	COMPGEN '-c' strings 'Path to a Compose file'
+	COMPGEN --compose-file strings 'Path to a Compose file'
 	COMPGEN --prune Switch 'Prune services that are no longer referenced'
 	COMPGEN --resolve-image string 'Query the registry to resolve image digest and supported platforms ("always"|"changed"|"never")'
 	COMPGEN --with-registry-auth Switch 'Send registry authentication details to Swarm agents'
@@ -1227,12 +1267,15 @@ Register-Completer docker_system_prune -Option {
 }
 
 Register-Completer docker_trust {
-	COMPGEN key ManagementCommand 'Manage keys for signing Docker images (experimental)'
-	COMPGEN signer ManagementCommand 'Manage entities who can sign Docker images (experimental)'
+	COMPGEN key ManagementCommand 'Manage keys for signing Docker images'
+	COMPGEN signer ManagementCommand 'Manage entities who can sign Docker images'
 	COMPGEN inspect SubCommand 'Return low-level information about keys and signatures'
 	COMPGEN revoke SubCommand 'Remove trust for an image'
 	COMPGEN sign SubCommand 'Sign an image'
-	COMPGEN view SubCommand 'Display detailed information about keys and signatures'
+}
+
+Register-Completer docker_trust_inspect -Option {
+	COMPGEN --pretty Switch 'Print the information in a human friendly format'
 }
 
 Register-Completer docker_trust_key {
@@ -1275,7 +1318,7 @@ Register-Completer docker_volume {
 	COMPGEN create SubCommand 'Create a volume'
 	COMPGEN inspect SubCommand 'Display detailed information on one or more volumes'
 	COMPGEN ls SubCommand 'List volumes'
-	COMPGEN prune SubCommand 'Remove all unused volumes'
+	COMPGEN prune SubCommand 'Remove all unused local volumes'
 	COMPGEN rm SubCommand 'Remove one or more volumes'
 }
 
@@ -1621,8 +1664,8 @@ Register-Completer docker_create -Option {
 
 Register-Completer docker_deploy -Option {
 	COMPGEN --bundle-file string 'Path to a Distributed Application Bundle file'
-	COMPGEN '-c' string 'Path to a Compose file'
-	COMPGEN --compose-file string 'Path to a Compose file'
+	COMPGEN '-c' strings 'Path to a Compose file'
+	COMPGEN --compose-file strings 'Path to a Compose file'
 	COMPGEN --prune Switch 'Prune services that are no longer referenced'
 	COMPGEN --resolve-image string 'Query the registry to resolve image digest and supported platforms ("always"|"changed"|"never")'
 	COMPGEN --with-registry-auth Switch 'Send registry authentication details to Swarm agents'
