@@ -147,7 +147,6 @@ $mount = {
 
 Register-Completer docker_--log-level { 'debug', 'info', 'warn', 'error', 'fatal' }
 Register-Completer docker_-l (Get-Completer docker_--log-level)
-Register-Completer docker_--orchestrator { 'swarm', 'kubernetes' }
 
 Register-Completer docker_config_inspect $configAll
 Register-Completer docker_config_ls_--filter {
@@ -305,6 +304,7 @@ Register-Completer docker_container_top $containerRunning
 Register-Completer docker_container_wait $containerAll
 
 Register-Completer docker_image_build_--cache-from $imageAll
+Register-Completer docker_image_build_--console { 'true', 'false', 'auto' }
 Register-Completer docker_image_build_--network {
 	Param([string]$wordToComplete)
 
@@ -666,6 +666,7 @@ Register-Completer docker_service_update_--secret-rm { Get-Secret }
 Register-Completer docker_service_update_--update-failure-action (Get-Completer docker_service_create_--update-failure-action)
 Register-Completer docker_service_update_--update-order (Get-Completer docker_service_create_--update-order)
 
+Register-Completer docker_stack_--orchestrator { 'swarm', 'kubernetes', 'all' }
 Register-Completer docker_stack_deploy $stackAll
 Register-Completer docker_stack_ps $stackAll
 Register-Completer docker_stack_ps_--filter {
@@ -843,6 +844,7 @@ Register-Completer docker_volume_ls_--format {
 Register-Completer docker_volume_rm $volumeAll
 
 Register-Completer docker_build_--cache-from (Get-Completer docker_image_build_--cache-from)
+Register-Completer docker_build_--console (Get-Completer docker_image_build_--console)
 Register-Completer docker_build_--network (Get-Completer docker_image_build_--network)
 Register-Completer docker_build_--tag (Get-Completer docker_image_build_--tag)
 Register-Completer docker_build_-t (Get-Completer docker_build_--tag)

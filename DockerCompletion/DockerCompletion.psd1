@@ -1,7 +1,7 @@
 @{
 
 RootModule = 'DockerCompletion'
-ModuleVersion = '1.1803.0.180323'
+ModuleVersion = '1.1806.0.180720'
 GUID = '3c963cd2-8dce-445a-b7b7-778726965d7d'
 Author = 'Masatoshi Higuchi'
 CompanyName = 'N/A'
@@ -20,7 +20,7 @@ PrivateData = @{
 		Tags = 'docker', 'completion'
 		LicenseUri = 'https://github.com/matt9ucci/DockerCompletion/blob/master/LICENSE'
 		ProjectUri = 'https://github.com/matt9ucci/DockerCompletion'
-		ReleaseNotes = 'First release for docker-ce v18.03.0-ce'
+		ReleaseNotes = 'First release for docker-ce v18.06.0-ce'
 	}
 }
 

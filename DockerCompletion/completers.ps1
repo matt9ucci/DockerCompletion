@@ -1,4 +1,4 @@
-# docker-ce v18.03.0-ce https://github.com/docker/docker-ce/tree/v18.03.0-ce
+# docker-ce v18.06.0-ce https://github.com/docker/docker-ce/tree/v18.06.0-ce
 $managementCommands = @(
 	COMPGEN checkpoint ManagementCommand 'Manage checkpoints'
 	COMPGEN config ManagementCommand 'Manage Docker configs'
@@ -80,7 +80,6 @@ Register-Completer docker -Option {
 	COMPGEN --host list 'Daemon socket(s) to connect to'
 	COMPGEN '-l' string 'Set the logging level ("debug"|"info"|"warn"|"error"|"fatal")'
 	COMPGEN --log-level string 'Set the logging level ("debug"|"info"|"warn"|"error"|"fatal")'
-	COMPGEN --orchestrator string 'Which orchestrator to use with the docker cli (swarm|kubernetes) (default swarm) (experimental)'
 	COMPGEN --tls Switch 'Use TLS; implied by --tlsverify'
 	COMPGEN --tlscacert string 'Trust certs signed only by this CA'
 	COMPGEN --tlscert string 'Path to TLS certificate file'
@@ -553,6 +552,7 @@ Register-Completer docker_image_build -Option {
 	COMPGEN --cache-from strings 'Images to consider as cache sources'
 	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
 	COMPGEN --compress Switch 'Compress the build context using gzip'
+	COMPGEN --console string 'Show console output (with buildkit only) (true, false, auto)'
 	COMPGEN --cpu-period int 'Limit the CPU CFS (Completely Fair Scheduler) period'
 	COMPGEN --cpu-quota int 'Limit the CPU CFS (Completely Fair Scheduler) quota'
 	COMPGEN '-c' int 'CPU shares (relative weight)'
@@ -673,11 +673,11 @@ Register-Completer docker_manifest_annotate -Option {
 Register-Completer docker_manifest_create -Option {
 	COMPGEN '-a' Switch 'Amend an existing manifest list'
 	COMPGEN --amend Switch 'Amend an existing manifest list'
-	COMPGEN --insecure Switch 'allow communication with an insecure registry'
+	COMPGEN --insecure Switch 'Allow communication with an insecure registry'
 }
 
 Register-Completer docker_manifest_inspect -Option {
-	COMPGEN --insecure Switch 'allow communication with an insecure registry'
+	COMPGEN --insecure Switch 'Allow communication with an insecure registry'
 	COMPGEN '-v' Switch 'Output additional info including layers and platform'
 	COMPGEN --verbose Switch 'Output additional info including layers and platform'
 }
@@ -927,6 +927,7 @@ Register-Completer docker_service_create -Option {
 	COMPGEN --health-timeout duration 'Maximum time to allow one check to run (ms|s|m|h)'
 	COMPGEN --host list 'Set one or more custom host-to-IP mappings (host:ip)'
 	COMPGEN --hostname string 'Container hostname'
+	COMPGEN --init Switch 'Use an init inside each service container to forward signals and reap processes'
 	COMPGEN --isolation string 'Service container isolation mode'
 	COMPGEN '-l' list 'Service labels'
 	COMPGEN --label list 'Service labels'
@@ -1062,6 +1063,7 @@ Register-Completer docker_service_update -Option {
 	COMPGEN --host-rm list 'Remove a custom host-to-IP mapping (host:ip)'
 	COMPGEN --hostname string 'Container hostname'
 	COMPGEN --image string 'Service image tag'
+	COMPGEN --init Switch 'Use an init inside each service container to forward signals and reap processes'
 	COMPGEN --isolation string 'Service container isolation mode'
 	COMPGEN --label-add list 'Add or update a service label'
 	COMPGEN --label-rm list 'Remove a label by its key'
@@ -1124,36 +1126,45 @@ Register-Completer docker_stack {
 }
 Register-Completer docker_stack -Option {
 	COMPGEN --kubeconfig string 'Kubernetes config file'
-	COMPGEN --namespace string 'Kubernetes namespace to use'
+	COMPGEN --orchestrator string 'Orchestrator to use (swarm|kubernetes|all)'
 }
 
 Register-Completer docker_stack_deploy -Option {
 	COMPGEN --bundle-file string 'Path to a Distributed Application Bundle file'
 	COMPGEN '-c' strings 'Path to a Compose file'
 	COMPGEN --compose-file strings 'Path to a Compose file'
+	COMPGEN --namespace string 'Kubernetes namespace to use'
 	COMPGEN --prune Switch 'Prune services that are no longer referenced'
 	COMPGEN --resolve-image string 'Query the registry to resolve image digest and supported platforms ("always"|"changed"|"never")'
 	COMPGEN --with-registry-auth Switch 'Send registry authentication details to Swarm agents'
 }
 
 Register-Completer docker_stack_ls -Option {
+	COMPGEN --all-namespaces Switch 'List stacks from all Kubernetes namespaces'
 	COMPGEN --format string 'Pretty-print stacks using a Go template'
+	COMPGEN --namespace strings 'Kubernetes namespaces to use'
 }
 
 Register-Completer docker_stack_ps -Option {
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
 	COMPGEN --format string 'Pretty-print tasks using a Go template'
+	COMPGEN --namespace string 'Kubernetes namespace to use'
 	COMPGEN --no-resolve Switch 'Do not map IDs to Names'
 	COMPGEN --no-trunc Switch 'Do not truncate output'
 	COMPGEN '-q' Switch 'Only display task IDs'
 	COMPGEN --quiet Switch 'Only display task IDs'
 }
 
+Register-Completer docker_stack_rm -Option {
+	COMPGEN --namespace string 'Kubernetes namespace to use'
+}
+
 Register-Completer docker_stack_services -Option {
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
 	COMPGEN --format string 'Pretty-print services using a Go template'
+	COMPGEN --namespace string 'Kubernetes namespace to use'
 	COMPGEN '-q' Switch 'Only display IDs'
 	COMPGEN --quiet Switch 'Only display IDs'
 }
@@ -1196,18 +1207,18 @@ Register-Completer docker_swarm_init -Option {
 	COMPGEN --task-history-limit int 'Task history retention limit'
 }
 
-Register-Completer docker_swarm_join-token -Option {
-	COMPGEN '-q' Switch 'Only display token'
-	COMPGEN --quiet Switch 'Only display token'
-	COMPGEN --rotate Switch 'Rotate join token'
-}
-
 Register-Completer docker_swarm_join -Option {
 	COMPGEN --advertise-addr string 'Advertised address (format: <ip|interface>[:port])'
 	COMPGEN --availability string 'Availability of the node ("active"|"pause"|"drain")'
 	COMPGEN --data-path-addr string 'Address or interface to use for data path traffic (format: <ip|interface>)'
 	COMPGEN --listen-addr node-addr 'Listen address (format: <ip|interface>[:port])'
 	COMPGEN --token string 'Token for entry into the swarm'
+}
+
+Register-Completer docker_swarm_join-token -Option {
+	COMPGEN '-q' Switch 'Only display token'
+	COMPGEN --quiet Switch 'Only display token'
+	COMPGEN --rotate Switch 'Rotate join token'
 }
 
 Register-Completer docker_swarm_leave -Option {
@@ -1360,6 +1371,7 @@ Register-Completer docker_build -Option {
 	COMPGEN --cache-from strings 'Images to consider as cache sources'
 	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
 	COMPGEN --compress Switch 'Compress the build context using gzip'
+	COMPGEN --console string 'Show console output (with buildkit only) (true, false, auto)'
 	COMPGEN --cpu-period int 'Limit the CPU CFS (Completely Fair Scheduler) period'
 	COMPGEN --cpu-quota int 'Limit the CPU CFS (Completely Fair Scheduler) quota'
 	COMPGEN '-c' int 'CPU shares (relative weight)'
@@ -1524,6 +1536,7 @@ Register-Completer docker_search -Option {
 Register-Completer docker_version -Option {
 	COMPGEN '-f' string 'Format the output using the given Go template'
 	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN --kubeconfig string 'Kubernetes config file'
 }
 
 if ($env:DOCKER_HIDE_LEGACY_COMMANDS) {
@@ -1666,6 +1679,7 @@ Register-Completer docker_deploy -Option {
 	COMPGEN --bundle-file string 'Path to a Distributed Application Bundle file'
 	COMPGEN '-c' strings 'Path to a Compose file'
 	COMPGEN --compose-file strings 'Path to a Compose file'
+	COMPGEN --namespace string 'Kubernetes namespace to use'
 	COMPGEN --prune Switch 'Prune services that are no longer referenced'
 	COMPGEN --resolve-image string 'Query the registry to resolve image digest and supported platforms ("always"|"changed"|"never")'
 	COMPGEN --with-registry-auth Switch 'Send registry authentication details to Swarm agents'
