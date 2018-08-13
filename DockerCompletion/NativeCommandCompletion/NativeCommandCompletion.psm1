@@ -114,7 +114,7 @@ function Register-NativeCommandArgumentCompleter {
 		[scriptblock]$ScriptBlock
 	)
 
-	$CommandName, (Get-Alias -Definition $CommandName -ErrorAction SilentlyContinue).Name | ForEach-Object {
+	$CommandName, (Get-Alias -Definition $CommandName -ErrorAction Ignore).Name | ForEach-Object {
 		if ($_) {
 			Register-ArgumentCompleter -CommandName $_ -ScriptBlock $ScriptBlock -Native
 		}
