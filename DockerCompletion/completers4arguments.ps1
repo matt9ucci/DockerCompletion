@@ -577,6 +577,7 @@ Register-Completer docker_search_--filter {
 
 Register-Completer docker_service_create $imageAll
 Register-Completer docker_service_create_--config $configAll
+Register-Completer docker_service_create_--endpoint-mode { 'dnsrr', 'vip' }
 Register-Completer docker_service_create_--log-driver $logDriver
 Register-Completer docker_service_create_--mode { 'global', 'replicated' }
 Register-Completer docker_service_create_--mount $mount
@@ -653,6 +654,7 @@ Register-Completer docker_service_scale {
 Register-Completer docker_service_update $serviceAll
 Register-Completer docker_service_update_--config-add $configAll
 Register-Completer docker_service_update_--config-rm $configAll
+Register-Completer docker_service_update_--endpoint-mode { 'dnsrr', 'vip' }
 Register-Completer docker_service_update_--image $imageAll
 Register-Completer docker_service_update_--log-driver (Get-Completer docker_service_create_--log-driver)
 Register-Completer docker_service_update_--mount-add $mount
@@ -668,6 +670,7 @@ Register-Completer docker_service_update_--update-order (Get-Completer docker_se
 
 Register-Completer docker_stack_--orchestrator { 'swarm', 'kubernetes', 'all' }
 Register-Completer docker_stack_deploy $stackAll
+Register-Completer docker_stack_deploy_--resolve-image { 'always', 'changed', 'never' }
 Register-Completer docker_stack_ps $stackAll
 Register-Completer docker_stack_ps_--filter {
 	Param([string]$wordToComplete)
