@@ -304,7 +304,7 @@ Register-Completer docker_container_top $containerRunning
 Register-Completer docker_container_wait $containerAll
 
 Register-Completer docker_image_build_--cache-from $imageAll
-Register-Completer docker_image_build_--console { 'true', 'false', 'auto' }
+Register-Completer docker_image_build_--progress { 'auto', 'plain', 'tty' }
 Register-Completer docker_image_build_--network {
 	Param([string]$wordToComplete)
 
@@ -321,6 +321,27 @@ Register-Completer docker_image_build_--network {
 
 	foreach ($v in $values) {
 		COMPGEN "container:$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
+	}
+}
+Register-Completer docker_image_build_--secret {
+	param ([string]$wordToComplete)
+
+	if ($wordToComplete -notlike '*=*') {
+		COMPGEN id string 'Secret name'
+		COMPGEN source string 'Secret source'
+		COMPGEN src string 'Abbreviation of "source"'
+		COMPGEN type string 'Secret type'
+		return
+	}
+
+	$key = ($wordToComplete -split '=')[0]
+	$values = switch ($key) {
+		id { Get-Secret }
+		type { 'file' }
+	}
+
+	foreach ($v in $values) {
+		COMPGEN "$key=$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
 	}
 }
 Register-Completer docker_image_build_--tag $imageAll
@@ -847,8 +868,9 @@ Register-Completer docker_volume_ls_--format {
 Register-Completer docker_volume_rm $volumeAll
 
 Register-Completer docker_build_--cache-from (Get-Completer docker_image_build_--cache-from)
-Register-Completer docker_build_--console (Get-Completer docker_image_build_--console)
+Register-Completer docker_build_--progress (Get-Completer docker_image_build_--progress)
 Register-Completer docker_build_--network (Get-Completer docker_image_build_--network)
+Register-Completer docker_build_--secret (Get-Completer docker_image_build_--secret)
 Register-Completer docker_build_--tag (Get-Completer docker_image_build_--tag)
 Register-Completer docker_build_-t (Get-Completer docker_build_--tag)
 

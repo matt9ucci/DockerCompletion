@@ -1,5 +1,6 @@
-# docker-ce v18.06.0-ce https://github.com/docker/docker-ce/tree/v18.06.0-ce
+# docker-ce v18.09.0 https://github.com/docker/docker-ce/tree/v18.09.0
 $managementCommands = @(
+	COMPGEN builder ManagementCommand 'Manage builds'
 	COMPGEN checkpoint ManagementCommand 'Manage checkpoints'
 	COMPGEN config ManagementCommand 'Manage Docker configs'
 	COMPGEN container ManagementCommand 'Manage containers'
@@ -552,7 +553,6 @@ Register-Completer docker_image_build -Option {
 	COMPGEN --cache-from strings 'Images to consider as cache sources'
 	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
 	COMPGEN --compress Switch 'Compress the build context using gzip'
-	COMPGEN --console string 'Show console output (with buildkit only) (true, false, auto)'
 	COMPGEN --cpu-period int 'Limit the CPU CFS (Completely Fair Scheduler) period'
 	COMPGEN --cpu-quota int 'Limit the CPU CFS (Completely Fair Scheduler) quota'
 	COMPGEN '-c' int 'CPU shares (relative weight)'
@@ -572,13 +572,16 @@ Register-Completer docker_image_build -Option {
 	COMPGEN --network string 'Set the networking mode for the RUN instructions during build'
 	COMPGEN --no-cache Switch 'Do not use cache when building the image'
 	COMPGEN --platform string 'Set platform if server is multi-platform capable'
+	COMPGEN --progress string 'Set type of progress output (auto, plain, tty). Use plain to show container output'
 	COMPGEN --pull Switch 'Always attempt to pull a newer version of the image'
 	COMPGEN '-q' Switch 'Suppress the build output and print image ID on success'
 	COMPGEN --quiet Switch 'Suppress the build output and print image ID on success'
 	COMPGEN --rm Switch 'Remove intermediate containers after a successful build'
+	COMPGEN --secret stringArray 'Secret file to expose to the build (only if BuildKit enabled): id=mysecret,src=/local/secret'
 	COMPGEN --security-opt strings 'Security options'
 	COMPGEN --shm-size bytes 'Size of /dev/shm'
 	COMPGEN --squash Switch 'Squash newly built layers into a single new layer'
+	COMPGEN --ssh stringArray 'SSH agent socket or keys to expose to the build (only if BuildKit enabled) (format: default|<id>[=<socket>|<key>[,<key>]])'
 	COMPGEN --stream Switch 'Stream attaches to server to negotiate build context'
 	COMPGEN '-t' list 'Name and optionally a tag in the ''name:tag'' format'
 	COMPGEN --tag list 'Name and optionally a tag in the ''name:tag'' format'
@@ -600,6 +603,7 @@ Register-Completer docker_image_import -Option {
 	COMPGEN --change list 'Apply Dockerfile instruction to the created image'
 	COMPGEN '-m' string 'Set commit message for imported image'
 	COMPGEN --message string 'Set commit message for imported image'
+	COMPGEN --platform string 'Set platform if server is multi-platform capable'
 }
 
 Register-Completer docker_image_inspect -Option {
@@ -1131,8 +1135,8 @@ Register-Completer docker_stack -Option {
 
 Register-Completer docker_stack_deploy -Option {
 	COMPGEN --bundle-file string 'Path to a Distributed Application Bundle file'
-	COMPGEN '-c' strings 'Path to a Compose file'
-	COMPGEN --compose-file strings 'Path to a Compose file'
+	COMPGEN '-c' strings 'Path to a Compose file, or "-" to read from stdin'
+	COMPGEN --compose-file strings 'Path to a Compose file, or "-" to read from stdin'
 	COMPGEN --namespace string 'Kubernetes namespace to use'
 	COMPGEN --prune Switch 'Prune services that are no longer referenced'
 	COMPGEN --resolve-image string 'Query the registry to resolve image digest and supported platforms ("always"|"changed"|"never")'
@@ -1198,6 +1202,8 @@ Register-Completer docker_swarm_init -Option {
 	COMPGEN --availability string 'Availability of the node ("active"|"pause"|"drain")'
 	COMPGEN --cert-expiry duration 'Validity period for node certificates (ns|us|ms|s|m|h)'
 	COMPGEN --data-path-addr string 'Address or interface to use for data path traffic (format: <ip|interface>)'
+	COMPGEN --default-addr-pool ipNetSlice 'default address pool in CIDR format'
+	COMPGEN --default-addr-pool-mask-length uint32 'default address pool subnet mask length'
 	COMPGEN --dispatcher-heartbeat duration 'Dispatcher heartbeat period (ns|us|ms|s|m|h)'
 	COMPGEN --external-ca external-ca 'Specifications of one or more certificate signing endpoints'
 	COMPGEN --force-new-cluster Switch 'Force create a new cluster from current state'
@@ -1371,7 +1377,6 @@ Register-Completer docker_build -Option {
 	COMPGEN --cache-from strings 'Images to consider as cache sources'
 	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
 	COMPGEN --compress Switch 'Compress the build context using gzip'
-	COMPGEN --console string 'Show console output (with buildkit only) (true, false, auto)'
 	COMPGEN --cpu-period int 'Limit the CPU CFS (Completely Fair Scheduler) period'
 	COMPGEN --cpu-quota int 'Limit the CPU CFS (Completely Fair Scheduler) quota'
 	COMPGEN '-c' int 'CPU shares (relative weight)'
@@ -1391,18 +1396,34 @@ Register-Completer docker_build -Option {
 	COMPGEN --network string 'Set the networking mode for the RUN instructions during build'
 	COMPGEN --no-cache Switch 'Do not use cache when building the image'
 	COMPGEN --platform string 'Set platform if server is multi-platform capable'
+	COMPGEN --progress string 'Set type of progress output (auto, plain, tty). Use plain to show container output'
 	COMPGEN --pull Switch 'Always attempt to pull a newer version of the image'
 	COMPGEN '-q' Switch 'Suppress the build output and print image ID on success'
 	COMPGEN --quiet Switch 'Suppress the build output and print image ID on success'
 	COMPGEN --rm Switch 'Remove intermediate containers after a successful build'
+	COMPGEN --secret stringArray 'Secret file to expose to the build (only if BuildKit enabled): id=mysecret,src=/local/secret'
 	COMPGEN --security-opt strings 'Security options'
 	COMPGEN --shm-size bytes 'Size of /dev/shm'
 	COMPGEN --squash Switch 'Squash newly built layers into a single new layer'
+	COMPGEN --ssh stringArray 'SSH agent socket or keys to expose to the build (only if BuildKit enabled) (format: default|<id>[=<socket>|<key>[,<key>]])'
 	COMPGEN --stream Switch 'Stream attaches to server to negotiate build context'
 	COMPGEN '-t' list 'Name and optionally a tag in the ''name:tag'' format'
 	COMPGEN --tag list 'Name and optionally a tag in the ''name:tag'' format'
 	COMPGEN --target string 'Set the target build stage to build.'
 	COMPGEN --ulimit ulimit 'Ulimit options'
+}
+
+Register-Completer docker_builder {
+	COMPGEN prune SubCommand 'Remove build cache'
+}
+
+Register-Completer docker_builder_prune -Option {
+	COMPGEN '-a' Switch 'Remove all unused images, not just dangling ones'
+	COMPGEN --all Switch 'Remove all unused images, not just dangling ones'
+	COMPGEN --filter filter 'Provide filter values (e.g. ''unused-for=24h'')'
+	COMPGEN '-f' Switch 'Do not prompt for confirmation'
+	COMPGEN --force Switch 'Do not prompt for confirmation'
+	COMPGEN --keep-storage bytes 'Amount of disk space to keep for cache'
 }
 
 Register-Completer docker_login -Option {
@@ -1677,8 +1698,8 @@ Register-Completer docker_create -Option {
 
 Register-Completer docker_deploy -Option {
 	COMPGEN --bundle-file string 'Path to a Distributed Application Bundle file'
-	COMPGEN '-c' strings 'Path to a Compose file'
-	COMPGEN --compose-file strings 'Path to a Compose file'
+	COMPGEN '-c' strings 'Path to a Compose file, or "-" to read from stdin'
+	COMPGEN --compose-file strings 'Path to a Compose file, or "-" to read from stdin'
 	COMPGEN --namespace string 'Kubernetes namespace to use'
 	COMPGEN --prune Switch 'Prune services that are no longer referenced'
 	COMPGEN --resolve-image string 'Query the registry to resolve image digest and supported platforms ("always"|"changed"|"never")'
@@ -1741,6 +1762,7 @@ Register-Completer docker_import -Option {
 	COMPGEN --change list 'Apply Dockerfile instruction to the created image'
 	COMPGEN '-m' string 'Set commit message for imported image'
 	COMPGEN --message string 'Set commit message for imported image'
+	COMPGEN --platform string 'Set platform if server is multi-platform capable'
 }
 
 Register-Completer docker_info -Option {
