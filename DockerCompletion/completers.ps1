@@ -1,9 +1,10 @@
-# docker-ce v18.09.0 https://github.com/docker/docker-ce/tree/v18.09.0
+# docker-ce v19.03.0 https://github.com/docker/docker-ce/tree/v19.03.0
 $managementCommands = @(
 	COMPGEN builder ManagementCommand 'Manage builds'
 	COMPGEN checkpoint ManagementCommand 'Manage checkpoints'
 	COMPGEN config ManagementCommand 'Manage Docker configs'
 	COMPGEN container ManagementCommand 'Manage containers'
+	COMPGEN context ManagementCommand 'Manage contexts'
 	COMPGEN image ManagementCommand 'Manage images'
 	COMPGEN manifest ManagementCommand 'Manage Docker image manifests and manifest lists'
 	COMPGEN network ManagementCommand 'Manage networks'
@@ -73,6 +74,8 @@ if ($env:DOCKER_HIDE_LEGACY_COMMANDS) {
 
 Register-Completer docker -Option {
 	COMPGEN --config string 'Location of client config files'
+	COMPGEN '-c' string 'Name of the context to use to connect to the daemon (overrides DOCKER_HOST env var and default context set with "docker context use")'
+	COMPGEN --context string 'Name of the context to use to connect to the daemon (overrides DOCKER_HOST env var and default context set with "docker context use")'
 	COMPGEN '-D' Switch 'Enable debug mode'
 	COMPGEN --debug Switch 'Enable debug mode'
 	COMPGEN '-h' Switch 'Print usage'
@@ -219,11 +222,13 @@ Register-Completer docker_container_create -Option {
 	COMPGEN --dns list 'Set custom DNS servers'
 	COMPGEN --dns-option list 'Set DNS options'
 	COMPGEN --dns-search list 'Set custom DNS search domains'
+	COMPGEN --domainname string 'Container NIS domain name'
 	COMPGEN --entrypoint string 'Overwrite the default ENTRYPOINT of the image'
 	COMPGEN '-e' list 'Set environment variables'
 	COMPGEN --env list 'Set environment variables'
 	COMPGEN --env-file list 'Read in a file of environment variables'
 	COMPGEN --expose list 'Expose a port or a range of ports'
+	COMPGEN --gpus gpu-request 'GPU devices to add to the container (''all'' to pass all GPUs)'
 	COMPGEN --group-add list 'Add additional groups to join'
 	COMPGEN --health-cmd string 'Command to run to check health'
 	COMPGEN --health-interval duration 'Time between running the check (ms|s|m|h) (default 0s)'
@@ -257,7 +262,7 @@ Register-Completer docker_container_create -Option {
 	COMPGEN --memory-swappiness int 'Tune container memory swappiness (0 to 100)'
 	COMPGEN --mount mount 'Attach a filesystem mount to the container'
 	COMPGEN --name string 'Assign a name to the container'
-	COMPGEN --network string 'Connect a container to a network'
+	COMPGEN --network network 'Connect a container to a network'
 	COMPGEN --network-alias list 'Add network-scoped alias for the container'
 	COMPGEN --no-healthcheck Switch 'Disable any container-specified HEALTHCHECK'
 	COMPGEN --oom-kill-disable Switch 'Disable OOM Killer'
@@ -412,11 +417,13 @@ Register-Completer docker_container_run -Option {
 	COMPGEN --dns list 'Set custom DNS servers'
 	COMPGEN --dns-option list 'Set DNS options'
 	COMPGEN --dns-search list 'Set custom DNS search domains'
+	COMPGEN --domainname string 'Container NIS domain name'
 	COMPGEN --entrypoint string 'Overwrite the default ENTRYPOINT of the image'
 	COMPGEN '-e' list 'Set environment variables'
 	COMPGEN --env list 'Set environment variables'
 	COMPGEN --env-file list 'Read in a file of environment variables'
 	COMPGEN --expose list 'Expose a port or a range of ports'
+	COMPGEN --gpus gpu-request 'GPU devices to add to the container (''all'' to pass all GPUs)'
 	COMPGEN --group-add list 'Add additional groups to join'
 	COMPGEN --health-cmd string 'Command to run to check health'
 	COMPGEN --health-interval duration 'Time between running the check (ms|s|m|h) (default 0s)'
@@ -450,7 +457,7 @@ Register-Completer docker_container_run -Option {
 	COMPGEN --memory-swappiness int 'Tune container memory swappiness (0 to 100)'
 	COMPGEN --mount mount 'Attach a filesystem mount to the container'
 	COMPGEN --name string 'Assign a name to the container'
-	COMPGEN --network string 'Connect a container to a network'
+	COMPGEN --network network 'Connect a container to a network'
 	COMPGEN --network-alias list 'Add network-scoped alias for the container'
 	COMPGEN --no-healthcheck Switch 'Disable any container-specified HEALTHCHECK'
 	COMPGEN --oom-kill-disable Switch 'Disable OOM Killer'
@@ -529,7 +536,54 @@ Register-Completer docker_container_update -Option {
 	COMPGEN --memory bytes 'Memory limit'
 	COMPGEN --memory-reservation bytes 'Memory soft limit'
 	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: ''-1'' to enable unlimited swap'
+	COMPGEN --pids-limit int 'Tune container pids limit (set -1 for unlimited)'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
+}
+
+Register-Completer docker_context {
+	COMPGEN create SubCommand 'Create a context'
+	COMPGEN export SubCommand 'Export a context to a tar or kubeconfig file'
+	COMPGEN import SubCommand 'Import a context from a tar or zip file'
+	COMPGEN inspect SubCommand 'Display detailed information on one or more contexts'
+	COMPGEN ls SubCommand 'List contexts'
+	COMPGEN rm SubCommand 'Remove one or more contexts'
+	COMPGEN update SubCommand 'Update a context'
+	COMPGEN use SubCommand 'Set the current docker context'
+}
+
+Register-Completer docker_context_create -Option {
+	COMPGEN --default-stack-orchestrator string 'Default orchestrator for stack operations to use with this context (swarm|kubernetes|all)'
+	COMPGEN --description string 'Description of the context'
+	COMPGEN --docker stringToString 'set the docker endpoint'
+	COMPGEN --from string 'create context from a named context'
+	COMPGEN --kubernetes stringToString 'set the kubernetes endpoint'
+}
+
+Register-Completer docker_context_export -Option {
+	COMPGEN --kubeconfig Switch 'Export as a kubeconfig file'
+}
+
+Register-Completer docker_context_inspect -Option {
+	COMPGEN '-f' string 'Format the output using the given Go template'
+	COMPGEN --format string 'Format the output using the given Go template'
+}
+
+Register-Completer docker_context_ls -Option {
+	COMPGEN --format string 'Pretty-print contexts using a Go template'
+	COMPGEN '-q' Switch 'Only show context names'
+	COMPGEN --quiet Switch 'Only show context names'
+}
+
+Register-Completer docker_context_rm -Option {
+	COMPGEN '-f' Switch 'Force the removal of a context in use'
+	COMPGEN --force Switch 'Force the removal of a context in use'
+}
+
+Register-Completer docker_context_update -Option {
+	COMPGEN --default-stack-orchestrator string 'Default orchestrator for stack operations to use with this context (swarm|kubernetes|all)'
+	COMPGEN --description string 'Description of the context'
+	COMPGEN --docker stringToString 'set the docker endpoint'
+	COMPGEN --kubernetes stringToString 'set the kubernetes endpoint'
 }
 
 Register-Completer docker_image {
@@ -571,6 +625,8 @@ Register-Completer docker_image_build -Option {
 	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: ''-1'' to enable unlimited swap'
 	COMPGEN --network string 'Set the networking mode for the RUN instructions during build'
 	COMPGEN --no-cache Switch 'Do not use cache when building the image'
+	COMPGEN '-o' stringArray 'Output destination (format: type=local,dest=path)'
+	COMPGEN --output stringArray 'Output destination (format: type=local,dest=path)'
 	COMPGEN --platform string 'Set platform if server is multi-platform capable'
 	COMPGEN --progress string 'Set type of progress output (auto, plain, tty). Use plain to show container output'
 	COMPGEN --pull Switch 'Always attempt to pull a newer version of the image'
@@ -643,6 +699,8 @@ Register-Completer docker_image_pull -Option {
 	COMPGEN --all-tags Switch 'Download all tagged images in the repository'
 	COMPGEN --disable-content-trust Switch 'Skip image verification'
 	COMPGEN --platform string 'Set platform if server is multi-platform capable'
+	COMPGEN '-q' Switch 'Suppress verbose output'
+	COMPGEN --quiet Switch 'Suppress verbose output'
 }
 
 Register-Completer docker_image_push -Option {
@@ -704,6 +762,7 @@ Register-Completer docker_network {
 
 Register-Completer docker_network_connect -Option {
 	COMPGEN --alias strings 'Add network-scoped alias for the container'
+	COMPGEN --driver-opt strings 'driver options for the network'
 	COMPGEN --ip string 'IPv4 address (e.g., 172.30.100.104)'
 	COMPGEN --ip6 string 'IPv6 address (e.g., 2001:db8::33)'
 	COMPGEN --link list 'Add link to another container'
@@ -952,6 +1011,7 @@ Register-Completer docker_service_create -Option {
 	COMPGEN --quiet Switch 'Suppress progress output'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
 	COMPGEN --replicas uint 'Number of tasks'
+	COMPGEN --replicas-max-per-node uint 'Maximum number of tasks per node (default 0 = unlimited)'
 	COMPGEN --reserve-cpu decimal 'Reserve CPUs'
 	COMPGEN --reserve-memory bytes 'Reserve Memory'
 	COMPGEN --restart-condition string 'Restart when condition is met ("none"|"on-failure"|"any") (default "any")'
@@ -967,6 +1027,7 @@ Register-Completer docker_service_create -Option {
 	COMPGEN --secret secret 'Specify secrets to expose to the service'
 	COMPGEN --stop-grace-period duration 'Time to wait before force killing a container (ns|us|ms|s|m|h) (default 10s)'
 	COMPGEN --stop-signal string 'Signal to stop the container'
+	COMPGEN --sysctl list 'Sysctl options'
 	COMPGEN '-t' Switch 'Allocate a pseudo-TTY'
 	COMPGEN --tty Switch 'Allocate a pseudo-TTY'
 	COMPGEN --update-delay duration 'Delay between updates (ns|us|ms|s|m|h) (default 0s)'
@@ -1089,6 +1150,7 @@ Register-Completer docker_service_update -Option {
 	COMPGEN --quiet Switch 'Suppress progress output'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
 	COMPGEN --replicas uint 'Number of tasks'
+	COMPGEN --replicas-max-per-node uint 'Maximum number of tasks per node (default 0 = unlimited)'
 	COMPGEN --reserve-cpu decimal 'Reserve CPUs'
 	COMPGEN --reserve-memory bytes 'Reserve Memory'
 	COMPGEN --restart-condition string 'Restart when condition is met ("none"|"on-failure"|"any")'
@@ -1106,6 +1168,8 @@ Register-Completer docker_service_update -Option {
 	COMPGEN --secret-rm list 'Remove a secret'
 	COMPGEN --stop-grace-period duration 'Time to wait before force killing a container (ns|us|ms|s|m|h)'
 	COMPGEN --stop-signal string 'Signal to stop the container'
+	COMPGEN --sysctl-add list 'Add or update a Sysctl option'
+	COMPGEN --sysctl-rm list 'Remove a Sysctl option'
 	COMPGEN '-t' Switch 'Allocate a pseudo-TTY'
 	COMPGEN --tty Switch 'Allocate a pseudo-TTY'
 	COMPGEN --update-delay duration 'Delay between updates (ns|us|ms|s|m|h)'
@@ -1202,6 +1266,7 @@ Register-Completer docker_swarm_init -Option {
 	COMPGEN --availability string 'Availability of the node ("active"|"pause"|"drain")'
 	COMPGEN --cert-expiry duration 'Validity period for node certificates (ns|us|ms|s|m|h)'
 	COMPGEN --data-path-addr string 'Address or interface to use for data path traffic (format: <ip|interface>)'
+	COMPGEN --data-path-port uint32 'Port number to use for data path traffic (1024 - 49151). If no value is set or is set to 0, the default port (4789) is used.'
 	COMPGEN --default-addr-pool ipNetSlice 'default address pool in CIDR format'
 	COMPGEN --default-addr-pool-mask-length uint32 'default address pool subnet mask length'
 	COMPGEN --dispatcher-heartbeat duration 'Dispatcher heartbeat period (ns|us|ms|s|m|h)'
@@ -1395,6 +1460,8 @@ Register-Completer docker_build -Option {
 	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: ''-1'' to enable unlimited swap'
 	COMPGEN --network string 'Set the networking mode for the RUN instructions during build'
 	COMPGEN --no-cache Switch 'Do not use cache when building the image'
+	COMPGEN '-o' stringArray 'Output destination (format: type=local,dest=path)'
+	COMPGEN --output stringArray 'Output destination (format: type=local,dest=path)'
 	COMPGEN --platform string 'Set platform if server is multi-platform capable'
 	COMPGEN --progress string 'Set type of progress output (auto, plain, tty). Use plain to show container output'
 	COMPGEN --pull Switch 'Always attempt to pull a newer version of the image'
@@ -1414,7 +1481,52 @@ Register-Completer docker_build -Option {
 }
 
 Register-Completer docker_builder {
+	COMPGEN build SubCommand 'Build an image from a Dockerfile'
 	COMPGEN prune SubCommand 'Remove build cache'
+}
+
+Register-Completer docker_builder_build -Option {
+	COMPGEN --add-host list 'Add a custom host-to-IP mapping (host:ip)'
+	COMPGEN --build-arg list 'Set build-time variables'
+	COMPGEN --cache-from strings 'Images to consider as cache sources'
+	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
+	COMPGEN --compress Switch 'Compress the build context using gzip'
+	COMPGEN --cpu-period int 'Limit the CPU CFS (Completely Fair Scheduler) period'
+	COMPGEN --cpu-quota int 'Limit the CPU CFS (Completely Fair Scheduler) quota'
+	COMPGEN '-c' int 'CPU shares (relative weight)'
+	COMPGEN --cpu-shares int 'CPU shares (relative weight)'
+	COMPGEN --cpuset-cpus string 'CPUs in which to allow execution (0-3, 0,1)'
+	COMPGEN --cpuset-mems string 'MEMs in which to allow execution (0-3, 0,1)'
+	COMPGEN --disable-content-trust Switch 'Skip image verification'
+	COMPGEN '-f' string 'Name of the Dockerfile (Default is ''PATH/Dockerfile'')'
+	COMPGEN --file string 'Name of the Dockerfile (Default is ''PATH/Dockerfile'')'
+	COMPGEN --force-rm Switch 'Always remove intermediate containers'
+	COMPGEN --iidfile string 'Write the image ID to the file'
+	COMPGEN --isolation string 'Container isolation technology'
+	COMPGEN --label list 'Set metadata for an image'
+	COMPGEN '-m' bytes 'Memory limit'
+	COMPGEN --memory bytes 'Memory limit'
+	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: ''-1'' to enable unlimited swap'
+	COMPGEN --network string 'Set the networking mode for the RUN instructions during build'
+	COMPGEN --no-cache Switch 'Do not use cache when building the image'
+	COMPGEN '-o' stringArray 'Output destination (format: type=local,dest=path)'
+	COMPGEN --output stringArray 'Output destination (format: type=local,dest=path)'
+	COMPGEN --platform string 'Set platform if server is multi-platform capable'
+	COMPGEN --progress string 'Set type of progress output (auto, plain, tty). Use plain to show container output'
+	COMPGEN --pull Switch 'Always attempt to pull a newer version of the image'
+	COMPGEN '-q' Switch 'Suppress the build output and print image ID on success'
+	COMPGEN --quiet Switch 'Suppress the build output and print image ID on success'
+	COMPGEN --rm Switch 'Remove intermediate containers after a successful build'
+	COMPGEN --secret stringArray 'Secret file to expose to the build (only if BuildKit enabled): id=mysecret,src=/local/secret'
+	COMPGEN --security-opt strings 'Security options'
+	COMPGEN --shm-size bytes 'Size of /dev/shm'
+	COMPGEN --squash Switch 'Squash newly built layers into a single new layer'
+	COMPGEN --ssh stringArray 'SSH agent socket or keys to expose to the build (only if BuildKit enabled) (format: default|<id>[=<socket>|<key>[,<key>]])'
+	COMPGEN --stream Switch 'Stream attaches to server to negotiate build context'
+	COMPGEN '-t' list 'Name and optionally a tag in the ''name:tag'' format'
+	COMPGEN --tag list 'Name and optionally a tag in the ''name:tag'' format'
+	COMPGEN --target string 'Set the target build stage to build.'
+	COMPGEN --ulimit ulimit 'Ulimit options'
 }
 
 Register-Completer docker_builder_prune -Option {
@@ -1468,11 +1580,13 @@ Register-Completer docker_run -Option {
 	COMPGEN --dns list 'Set custom DNS servers'
 	COMPGEN --dns-option list 'Set DNS options'
 	COMPGEN --dns-search list 'Set custom DNS search domains'
+	COMPGEN --domainname string 'Container NIS domain name'
 	COMPGEN --entrypoint string 'Overwrite the default ENTRYPOINT of the image'
 	COMPGEN '-e' list 'Set environment variables'
 	COMPGEN --env list 'Set environment variables'
 	COMPGEN --env-file list 'Read in a file of environment variables'
 	COMPGEN --expose list 'Expose a port or a range of ports'
+	COMPGEN --gpus gpu-request 'GPU devices to add to the container (''all'' to pass all GPUs)'
 	COMPGEN --group-add list 'Add additional groups to join'
 	COMPGEN --health-cmd string 'Command to run to check health'
 	COMPGEN --health-interval duration 'Time between running the check (ms|s|m|h) (default 0s)'
@@ -1506,7 +1620,7 @@ Register-Completer docker_run -Option {
 	COMPGEN --memory-swappiness int 'Tune container memory swappiness (0 to 100)'
 	COMPGEN --mount mount 'Attach a filesystem mount to the container'
 	COMPGEN --name string 'Assign a name to the container'
-	COMPGEN --network string 'Connect a container to a network'
+	COMPGEN --network network 'Connect a container to a network'
 	COMPGEN --network-alias list 'Add network-scoped alias for the container'
 	COMPGEN --no-healthcheck Switch 'Disable any container-specified HEALTHCHECK'
 	COMPGEN --oom-kill-disable Switch 'Disable OOM Killer'
@@ -1619,11 +1733,13 @@ Register-Completer docker_create -Option {
 	COMPGEN --dns list 'Set custom DNS servers'
 	COMPGEN --dns-option list 'Set DNS options'
 	COMPGEN --dns-search list 'Set custom DNS search domains'
+	COMPGEN --domainname string 'Container NIS domain name'
 	COMPGEN --entrypoint string 'Overwrite the default ENTRYPOINT of the image'
 	COMPGEN '-e' list 'Set environment variables'
 	COMPGEN --env list 'Set environment variables'
 	COMPGEN --env-file list 'Read in a file of environment variables'
 	COMPGEN --expose list 'Expose a port or a range of ports'
+	COMPGEN --gpus gpu-request 'GPU devices to add to the container (''all'' to pass all GPUs)'
 	COMPGEN --group-add list 'Add additional groups to join'
 	COMPGEN --health-cmd string 'Command to run to check health'
 	COMPGEN --health-interval duration 'Time between running the check (ms|s|m|h) (default 0s)'
@@ -1657,7 +1773,7 @@ Register-Completer docker_create -Option {
 	COMPGEN --memory-swappiness int 'Tune container memory swappiness (0 to 100)'
 	COMPGEN --mount mount 'Attach a filesystem mount to the container'
 	COMPGEN --name string 'Assign a name to the container'
-	COMPGEN --network string 'Connect a container to a network'
+	COMPGEN --network network 'Connect a container to a network'
 	COMPGEN --network-alias list 'Add network-scoped alias for the container'
 	COMPGEN --no-healthcheck Switch 'Disable any container-specified HEALTHCHECK'
 	COMPGEN --oom-kill-disable Switch 'Disable OOM Killer'
@@ -1823,6 +1939,8 @@ Register-Completer docker_pull -Option {
 	COMPGEN --all-tags Switch 'Download all tagged images in the repository'
 	COMPGEN --disable-content-trust Switch 'Skip image verification'
 	COMPGEN --platform string 'Set platform if server is multi-platform capable'
+	COMPGEN '-q' Switch 'Suppress verbose output'
+	COMPGEN --quiet Switch 'Suppress verbose output'
 }
 
 Register-Completer docker_push -Option {
@@ -1893,5 +2011,6 @@ Register-Completer docker_update -Option {
 	COMPGEN --memory bytes 'Memory limit'
 	COMPGEN --memory-reservation bytes 'Memory soft limit'
 	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: ''-1'' to enable unlimited swap'
+	COMPGEN --pids-limit int 'Tune container pids limit (set -1 for unlimited)'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
 }

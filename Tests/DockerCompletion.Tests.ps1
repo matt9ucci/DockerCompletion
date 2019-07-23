@@ -14,10 +14,11 @@ Describe 'docker' {
 	$result[4].CompletionText | Should Be --tlsverify
 
 	$result = Get-Result 'docker co'
-	$result.Count | Should Be 3
+	$result.Count | Should Be 4
 	$result[0].CompletionText | Should Be config
 	$result[1].CompletionText | Should Be container
-	$result[2].CompletionText | Should Be commit
+	$result[2].CompletionText | Should Be context
+	$result[3].CompletionText | Should Be commit
 }
 
 Describe 'docker container' {
