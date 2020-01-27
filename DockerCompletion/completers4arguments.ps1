@@ -5,6 +5,8 @@ $containerRunning = { Get-Container -Status running }
 
 $formatBasic = @("'{{json .}}'")
 
+$isolation = { 'default', 'hyperv', 'process' }
+
 $logDriver = {
 	'awslogs'
 	'etwlogs'
@@ -148,6 +150,8 @@ $mount = {
 Register-Completer docker_--log-level { 'debug', 'info', 'warn', 'error', 'fatal' }
 Register-Completer docker_-l (Get-Completer docker_--log-level)
 
+Register-Completer docker_builder_build_--isolation $isolation
+
 Register-Completer docker_config_inspect $configAll
 Register-Completer docker_config_ls_--filter {
 	Param([string]$wordToComplete)
@@ -189,6 +193,7 @@ Register-Completer docker_container_commit {
 Register-Completer docker_container_create $imageAll
 Register-Completer docker_container_create_--cap-add $capAddable
 Register-Completer docker_container_create_--cap-drop $capDroppable
+Register-Completer docker_container_create_--isolation $isolation
 Register-Completer docker_container_create_--log-driver $logDriver
 Register-Completer docker_container_create_--volume $volumeAll
 Register-Completer docker_container_create_-v (Get-Completer docker_container_create_--volume)
@@ -274,6 +279,7 @@ Register-Completer docker_container_rm {
 Register-Completer docker_container_run $imageAll
 Register-Completer docker_container_run_--cap-add $capAddable
 Register-Completer docker_container_run_--cap-drop $capDroppable
+Register-Completer docker_container_run_--isolation $isolation
 Register-Completer docker_container_run_--log-driver $logDriver
 Register-Completer docker_container_run_--network {
 	Param([string]$wordToComplete)
@@ -304,6 +310,7 @@ Register-Completer docker_container_top $containerRunning
 Register-Completer docker_container_wait $containerAll
 
 Register-Completer docker_image_build_--cache-from $imageAll
+Register-Completer docker_image_build_--isolation $isolation
 Register-Completer docker_image_build_--progress { 'auto', 'plain', 'tty' }
 Register-Completer docker_image_build_--network {
 	Param([string]$wordToComplete)
@@ -599,6 +606,7 @@ Register-Completer docker_search_--filter {
 Register-Completer docker_service_create $imageAll
 Register-Completer docker_service_create_--config $configAll
 Register-Completer docker_service_create_--endpoint-mode { 'dnsrr', 'vip' }
+Register-Completer docker_service_create_--isolation $isolation
 Register-Completer docker_service_create_--log-driver $logDriver
 Register-Completer docker_service_create_--mode { 'global', 'replicated' }
 Register-Completer docker_service_create_--mount $mount
@@ -677,6 +685,7 @@ Register-Completer docker_service_update_--config-add $configAll
 Register-Completer docker_service_update_--config-rm $configAll
 Register-Completer docker_service_update_--endpoint-mode { 'dnsrr', 'vip' }
 Register-Completer docker_service_update_--image $imageAll
+Register-Completer docker_service_update_--isolation $isolation
 Register-Completer docker_service_update_--log-driver (Get-Completer docker_service_create_--log-driver)
 Register-Completer docker_service_update_--mount-add $mount
 Register-Completer docker_service_update_--network-add $networkAll
@@ -868,6 +877,7 @@ Register-Completer docker_volume_ls_--format {
 Register-Completer docker_volume_rm $volumeAll
 
 Register-Completer docker_build_--cache-from (Get-Completer docker_image_build_--cache-from)
+Register-Completer docker_build_--isolation (Get-Completer docker_image_build_--isolation)
 Register-Completer docker_build_--progress (Get-Completer docker_image_build_--progress)
 Register-Completer docker_build_--network (Get-Completer docker_image_build_--network)
 Register-Completer docker_build_--secret (Get-Completer docker_image_build_--secret)
@@ -877,6 +887,7 @@ Register-Completer docker_build_-t (Get-Completer docker_build_--tag)
 Register-Completer docker_run (Get-Completer docker_container_run)
 Register-Completer docker_run_--cap-add (Get-Completer docker_container_run_--cap-add)
 Register-Completer docker_run_--cap-drop (Get-Completer docker_container_run_--cap-drop)
+Register-Completer docker_run_--isolation (Get-Completer docker_container_run_--isolation)
 Register-Completer docker_run_--mount (Get-Completer docker_container_run_--mount)
 Register-Completer docker_run_--network (Get-Completer docker_container_run_--network)
 Register-Completer docker_run_--log-driver (Get-Completer docker_container_run_--log-driver)
@@ -893,6 +904,7 @@ Register-Completer docker_commit (Get-Completer docker_container_commit)
 Register-Completer docker_create (Get-Completer docker_container_create)
 Register-Completer docker_create_--cap-add (Get-Completer docker_container_create_--cap-add)
 Register-Completer docker_create_--cap-drop (Get-Completer docker_container_create_--cap-drop)
+Register-Completer docker_create_--isolation (Get-Completer docker_container_create_--isolation)
 Register-Completer docker_create_--log-driver (Get-Completer docker_container_create_--log-driver)
 Register-Completer docker_create_--volume (Get-Completer docker_container_create_--volume)
 Register-Completer docker_create_-v (Get-Completer docker_create_--volume)
