@@ -419,6 +419,21 @@ Register-Completer docker_network_create_--driver {
 		Where-Object { $_ -notin @('host', 'null') }
 }
 Register-Completer docker_network_create_-d (Get-Completer docker_network_create_--driver)
+Register-Completer docker_network_disconnect {
+	Param([string]$wordToComplete, $commandAst, $cursorPosition, $indexOfFirstArg)
+
+	if ($indexOfFirstArg -lt 0) {
+		Get-Network
+	} else {
+		$extent = $commandAst.CommandElements[$indexOfFirstArg].Extent
+		if (($extent.StartOffset -le $cursorPosition) -and ($cursorPosition -le $extent.EndOffset)) {
+			Get-Network
+		} else {
+			$containersInNetwork = docker network inspect --format '{{json .Containers}}' $extent.Text
+			($containersInNetwork | ConvertFrom-Json).psobject.Properties.Value.Name | Sort-Object
+		}
+	}
+}
 Register-Completer docker_network_inspect $networkAll
 Register-Completer docker_network_ls_--filter {
 	Param([string]$wordToComplete)
