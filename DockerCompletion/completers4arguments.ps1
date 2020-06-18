@@ -15,6 +15,7 @@ $logDriver = {
 	'gelf'
 	'journald'
 	'json-file'
+	'local'
 	'logentries'
 	'none'
 	'splunk'
