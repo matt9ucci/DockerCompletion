@@ -3,6 +3,8 @@ $configAll = { Get-Config }
 $containerAll = { Get-Container }
 $containerRunning = { Get-Container -Status running }
 
+$contextAll = { Get-Context }
+
 $formatBasic = @("'{{json .}}'")
 
 $isolation = { 'default', 'hyperv', 'process' }
@@ -148,6 +150,8 @@ $mount = {
 	}
 }
 
+Register-Completer docker_--context $contextAll
+Register-Completer docker_-c (Get-Completer docker_--context)
 Register-Completer docker_--log-level { 'debug', 'info', 'warn', 'error', 'fatal' }
 Register-Completer docker_-l (Get-Completer docker_--log-level)
 

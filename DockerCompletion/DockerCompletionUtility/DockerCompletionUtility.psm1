@@ -21,6 +21,10 @@ function Get-Container {
 	Invoke-Expression -Command $command
 }
 
+function Get-Context {
+	docker context ls --quiet
+}
+
 function Get-Image {
 	Param(
 		[switch]$WithTag

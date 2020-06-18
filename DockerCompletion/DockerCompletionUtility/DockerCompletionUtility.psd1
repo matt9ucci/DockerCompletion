@@ -4,7 +4,7 @@
 RootModule = 'DockerCompletionUtility'
 
 # Version number of this module.
-ModuleVersion = '1.180105'
+ModuleVersion = '1.200618'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -19,7 +19,7 @@ Author = 'Masatoshi Higuchi'
 CompanyName = 'N/A'
 
 # Copyright statement for this module
-Copyright = '(c) 2018 Masatoshi Higuchi. All rights reserved.'
+Copyright = '(c) 2020 Masatoshi Higuchi. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'Utility for DockerCompletion.'
@@ -88,13 +88,13 @@ PrivateData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
         Tags = 'docker', 'completion'
-        
+
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/matt9ucci/DockerCompletion/blob/master/LICENSE'
-        
+
         # A URL to the main website for this project.
         ProjectUri = 'https://github.com/matt9ucci/DockerCompletion'
-        
+
         # A URL to an icon representing this module.
         # IconUri = ''
 
