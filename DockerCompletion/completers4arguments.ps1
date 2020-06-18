@@ -314,6 +314,20 @@ Register-Completer docker_container_stop $containerRunning
 Register-Completer docker_container_top $containerRunning
 Register-Completer docker_container_wait $containerAll
 
+Register-Completer docker_context_create_--from $contextAll
+Register-Completer docker_context_export {
+	Param([string]$wordToComplete, $commandAst, $cursorPosition, $indexOfFirstArg)
+
+	if ($indexOfFirstArg -lt 0) {
+		Get-Context
+	}
+}
+Register-Completer docker_context_inspect $contextAll
+Register-Completer docker_context_rm $contextAll
+Register-Completer docker_context_update $contextAll
+Register-Completer docker_context_update_--default-stack-orchestrator { 'all', 'kubernetes', 'swarm' }
+Register-Completer docker_context_use $contextAll
+
 Register-Completer docker_image_build_--cache-from $imageAll
 Register-Completer docker_image_build_--isolation $isolation
 Register-Completer docker_image_build_--progress { 'auto', 'plain', 'tty' }
