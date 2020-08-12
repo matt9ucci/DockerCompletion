@@ -373,6 +373,14 @@ Register-Completer docker_image_build_--secret {
 Register-Completer docker_image_build_--tag $imageAll
 Register-Completer docker_image_build_-t (Get-Completer docker_image_build_--tag)
 Register-Completer docker_image_history $imageAll
+Register-Completer docker_image_history_--format {
+	"'{{.Comment}}'"
+	"'{{.CreatedAt}}'"
+	"'{{.CreatedBy}}'"
+	"'{{.CreatedSince}}'"
+	"'{{.ID}}'"
+	"'{{.Size}}'"
+}
 Register-Completer docker_image_import {
 	Param([string]$wordToComplete, $commandAst, $cursorPosition, $indexOfFirstArg)
 
@@ -950,6 +958,7 @@ Register-Completer docker_events_--format (Get-Completer docker_system_events_--
 Register-Completer docker_exec (Get-Completer docker_container_exec)
 Register-Completer docker_export (Get-Completer docker_container_export)
 Register-Completer docker_history (Get-Completer docker_image_history)
+Register-Completer docker_history_--format (Get-Completer docker_image_history_--format)
 Register-Completer docker_images (Get-Completer docker_image_ls)
 Register-Completer docker_import (Get-Completer docker_image_import)
 Register-Completer docker_images_--filter (Get-Completer docker_image_ls_--filter)
