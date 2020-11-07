@@ -15,9 +15,10 @@
 All of the completions are [customizable](#customization).
 
 ## Requirements
-* PowerShell >= 5.0 for command support.  
-* `$PSVersionTable.PSVersion -ge 6` for options support (`-`, `--`).
 * docker cli >= 1.13 in `$env:PATH`
+* `$PSVersionTable.PSVersion -ge 5` for command support. 
+* One dash (`-`) and double dash (`--`) completers are not invoked in `PSVersion` of `5.*`. Type a character following `-` and `--`. For example, type `--a` and press tab.
+* `$PSVersionTable.PSVersion -ge 6` for completers with one `-` and double `--` dash without workarounds.
 
 ## Quick Start
 
@@ -87,13 +88,6 @@ To apply your custom script, pass the path as `Import-Module`'s ArgumentList par
 ```powershell
 Import-Module DockerCompletion -ArgumentList pathto\custom1.ps1, pathto\custom2.ps1
 ```
-
-## Known Issues
-In PowerShell 5.0/5.1, with one dash (`-`) and double dash (`--`), completers are not invoked because of [a PowerShell's bug](https://github.com/PowerShell/PowerShell/issues/2912).
-It will be [fixed in PowerShell 6.0](https://github.com/PowerShell/PowerShell/pull/3633).
-
-A workaround for this issue is to type a character following `-` and `--`.
-For example, type `--a` and press tab.
 
 ## Misc
 
