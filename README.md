@@ -15,7 +15,8 @@
 All of the completions are [customizable](#customization).
 
 ## Requirements
-* PowerShell >= 5.0
+* PowerShell >= 5.0 for command support.  
+* `$PSVersionTable.PSVersion -ge 6` for options support (`-`, `--`).
 * docker cli >= 1.13 in `$env:PATH`
 
 ## Quick Start
