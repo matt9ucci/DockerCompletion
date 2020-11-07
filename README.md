@@ -29,7 +29,7 @@ Import-Module DockerCompletion
 
 ### Auto Import
 You can add import to your profile to avoid calling it each time you open shell:
-```
+```powershell
 Add-Content --Path $PROFILE --Value "Import-Module DockerCompletion"
 ```
 
