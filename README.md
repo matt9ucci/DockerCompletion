@@ -26,6 +26,13 @@ Install-Module DockerCompletion -Scope CurrentUser
 # Import
 Import-Module DockerCompletion
 ```
+
+### Auto Import
+You can add import to your profile to avoid calling it each time you open shell:
+```
+Add-Content --Path $PROFILE --Value "Import-Module DockerCompletion"
+```
+
 ## Less Quick Start (without `Install-Module`)
 
 DockerCompletion is a "well-formed" module.
