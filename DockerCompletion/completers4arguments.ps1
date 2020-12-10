@@ -37,7 +37,10 @@ $volumeAll = { Get-Volume }
 $capAddable = {
 	COMPGEN ALL string 'All capabilities'
 	COMPGEN AUDIT_CONTROL string 'Enable and disable kernel auditing; change auditing filter rules; retrieve auditing status and filtering rules'
+	COMPGEN AUDIT_READ string 'Allow reading the audit log via multicast netlink socket'
 	COMPGEN BLOCK_SUSPEND string 'Employ features that can block system suspend'
+	COMPGEN BPF string 'Allow creating BPF maps, loading BPF Type Format (BTF) data, retrieve JITed code of BPF programs, and more'
+	COMPGEN CHECKPOINT_RESTORE string 'Allow checkpoint/restore related operations. Introduced in kernel 5.9'
 	COMPGEN DAC_READ_SEARCH string 'Bypass file read permission checks and directory read and execute permission checks'
 	COMPGEN IPC_LOCK string 'Lock memory (mlock(2), mlockall(2), mmap(2), shmctl(2))'
 	COMPGEN IPC_OWNER string 'Bypass permission checks for operations on System V IPC objects'
@@ -47,6 +50,7 @@ $capAddable = {
 	COMPGEN MAC_OVERRIDE string 'Allow MAC configuration or state changes. Implemented for the Smack LSM'
 	COMPGEN NET_ADMIN string 'Perform various network-related operations'
 	COMPGEN NET_BROADCAST string 'Make socket broadcasts, and listen to multicasts'
+	COMPGEN PERFMON string 'Allow system performance and observability privileged operations using perf_events, i915_perf and other kernel subsystems'
 	COMPGEN SYS_ADMIN string 'Perform a range of system administration operations'
 	COMPGEN SYS_BOOT string 'Use reboot(2) and kexec_load(2), reboot and load a new kernel for later execution'
 	COMPGEN SYS_MODULE string 'Load and unload kernel modules'
@@ -157,8 +161,6 @@ Register-Completer docker_-c (Get-Completer docker_--context)
 Register-Completer docker_--log-level { 'debug', 'info', 'warn', 'error', 'fatal' }
 Register-Completer docker_-l (Get-Completer docker_--log-level)
 
-Register-Completer docker_builder_build_--isolation $isolation
-
 Register-Completer docker_config_inspect $configAll
 Register-Completer docker_config_ls_--filter {
 	Param([string]$wordToComplete)
@@ -203,6 +205,7 @@ Register-Completer docker_container_create_--cap-drop $capDroppable
 Register-Completer docker_container_create_--cgroupns { 'host', 'private' }
 Register-Completer docker_container_create_--isolation $isolation
 Register-Completer docker_container_create_--log-driver $logDriver
+Register-Completer docker_container_create_--mount $mount
 Register-Completer docker_container_create_--pull { 'always', 'missing', 'never' }
 Register-Completer docker_container_create_--volume $volumeAll
 Register-Completer docker_container_create_-v (Get-Completer docker_container_create_--volume)
@@ -811,14 +814,18 @@ Register-Completer docker_system_events_--filter {
 	Param([string]$wordToComplete)
 
 	if ($wordToComplete -notlike '*=*') {
+		COMPGEN config string 'Config name or id'
 		COMPGEN container string 'Container name or id'
 		COMPGEN daemon string 'Daemon name or id'
 		COMPGEN event string 'Event name'
 		COMPGEN image string 'Image name or id'
 		COMPGEN label string '<key> or <key>=<value>'
 		COMPGEN network string 'Network name or id'
+		COMPGEN node string 'Node id'
 		COMPGEN plugin string 'Plugin name or id'
 		COMPGEN scope string 'local or swarm'
+		COMPGEN secret string 'Secret name or id'
+		COMPGEN service string 'Service name or id'
 		COMPGEN type string 'Object type'
 		COMPGEN volume string 'Volume name or id'
 		return
@@ -826,6 +833,7 @@ Register-Completer docker_system_events_--filter {
 
 	$key = ($wordToComplete -split '=')[0]
 	$values = switch ($key) {
+		config { Get-Config }
 		container { Get-Container }
 		daemon {
 			docker system info --format '{{.Name}}'
@@ -875,8 +883,11 @@ Register-Completer docker_system_events_--filter {
 		}
 		image { Get-Image }
 		network { Get-Network }
+		node { docker node ls --quiet }
 		plugin { Get-Plugin }
 		scope { 'local', 'swarm' }
+		secret { Get-Secret }
+		service { Get-Service }
 		type { 'config', 'container', 'daemon', 'image', 'network', 'node', 'plugin', 'secret', 'service', 'volume' }
 		volume { Get-Volume }
 	}
@@ -928,6 +939,14 @@ Register-Completer docker_volume_ls_--format {
 
 Register-Completer docker_volume_rm $volumeAll
 
+Register-Completer docker_builder_build_--cache-from (Get-Completer docker_image_build_--cache-from)
+Register-Completer docker_builder_build_--isolation (Get-Completer docker_image_build_--isolation)
+Register-Completer docker_builder_build_--progress (Get-Completer docker_image_build_--progress)
+Register-Completer docker_builder_build_--network (Get-Completer docker_image_build_--network)
+Register-Completer docker_builder_build_--secret (Get-Completer docker_image_build_--secret)
+Register-Completer docker_builder_build_--tag (Get-Completer docker_image_build_--tag)
+Register-Completer docker_builder_build_-t (Get-Completer docker_image_build_-t)
+
 Register-Completer docker_build_--cache-from (Get-Completer docker_image_build_--cache-from)
 Register-Completer docker_build_--isolation (Get-Completer docker_image_build_--isolation)
 Register-Completer docker_build_--progress (Get-Completer docker_image_build_--progress)
@@ -961,6 +980,7 @@ Register-Completer docker_create_--cap-drop (Get-Completer docker_container_crea
 Register-Completer docker_create_--cgroupns (Get-Completer docker_container_create_--cgroupns)
 Register-Completer docker_create_--isolation (Get-Completer docker_container_create_--isolation)
 Register-Completer docker_create_--log-driver (Get-Completer docker_container_create_--log-driver)
+Register-Completer docker_create_--mount (Get-Completer docker_container_create_--mount)
 Register-Completer docker_create_--pull (Get-Completer docker_container_create_--pull)
 Register-Completer docker_create_--volume (Get-Completer docker_container_create_--volume)
 Register-Completer docker_create_-v (Get-Completer docker_create_--volume)
