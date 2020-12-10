@@ -107,6 +107,7 @@ $mount = {
 				COMPGEN ro string 'The abbreviation of "readonly"'
 				COMPGEN consistency string 'The consistency requirements for the mount'
 				COMPGEN bind-propagation string 'Refers to whether or not mounts created within a given bind mount or named volume can be propagated to replicas of that mount'
+				COMPGEN bind-nonrecursive string 'To disable recursive bind-mount'
 			}
 			volume {
 				COMPGEN source string 'The source of mount'
@@ -142,6 +143,7 @@ $mount = {
 		{ 'readonly', 'ro' -contains $_ } { 'true', 'false', 1, 0 }
 		consistency {'default', 'consistent', 'cached', 'delegated'}
 		bind-propagation { 'shared', 'slave', 'private', 'rshared', 'rslave', 'rprivate' }
+		bind-nonrecursive { 'true', 'false' }
 		volume-nocopy { 'true', 'false' }
 	}
 
@@ -198,8 +200,10 @@ Register-Completer docker_container_commit {
 Register-Completer docker_container_create $imageAll
 Register-Completer docker_container_create_--cap-add $capAddable
 Register-Completer docker_container_create_--cap-drop $capDroppable
+Register-Completer docker_container_create_--cgroupns { 'host', 'private' }
 Register-Completer docker_container_create_--isolation $isolation
 Register-Completer docker_container_create_--log-driver $logDriver
+Register-Completer docker_container_create_--pull { 'always', 'missing', 'never' }
 Register-Completer docker_container_create_--volume $volumeAll
 Register-Completer docker_container_create_-v (Get-Completer docker_container_create_--volume)
 Register-Completer docker_container_create_--volumes-from $containerAll
@@ -284,6 +288,7 @@ Register-Completer docker_container_rm {
 Register-Completer docker_container_run $imageAll
 Register-Completer docker_container_run_--cap-add $capAddable
 Register-Completer docker_container_run_--cap-drop $capDroppable
+Register-Completer docker_container_run_--cgroupns { 'host', 'private' }
 Register-Completer docker_container_run_--isolation $isolation
 Register-Completer docker_container_run_--log-driver $logDriver
 Register-Completer docker_container_run_--network {
@@ -304,6 +309,7 @@ Register-Completer docker_container_run_--network {
 		COMPGEN "container:$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
 	}
 }
+Register-Completer docker_container_run_--pull { 'always', 'missing', 'never' }
 Register-Completer docker_container_start { Get-Container -Status created, exited }
 Register-Completer docker_container_run_--mount $mount
 Register-Completer docker_container_run_--volume $volumeAll
@@ -646,11 +652,13 @@ Register-Completer docker_search_--filter {
 }
 
 Register-Completer docker_service_create $imageAll
+Register-Completer docker_service_create_--cap-add $capAddable
+Register-Completer docker_service_create_--cap-drop $capDroppable
 Register-Completer docker_service_create_--config $configAll
 Register-Completer docker_service_create_--endpoint-mode { 'dnsrr', 'vip' }
 Register-Completer docker_service_create_--isolation $isolation
 Register-Completer docker_service_create_--log-driver $logDriver
-Register-Completer docker_service_create_--mode { 'global', 'replicated' }
+Register-Completer docker_service_create_--mode { 'global', 'global-job', 'replicated', 'replicated-job' }
 Register-Completer docker_service_create_--mount $mount
 Register-Completer docker_service_create_--restart-condition { 'any', 'none', 'on-failure' }
 Register-Completer docker_service_create_--rollback-failure-action { 'continue', 'pause' }
@@ -723,6 +731,8 @@ Register-Completer docker_service_scale {
 	}
 }
 Register-Completer docker_service_update $serviceAll
+Register-Completer docker_service_update_--cap-add $capAddable
+Register-Completer docker_service_update_--cap-drop $capDroppable
 Register-Completer docker_service_update_--config-add $configAll
 Register-Completer docker_service_update_--config-rm $configAll
 Register-Completer docker_service_update_--endpoint-mode { 'dnsrr', 'vip' }
@@ -929,10 +939,12 @@ Register-Completer docker_build_-t (Get-Completer docker_build_--tag)
 Register-Completer docker_run (Get-Completer docker_container_run)
 Register-Completer docker_run_--cap-add (Get-Completer docker_container_run_--cap-add)
 Register-Completer docker_run_--cap-drop (Get-Completer docker_container_run_--cap-drop)
+Register-Completer docker_run_--cgroupns (Get-Completer docker_container_run_--cgroupns)
 Register-Completer docker_run_--isolation (Get-Completer docker_container_run_--isolation)
 Register-Completer docker_run_--mount (Get-Completer docker_container_run_--mount)
 Register-Completer docker_run_--network (Get-Completer docker_container_run_--network)
 Register-Completer docker_run_--log-driver (Get-Completer docker_container_run_--log-driver)
+Register-Completer docker_run_--pull (Get-Completer docker_container_run_--pull)
 Register-Completer docker_run_--volume (Get-Completer docker_container_run_--volume)
 Register-Completer docker_run_-v (Get-Completer docker_run_--volume)
 Register-Completer docker_run_--volumes-from (Get-Completer docker_container_run_--volumes-from)
@@ -946,8 +958,10 @@ Register-Completer docker_commit (Get-Completer docker_container_commit)
 Register-Completer docker_create (Get-Completer docker_container_create)
 Register-Completer docker_create_--cap-add (Get-Completer docker_container_create_--cap-add)
 Register-Completer docker_create_--cap-drop (Get-Completer docker_container_create_--cap-drop)
+Register-Completer docker_create_--cgroupns (Get-Completer docker_container_create_--cgroupns)
 Register-Completer docker_create_--isolation (Get-Completer docker_container_create_--isolation)
 Register-Completer docker_create_--log-driver (Get-Completer docker_container_create_--log-driver)
+Register-Completer docker_create_--pull (Get-Completer docker_container_create_--pull)
 Register-Completer docker_create_--volume (Get-Completer docker_container_create_--volume)
 Register-Completer docker_create_-v (Get-Completer docker_create_--volume)
 Register-Completer docker_create_--volumes-from (Get-Completer docker_container_create_--volumes-from)

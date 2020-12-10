@@ -1,4 +1,4 @@
-# docker-ce v19.03.0 https://github.com/docker/docker-ce/tree/v19.03.0
+# docker/cli v20.10.0 https://github.com/docker/cli/tree/v20.10.0
 $managementCommands = @(
 	COMPGEN builder ManagementCommand 'Manage builds'
 	COMPGEN checkpoint ManagementCommand 'Manage checkpoints'
@@ -200,6 +200,11 @@ Register-Completer docker_container_create -Option {
 	COMPGEN --cap-add list 'Add Linux capabilities'
 	COMPGEN --cap-drop list 'Drop Linux capabilities'
 	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
+	COMPGEN --cgroupns string 'Cgroup namespace to use (host|private)
+''host'':    Run the container in the Docker host''s cgroup namespace
+''private'': Run the container in its own private cgroup namespace
+'''':        Use the cgroup namespace as configured by the
+           default-cgroupns-mode option on the daemon (default)'
 	COMPGEN --cidfile string 'Write the container ID to the file'
 	COMPGEN --cpu-count int 'CPU count (Windows only)'
 	COMPGEN --cpu-percent int 'CPU percent (Windows only)'
@@ -275,6 +280,7 @@ Register-Completer docker_container_create -Option {
 	COMPGEN --publish list 'Publish a container''s port(s) to the host'
 	COMPGEN '-P' Switch 'Publish all exposed ports to random ports'
 	COMPGEN --publish-all Switch 'Publish all exposed ports to random ports'
+	COMPGEN --pull string 'Pull image before creating ("always"|"missing"|"never")'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
 	COMPGEN --rm Switch 'Automatically remove the container when it exits'
@@ -307,6 +313,7 @@ Register-Completer docker_container_exec -Option {
 	COMPGEN --detach-keys string 'Override the key sequence for detaching a container'
 	COMPGEN '-e' list 'Set environment variables'
 	COMPGEN --env list 'Set environment variables'
+	COMPGEN --env-file list 'Read in a file of environment variables'
 	COMPGEN '-i' Switch 'Keep STDIN open even if not attached'
 	COMPGEN --interactive Switch 'Keep STDIN open even if not attached'
 	COMPGEN --privileged Switch 'Give extended privileges to the command'
@@ -339,11 +346,12 @@ Register-Completer docker_container_logs -Option {
 	COMPGEN --details Switch 'Show extra details provided to logs'
 	COMPGEN '-f' Switch 'Follow log output'
 	COMPGEN --follow Switch 'Follow log output'
-	COMPGEN --since string 'Show logs since timestamp (e.g. 2013-01-02T13:23:37) or relative (e.g. 42m for 42 minutes)'
+	COMPGEN --since string 'Show logs since timestamp (e.g. 2013-01-02T13:23:37Z) or relative (e.g. 42m for 42 minutes)'
+	COMPGEN '-n' string 'Number of lines to show from the end of the logs'
 	COMPGEN --tail string 'Number of lines to show from the end of the logs'
 	COMPGEN '-t' Switch 'Show timestamps'
 	COMPGEN --timestamps Switch 'Show timestamps'
-	COMPGEN --until string 'Show logs before a timestamp (e.g. 2013-01-02T13:23:37) or relative (e.g. 42m for 42 minutes)'
+	COMPGEN --until string 'Show logs before a timestamp (e.g. 2013-01-02T13:23:37Z) or relative (e.g. 42m for 42 minutes)'
 }
 
 Register-Completer docker_container_ls -Option {
@@ -357,8 +365,8 @@ Register-Completer docker_container_ls -Option {
 	COMPGEN '-l' Switch 'Show the latest created container (includes all states)'
 	COMPGEN --latest Switch 'Show the latest created container (includes all states)'
 	COMPGEN --no-trunc Switch 'Don''t truncate output'
-	COMPGEN '-q' Switch 'Only display numeric IDs'
-	COMPGEN --quiet Switch 'Only display numeric IDs'
+	COMPGEN '-q' Switch 'Only display container IDs'
+	COMPGEN --quiet Switch 'Only display container IDs'
 	COMPGEN '-s' Switch 'Display total file sizes'
 	COMPGEN --size Switch 'Display total file sizes'
 }
@@ -379,8 +387,8 @@ Register-Completer docker_container_rm -Option {
 	COMPGEN --force Switch 'Force the removal of a running container (uses SIGKILL)'
 	COMPGEN '-l' Switch 'Remove the specified link'
 	COMPGEN --link Switch 'Remove the specified link'
-	COMPGEN '-v' Switch 'Remove the volumes associated with the container'
-	COMPGEN --volumes Switch 'Remove the volumes associated with the container'
+	COMPGEN '-v' Switch 'Remove anonymous volumes associated with the container'
+	COMPGEN --volumes Switch 'Remove anonymous volumes associated with the container'
 }
 
 Register-Completer docker_container_run -Option {
@@ -392,6 +400,11 @@ Register-Completer docker_container_run -Option {
 	COMPGEN --cap-add list 'Add Linux capabilities'
 	COMPGEN --cap-drop list 'Drop Linux capabilities'
 	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
+	COMPGEN --cgroupns string 'Cgroup namespace to use (host|private)
+''host'':    Run the container in the Docker host''s cgroup namespace
+''private'': Run the container in its own private cgroup namespace
+'''':        Use the cgroup namespace as configured by the
+           default-cgroupns-mode option on the daemon (default)'
 	COMPGEN --cidfile string 'Write the container ID to the file'
 	COMPGEN --cpu-count int 'CPU count (Windows only)'
 	COMPGEN --cpu-percent int 'CPU percent (Windows only)'
@@ -470,6 +483,7 @@ Register-Completer docker_container_run -Option {
 	COMPGEN --publish list 'Publish a container''s port(s) to the host'
 	COMPGEN '-P' Switch 'Publish all exposed ports to random ports'
 	COMPGEN --publish-all Switch 'Publish all exposed ports to random ports'
+	COMPGEN --pull string 'Pull image before running ("always"|"missing"|"never")'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
 	COMPGEN --rm Switch 'Automatically remove the container when it exits'
@@ -650,8 +664,8 @@ Register-Completer docker_image_history -Option {
 	COMPGEN '-H' Switch 'Print sizes and dates in human readable format'
 	COMPGEN --human Switch 'Print sizes and dates in human readable format'
 	COMPGEN --no-trunc Switch 'Don''t truncate output'
-	COMPGEN '-q' Switch 'Only show numeric IDs'
-	COMPGEN --quiet Switch 'Only show numeric IDs'
+	COMPGEN '-q' Switch 'Only show image IDs'
+	COMPGEN --quiet Switch 'Only show image IDs'
 }
 
 Register-Completer docker_image_import -Option {
@@ -682,8 +696,8 @@ Register-Completer docker_image_ls -Option {
 	COMPGEN --filter filter 'Filter output based on conditions provided'
 	COMPGEN --format string 'Pretty-print images using a Go template'
 	COMPGEN --no-trunc Switch 'Don''t truncate output'
-	COMPGEN '-q' Switch 'Only show numeric IDs'
-	COMPGEN --quiet Switch 'Only show numeric IDs'
+	COMPGEN '-q' Switch 'Only show image IDs'
+	COMPGEN --quiet Switch 'Only show image IDs'
 }
 
 Register-Completer docker_image_prune -Option {
@@ -704,7 +718,11 @@ Register-Completer docker_image_pull -Option {
 }
 
 Register-Completer docker_image_push -Option {
+	COMPGEN '-a' Switch 'Push all tagged images in the repository'
+	COMPGEN --all-tags Switch 'Push all tagged images in the repository'
 	COMPGEN --disable-content-trust Switch 'Skip image signing'
+	COMPGEN '-q' Switch 'Suppress verbose output'
+	COMPGEN --quiet Switch 'Suppress verbose output'
 }
 
 Register-Completer docker_image_rm -Option {
@@ -723,12 +741,14 @@ Register-Completer docker_manifest {
 	COMPGEN create SubCommand 'Create a local manifest list for annotating and pushing to a registry'
 	COMPGEN inspect SubCommand 'Display an image manifest, or manifest list'
 	COMPGEN push SubCommand 'Push a manifest list to a repository'
+	COMPGEN rm SubCommand 'Delete one or more manifest lists from local storage'
 }
 
 Register-Completer docker_manifest_annotate -Option {
 	COMPGEN --arch string 'Set architecture'
 	COMPGEN --os string 'Set operating system'
 	COMPGEN --os-features strings 'Set operating system feature'
+	COMPGEN --os-version string 'Set operating system version'
 	COMPGEN --variant string 'Set architecture variant'
 }
 
@@ -772,7 +792,7 @@ Register-Completer docker_network_connect -Option {
 Register-Completer docker_network_create -Option {
 	COMPGEN --attachable Switch 'Enable manual container attachment'
 	COMPGEN --aux-address map 'Auxiliary IPv4 or IPv6 addresses used by Network driver'
-	COMPGEN --config-from string 'The network from which copying the configuration'
+	COMPGEN --config-from string 'The network from which to copy the configuration'
 	COMPGEN --config-only Switch 'Create a configuration only network'
 	COMPGEN '-d' string 'Driver to manage the Network'
 	COMPGEN --driver string 'Driver to manage the Network'
@@ -967,6 +987,8 @@ Register-Completer docker_service {
 }
 
 Register-Completer docker_service_create -Option {
+	COMPGEN --cap-add list 'Add Linux capabilities'
+	COMPGEN --cap-drop list 'Drop Linux capabilities'
 	COMPGEN --config config 'Specify configurations to expose to the service'
 	COMPGEN --constraint list 'Placement constraints'
 	COMPGEN --container-label list 'Container labels'
@@ -996,9 +1018,11 @@ Register-Completer docker_service_create -Option {
 	COMPGEN --label list 'Service labels'
 	COMPGEN --limit-cpu decimal 'Limit CPUs'
 	COMPGEN --limit-memory bytes 'Limit Memory'
+	COMPGEN --limit-pids int 'Limit maximum number of processes (default 0 = unlimited)'
 	COMPGEN --log-driver string 'Logging driver for service'
 	COMPGEN --log-opt list 'Logging driver options'
-	COMPGEN --mode string 'Service mode (replicated or global)'
+	COMPGEN --max-concurrent uint 'Number of job tasks to run concurrently (default equal to --replicas)'
+	COMPGEN --mode string 'Service mode (replicated, global, replicated-job, or global-job)'
 	COMPGEN --mount mount 'Attach a filesystem mount to the service'
 	COMPGEN --name string 'Service name'
 	COMPGEN --network network 'Network attachments'
@@ -1030,6 +1054,7 @@ Register-Completer docker_service_create -Option {
 	COMPGEN --sysctl list 'Sysctl options'
 	COMPGEN '-t' Switch 'Allocate a pseudo-TTY'
 	COMPGEN --tty Switch 'Allocate a pseudo-TTY'
+	COMPGEN --ulimit ulimit 'Ulimit options'
 	COMPGEN --update-delay duration 'Delay between updates (ns|us|ms|s|m|h) (default 0s)'
 	COMPGEN --update-failure-action string 'Action on update failure ("pause"|"continue"|"rollback") (default "pause")'
 	COMPGEN --update-max-failure-ratio float 'Failure rate to tolerate during an update (default 0)'
@@ -1057,7 +1082,8 @@ Register-Completer docker_service_logs -Option {
 	COMPGEN --no-task-ids Switch 'Do not include task IDs in output'
 	COMPGEN --no-trunc Switch 'Do not truncate output'
 	COMPGEN --raw Switch 'Do not neatly format logs'
-	COMPGEN --since string 'Show logs since timestamp (e.g. 2013-01-02T13:23:37) or relative (e.g. 42m for 42 minutes)'
+	COMPGEN --since string 'Show logs since timestamp (e.g. 2013-01-02T13:23:37Z) or relative (e.g. 42m for 42 minutes)'
+	COMPGEN '-n' string 'Number of lines to show from the end of the logs'
 	COMPGEN --tail string 'Number of lines to show from the end of the logs'
 	COMPGEN '-t' Switch 'Show timestamps'
 	COMPGEN --timestamps Switch 'Show timestamps'
@@ -1095,6 +1121,8 @@ Register-Completer docker_service_scale -Option {
 
 Register-Completer docker_service_update -Option {
 	COMPGEN --args command 'Service command args'
+	COMPGEN --cap-add list 'Add Linux capabilities'
+	COMPGEN --cap-drop list 'Drop Linux capabilities'
 	COMPGEN --config-add config 'Add or update a config file on a service'
 	COMPGEN --config-rm list 'Remove a configuration file'
 	COMPGEN --constraint-add list 'Add or update a placement constraint'
@@ -1134,8 +1162,10 @@ Register-Completer docker_service_update -Option {
 	COMPGEN --label-rm list 'Remove a label by its key'
 	COMPGEN --limit-cpu decimal 'Limit CPUs'
 	COMPGEN --limit-memory bytes 'Limit Memory'
+	COMPGEN --limit-pids int 'Limit maximum number of processes (default 0 = unlimited)'
 	COMPGEN --log-driver string 'Logging driver for service'
 	COMPGEN --log-opt list 'Logging driver options'
+	COMPGEN --max-concurrent uint 'Number of job tasks to run concurrently (default equal to --replicas)'
 	COMPGEN --mount-add mount 'Add or update a mount on a service'
 	COMPGEN --mount-rm list 'Remove a mount by its target path'
 	COMPGEN --network-add network 'Add a network'
@@ -1172,6 +1202,8 @@ Register-Completer docker_service_update -Option {
 	COMPGEN --sysctl-rm list 'Remove a Sysctl option'
 	COMPGEN '-t' Switch 'Allocate a pseudo-TTY'
 	COMPGEN --tty Switch 'Allocate a pseudo-TTY'
+	COMPGEN --ulimit-add ulimit 'Add or update a ulimit option'
+	COMPGEN --ulimit-rm list 'Remove a ulimit option'
 	COMPGEN --update-delay duration 'Delay between updates (ns|us|ms|s|m|h)'
 	COMPGEN --update-failure-action string 'Action on update failure ("pause"|"continue"|"rollback")'
 	COMPGEN --update-max-failure-ratio float 'Failure rate to tolerate during an update'
@@ -1530,9 +1562,9 @@ Register-Completer docker_builder_build -Option {
 }
 
 Register-Completer docker_builder_prune -Option {
-	COMPGEN '-a' Switch 'Remove all unused images, not just dangling ones'
-	COMPGEN --all Switch 'Remove all unused images, not just dangling ones'
-	COMPGEN --filter filter 'Provide filter values (e.g. ''unused-for=24h'')'
+	COMPGEN '-a' Switch 'Remove all unused build cache, not just dangling ones'
+	COMPGEN --all Switch 'Remove all unused build cache, not just dangling ones'
+	COMPGEN --filter filter 'Provide filter values (e.g. ''until=24h'')'
 	COMPGEN '-f' Switch 'Do not prompt for confirmation'
 	COMPGEN --force Switch 'Do not prompt for confirmation'
 	COMPGEN --keep-storage bytes 'Amount of disk space to keep for cache'
@@ -1555,6 +1587,11 @@ Register-Completer docker_run -Option {
 	COMPGEN --cap-add list 'Add Linux capabilities'
 	COMPGEN --cap-drop list 'Drop Linux capabilities'
 	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
+	COMPGEN --cgroupns string 'Cgroup namespace to use (host|private)
+''host'':    Run the container in the Docker host''s cgroup namespace
+''private'': Run the container in its own private cgroup namespace
+'''':        Use the cgroup namespace as configured by the
+           default-cgroupns-mode option on the daemon (default)'
 	COMPGEN --cidfile string 'Write the container ID to the file'
 	COMPGEN --cpu-count int 'CPU count (Windows only)'
 	COMPGEN --cpu-percent int 'CPU percent (Windows only)'
@@ -1633,6 +1670,7 @@ Register-Completer docker_run -Option {
 	COMPGEN --publish list 'Publish a container''s port(s) to the host'
 	COMPGEN '-P' Switch 'Publish all exposed ports to random ports'
 	COMPGEN --publish-all Switch 'Publish all exposed ports to random ports'
+	COMPGEN --pull string 'Pull image before running ("always"|"missing"|"never")'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
 	COMPGEN --rm Switch 'Automatically remove the container when it exits'
@@ -1711,6 +1749,11 @@ Register-Completer docker_create -Option {
 	COMPGEN --cap-add list 'Add Linux capabilities'
 	COMPGEN --cap-drop list 'Drop Linux capabilities'
 	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
+	COMPGEN --cgroupns string 'Cgroup namespace to use (host|private)
+''host'':    Run the container in the Docker host''s cgroup namespace
+''private'': Run the container in its own private cgroup namespace
+'''':        Use the cgroup namespace as configured by the
+           default-cgroupns-mode option on the daemon (default)'
 	COMPGEN --cidfile string 'Write the container ID to the file'
 	COMPGEN --cpu-count int 'CPU count (Windows only)'
 	COMPGEN --cpu-percent int 'CPU percent (Windows only)'
@@ -1786,6 +1829,7 @@ Register-Completer docker_create -Option {
 	COMPGEN --publish list 'Publish a container''s port(s) to the host'
 	COMPGEN '-P' Switch 'Publish all exposed ports to random ports'
 	COMPGEN --publish-all Switch 'Publish all exposed ports to random ports'
+	COMPGEN --pull string 'Pull image before creating ("always"|"missing"|"never")'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
 	COMPGEN --rm Switch 'Automatically remove the container when it exits'
@@ -1836,6 +1880,7 @@ Register-Completer docker_exec -Option {
 	COMPGEN --detach-keys string 'Override the key sequence for detaching a container'
 	COMPGEN '-e' list 'Set environment variables'
 	COMPGEN --env list 'Set environment variables'
+	COMPGEN --env-file list 'Read in a file of environment variables'
 	COMPGEN '-i' Switch 'Keep STDIN open even if not attached'
 	COMPGEN --interactive Switch 'Keep STDIN open even if not attached'
 	COMPGEN --privileged Switch 'Give extended privileges to the command'
@@ -1857,8 +1902,8 @@ Register-Completer docker_history -Option {
 	COMPGEN '-H' Switch 'Print sizes and dates in human readable format'
 	COMPGEN --human Switch 'Print sizes and dates in human readable format'
 	COMPGEN --no-trunc Switch 'Don''t truncate output'
-	COMPGEN '-q' Switch 'Only show numeric IDs'
-	COMPGEN --quiet Switch 'Only show numeric IDs'
+	COMPGEN '-q' Switch 'Only show image IDs'
+	COMPGEN --quiet Switch 'Only show image IDs'
 }
 
 Register-Completer docker_images -Option {
@@ -1869,8 +1914,8 @@ Register-Completer docker_images -Option {
 	COMPGEN --filter filter 'Filter output based on conditions provided'
 	COMPGEN --format string 'Pretty-print images using a Go template'
 	COMPGEN --no-trunc Switch 'Don''t truncate output'
-	COMPGEN '-q' Switch 'Only show numeric IDs'
-	COMPGEN --quiet Switch 'Only show numeric IDs'
+	COMPGEN '-q' Switch 'Only show image IDs'
+	COMPGEN --quiet Switch 'Only show image IDs'
 }
 
 Register-Completer docker_import -Option {
@@ -1910,11 +1955,12 @@ Register-Completer docker_logs -Option {
 	COMPGEN --details Switch 'Show extra details provided to logs'
 	COMPGEN '-f' Switch 'Follow log output'
 	COMPGEN --follow Switch 'Follow log output'
-	COMPGEN --since string 'Show logs since timestamp (e.g. 2013-01-02T13:23:37) or relative (e.g. 42m for 42 minutes)'
+	COMPGEN --since string 'Show logs since timestamp (e.g. 2013-01-02T13:23:37Z) or relative (e.g. 42m for 42 minutes)'
+	COMPGEN '-n' string 'Number of lines to show from the end of the logs'
 	COMPGEN --tail string 'Number of lines to show from the end of the logs'
 	COMPGEN '-t' Switch 'Show timestamps'
 	COMPGEN --timestamps Switch 'Show timestamps'
-	COMPGEN --until string 'Show logs before a timestamp (e.g. 2013-01-02T13:23:37) or relative (e.g. 42m for 42 minutes)'
+	COMPGEN --until string 'Show logs before a timestamp (e.g. 2013-01-02T13:23:37Z) or relative (e.g. 42m for 42 minutes)'
 }
 
 Register-Completer docker_ps -Option {
@@ -1928,8 +1974,8 @@ Register-Completer docker_ps -Option {
 	COMPGEN '-l' Switch 'Show the latest created container (includes all states)'
 	COMPGEN --latest Switch 'Show the latest created container (includes all states)'
 	COMPGEN --no-trunc Switch 'Don''t truncate output'
-	COMPGEN '-q' Switch 'Only display numeric IDs'
-	COMPGEN --quiet Switch 'Only display numeric IDs'
+	COMPGEN '-q' Switch 'Only display container IDs'
+	COMPGEN --quiet Switch 'Only display container IDs'
 	COMPGEN '-s' Switch 'Display total file sizes'
 	COMPGEN --size Switch 'Display total file sizes'
 }
@@ -1944,7 +1990,11 @@ Register-Completer docker_pull -Option {
 }
 
 Register-Completer docker_push -Option {
+	COMPGEN '-a' Switch 'Push all tagged images in the repository'
+	COMPGEN --all-tags Switch 'Push all tagged images in the repository'
 	COMPGEN --disable-content-trust Switch 'Skip image signing'
+	COMPGEN '-q' Switch 'Suppress verbose output'
+	COMPGEN --quiet Switch 'Suppress verbose output'
 }
 
 Register-Completer docker_restart -Option {
@@ -1957,8 +2007,8 @@ Register-Completer docker_rm -Option {
 	COMPGEN --force Switch 'Force the removal of a running container (uses SIGKILL)'
 	COMPGEN '-l' Switch 'Remove the specified link'
 	COMPGEN --link Switch 'Remove the specified link'
-	COMPGEN '-v' Switch 'Remove the volumes associated with the container'
-	COMPGEN --volumes Switch 'Remove the volumes associated with the container'
+	COMPGEN '-v' Switch 'Remove anonymous volumes associated with the container'
+	COMPGEN --volumes Switch 'Remove anonymous volumes associated with the container'
 }
 
 Register-Completer docker_rmi -Option {
