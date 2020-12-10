@@ -33,7 +33,6 @@ $legacyCommands = @(
 	COMPGEN commit LegacyCommand 'Create a new image from a container''s changes'
 	COMPGEN cp LegacyCommand 'Copy files/folders between a container and the local filesystem'
 	COMPGEN create LegacyCommand 'Create a new container'
-	COMPGEN deploy LegacyCommand 'Deploy a new stack or update an existing stack'
 	COMPGEN diff LegacyCommand 'Inspect changes to files or directories on a container''s filesystem'
 	COMPGEN events LegacyCommand 'Get real time events from the server'
 	COMPGEN exec LegacyCommand 'Run a command in a running container'
@@ -652,7 +651,6 @@ Register-Completer docker_image_build -Option {
 	COMPGEN --shm-size bytes 'Size of /dev/shm'
 	COMPGEN --squash Switch 'Squash newly built layers into a single new layer'
 	COMPGEN --ssh stringArray 'SSH agent socket or keys to expose to the build (only if BuildKit enabled) (format: default|<id>[=<socket>|<key>[,<key>]])'
-	COMPGEN --stream Switch 'Stream attaches to server to negotiate build context'
 	COMPGEN '-t' list 'Name and optionally a tag in the ''name:tag'' format'
 	COMPGEN --tag list 'Name and optionally a tag in the ''name:tag'' format'
 	COMPGEN --target string 'Set the target build stage to build.'
@@ -1230,7 +1228,6 @@ Register-Completer docker_stack -Option {
 }
 
 Register-Completer docker_stack_deploy -Option {
-	COMPGEN --bundle-file string 'Path to a Distributed Application Bundle file'
 	COMPGEN '-c' strings 'Path to a Compose file, or "-" to read from stdin'
 	COMPGEN --compose-file strings 'Path to a Compose file, or "-" to read from stdin'
 	COMPGEN --namespace string 'Kubernetes namespace to use'
@@ -1505,7 +1502,6 @@ Register-Completer docker_build -Option {
 	COMPGEN --shm-size bytes 'Size of /dev/shm'
 	COMPGEN --squash Switch 'Squash newly built layers into a single new layer'
 	COMPGEN --ssh stringArray 'SSH agent socket or keys to expose to the build (only if BuildKit enabled) (format: default|<id>[=<socket>|<key>[,<key>]])'
-	COMPGEN --stream Switch 'Stream attaches to server to negotiate build context'
 	COMPGEN '-t' list 'Name and optionally a tag in the ''name:tag'' format'
 	COMPGEN --tag list 'Name and optionally a tag in the ''name:tag'' format'
 	COMPGEN --target string 'Set the target build stage to build.'
@@ -1554,7 +1550,6 @@ Register-Completer docker_builder_build -Option {
 	COMPGEN --shm-size bytes 'Size of /dev/shm'
 	COMPGEN --squash Switch 'Squash newly built layers into a single new layer'
 	COMPGEN --ssh stringArray 'SSH agent socket or keys to expose to the build (only if BuildKit enabled) (format: default|<id>[=<socket>|<key>[,<key>]])'
-	COMPGEN --stream Switch 'Stream attaches to server to negotiate build context'
 	COMPGEN '-t' list 'Name and optionally a tag in the ''name:tag'' format'
 	COMPGEN --tag list 'Name and optionally a tag in the ''name:tag'' format'
 	COMPGEN --target string 'Set the target build stage to build.'
@@ -1854,16 +1849,6 @@ Register-Completer docker_create -Option {
 	COMPGEN --volumes-from list 'Mount volumes from the specified container(s)'
 	COMPGEN '-w' string 'Working directory inside the container'
 	COMPGEN --workdir string 'Working directory inside the container'
-}
-
-Register-Completer docker_deploy -Option {
-	COMPGEN --bundle-file string 'Path to a Distributed Application Bundle file'
-	COMPGEN '-c' strings 'Path to a Compose file, or "-" to read from stdin'
-	COMPGEN --compose-file strings 'Path to a Compose file, or "-" to read from stdin'
-	COMPGEN --namespace string 'Kubernetes namespace to use'
-	COMPGEN --prune Switch 'Prune services that are no longer referenced'
-	COMPGEN --resolve-image string 'Query the registry to resolve image digest and supported platforms ("always"|"changed"|"never")'
-	COMPGEN --with-registry-auth Switch 'Send registry authentication details to Swarm agents'
 }
 
 Register-Completer docker_events -Option {
