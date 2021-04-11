@@ -138,3 +138,4 @@ $argumentCompleter = {
 }
 
 Register-NativeCommandArgumentCompleter docker $argumentCompleter
+Register-NativeCommandArgumentCompleter docker.exe $argumentCompleter
