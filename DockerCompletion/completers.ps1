@@ -2,6 +2,7 @@
 $managementCommands = @(
 	COMPGEN builder ManagementCommand 'Manage builds'
 	COMPGEN checkpoint ManagementCommand 'Manage checkpoints'
+	COMPGEN compose ManagementCommand 'Docker Compose (Docker Inc., v2.0.0)'
 	COMPGEN config ManagementCommand 'Manage Docker configs'
 	COMPGEN container ManagementCommand 'Manage containers'
 	COMPGEN context ManagementCommand 'Manage contexts'

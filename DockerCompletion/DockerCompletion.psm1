@@ -42,7 +42,54 @@ function Invoke-CompletionCustomScript {
 	}
 }
 
-Invoke-CompletionCustomScript $PSScriptRoot\completers.ps1, $PSScriptRoot\completers4arguments.ps1
+function Get-ComposeCommandText {
+	param (
+		$CommandAst
+	)
+
+	$counter = 0
+	$commandTexts = New-Object System.Collections.ArrayList
+
+	foreach ($ce in $CommandAst.CommandElements) {
+		$commandTexts.Add($ce.Extent.Text) > $null
+		$counter++
+		if ($ce.Extent.Text -eq 'compose') {
+			break
+		}
+	}
+	# At this point, $commandTexts = @('docker', [OPTIONS])
+
+	$optionsWithArg = @(
+		'-f', '--file'
+		'--profile'
+		'--project-directory'
+		'-p', '--project-name'
+	)
+
+	$addNext = $false
+	for (; $counter -lt $CommandAst.CommandElements.Count; $counter++) {
+		$text = $CommandAst.CommandElements[$counter].Extent.Text
+
+		if ($addNext) {
+			# option's argument (e.g. `file.yaml` of `-f file.yaml`)
+			$commandTexts.Add($text) > $null
+			$addNext = $false
+		} elseif ($text -in $optionsWithArg) {
+			$commandTexts.Add($text) > $null
+			$addNext = $true
+		}
+	}
+	# At this point, $commandTexts = @('docker', [OPTIONS], 'compose', [OPTIONS])
+
+	return $commandTexts
+}
+
+Invoke-CompletionCustomScript @(
+	"$PSScriptRoot\completers.ps1"
+	"$PSScriptRoot\completers4arguments.ps1"
+	"$PSScriptRoot\Compose\completers.ps1"
+	"$PSScriptRoot\Compose\completers4arguments.ps1"
+)
 if ($CustomScriptPath) {
 	Invoke-CompletionCustomScript $CustomScriptPath
 }

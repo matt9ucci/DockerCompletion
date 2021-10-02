@@ -12,6 +12,13 @@
 * PowerShell >= 5.0
 * docker cli >= 1.13 in `$env:PATH`
 
+### Optional
+* [Compose v2](https://github.com/docker/compose)
+
+  It is used for `docker compose` completion.
+  The supported version will be bumped up frequently.
+  For information about it, see the comment of [Compose/completers.ps1](DockerCompletion/Compose/completers.ps1).
+
 ## Installation
 
 ```powershell

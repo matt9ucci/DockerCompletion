@@ -1,0 +1,6 @@
+services:
+  web:
+    build: .
+  db:
+    build: .
+    profiles: ["dev-1", "dev-2"]

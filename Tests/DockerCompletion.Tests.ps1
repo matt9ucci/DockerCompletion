@@ -21,11 +21,66 @@ Describe 'docker' {
 
 	It 'completes co' {
 		$result = Get-Result 'docker co'
-		$result | Should -HaveCount 4
-		$result[0].CompletionText | Should -Be config
-		$result[1].CompletionText | Should -Be container
-		$result[2].CompletionText | Should -Be context
-		$result[3].CompletionText | Should -Be commit
+		$result | Should -HaveCount 5
+		$result[0].CompletionText | Should -Be compose
+		$result[1].CompletionText | Should -Be config
+		$result[2].CompletionText | Should -Be container
+		$result[3].CompletionText | Should -Be context
+		$result[4].CompletionText | Should -Be commit
+	}
+}
+
+Describe 'docker compose' {
+	It 'completes p' {
+		$result = Get-Result 'docker compose p'
+		$result | Should -HaveCount 5
+		$result[0].CompletionText | Should -Be pause
+		$result[1].CompletionText | Should -Be port
+		$result[2].CompletionText | Should -Be ps
+		$result[3].CompletionText | Should -Be pull
+		$result[4].CompletionText | Should -Be push
+	}
+
+	It 'completes pu' {
+		$result = Get-Result 'docker compose pu'
+		$result | Should -HaveCount 2
+		$result[0].CompletionText | Should -Be pull
+		$result[1].CompletionText | Should -Be push
+	}
+}
+
+Describe 'docker --log-level debug compose' {
+	It 'completes c' {
+		$result = Get-Result 'docker --log-level debug compose c'
+		$result | Should -HaveCount 3
+		$result[0].CompletionText | Should -Be convert
+		$result[1].CompletionText | Should -Be cp
+		$result[2].CompletionText | Should -Be create
+	}
+}
+
+Describe 'docker --log-level debug compose --file test.yaml' {
+	It 'completes --profile' {
+		$file = Join-Path $PSScriptRoot test.yaml
+		$result = Get-Result "docker --log-level debug compose --file $file --profile "
+		$result | Should -HaveCount 2
+		$result[0].CompletionText | Should -Be dev-1
+		$result[1].CompletionText | Should -Be dev-2
+	}
+
+	It 'completes l' {
+		$file = Join-Path $PSScriptRoot test.yaml
+		$result = Get-Result "docker --log-level debug compose --file $file l"
+		$result | Should -HaveCount 2
+		$result[0].CompletionText | Should -Be logs
+		$result[1].CompletionText | Should -Be ls
+	}
+
+	It 'completes create' {
+		$file = Join-Path $PSScriptRoot test.yaml
+		$result = Get-Result "docker --log-level debug compose --file $file create "
+		$result | Should -HaveCount 1
+		$result[0].CompletionText | Should -Be web
 	}
 }
 
