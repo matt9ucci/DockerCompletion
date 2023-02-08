@@ -93,6 +93,63 @@ Register-Completer docker -Option {
 	COMPGEN --version Switch 'Print version information and quit'
 }
 
+Register-Completer docker_builder {
+	COMPGEN build SubCommand 'Build an image from a Dockerfile'
+	COMPGEN prune SubCommand 'Remove build cache'
+}
+
+Register-Completer docker_builder_build -Option {
+	COMPGEN --add-host list 'Add a custom host-to-IP mapping (host:ip)'
+	COMPGEN --build-arg list 'Set build-time variables'
+	COMPGEN --cache-from strings 'Images to consider as cache sources'
+	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
+	COMPGEN --compress Switch 'Compress the build context using gzip'
+	COMPGEN --cpu-period int 'Limit the CPU CFS (Completely Fair Scheduler) period'
+	COMPGEN --cpu-quota int 'Limit the CPU CFS (Completely Fair Scheduler) quota'
+	COMPGEN '-c' int 'CPU shares (relative weight)'
+	COMPGEN --cpu-shares int 'CPU shares (relative weight)'
+	COMPGEN --cpuset-cpus string 'CPUs in which to allow execution (0-3, 0,1)'
+	COMPGEN --cpuset-mems string 'MEMs in which to allow execution (0-3, 0,1)'
+	COMPGEN --disable-content-trust Switch 'Skip image verification'
+	COMPGEN '-f' string 'Name of the Dockerfile (Default is ''PATH/Dockerfile'')'
+	COMPGEN --file string 'Name of the Dockerfile (Default is ''PATH/Dockerfile'')'
+	COMPGEN --force-rm Switch 'Always remove intermediate containers'
+	COMPGEN --iidfile string 'Write the image ID to the file'
+	COMPGEN --isolation string 'Container isolation technology'
+	COMPGEN --label list 'Set metadata for an image'
+	COMPGEN '-m' bytes 'Memory limit'
+	COMPGEN --memory bytes 'Memory limit'
+	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: ''-1'' to enable unlimited swap'
+	COMPGEN --network string 'Set the networking mode for the RUN instructions during build'
+	COMPGEN --no-cache Switch 'Do not use cache when building the image'
+	COMPGEN '-o' stringArray 'Output destination (format: type=local,dest=path)'
+	COMPGEN --output stringArray 'Output destination (format: type=local,dest=path)'
+	COMPGEN --platform string 'Set platform if server is multi-platform capable'
+	COMPGEN --progress string 'Set type of progress output (auto, plain, tty). Use plain to show container output'
+	COMPGEN --pull Switch 'Always attempt to pull a newer version of the image'
+	COMPGEN '-q' Switch 'Suppress the build output and print image ID on success'
+	COMPGEN --quiet Switch 'Suppress the build output and print image ID on success'
+	COMPGEN --rm Switch 'Remove intermediate containers after a successful build'
+	COMPGEN --secret stringArray 'Secret file to expose to the build (only if BuildKit enabled): id=mysecret,src=/local/secret'
+	COMPGEN --security-opt strings 'Security options'
+	COMPGEN --shm-size bytes 'Size of /dev/shm'
+	COMPGEN --squash Switch 'Squash newly built layers into a single new layer'
+	COMPGEN --ssh stringArray 'SSH agent socket or keys to expose to the build (only if BuildKit enabled) (format: default|<id>[=<socket>|<key>[,<key>]])'
+	COMPGEN '-t' list 'Name and optionally a tag in the ''name:tag'' format'
+	COMPGEN --tag list 'Name and optionally a tag in the ''name:tag'' format'
+	COMPGEN --target string 'Set the target build stage to build.'
+	COMPGEN --ulimit ulimit 'Ulimit options'
+}
+
+Register-Completer docker_builder_prune -Option {
+	COMPGEN '-a' Switch 'Remove all unused build cache, not just dangling ones'
+	COMPGEN --all Switch 'Remove all unused build cache, not just dangling ones'
+	COMPGEN --filter filter 'Provide filter values (e.g. ''until=24h'')'
+	COMPGEN '-f' Switch 'Do not prompt for confirmation'
+	COMPGEN --force Switch 'Do not prompt for confirmation'
+	COMPGEN --keep-storage bytes 'Amount of disk space to keep for cache'
+}
+
 Register-Completer docker_checkpoint {
 	COMPGEN create SubCommand 'Create a checkpoint from a running container'
 	COMPGEN ls SubCommand 'List checkpoints for a container'
@@ -1507,63 +1564,6 @@ Register-Completer docker_build -Option {
 	COMPGEN --tag list 'Name and optionally a tag in the ''name:tag'' format'
 	COMPGEN --target string 'Set the target build stage to build.'
 	COMPGEN --ulimit ulimit 'Ulimit options'
-}
-
-Register-Completer docker_builder {
-	COMPGEN build SubCommand 'Build an image from a Dockerfile'
-	COMPGEN prune SubCommand 'Remove build cache'
-}
-
-Register-Completer docker_builder_build -Option {
-	COMPGEN --add-host list 'Add a custom host-to-IP mapping (host:ip)'
-	COMPGEN --build-arg list 'Set build-time variables'
-	COMPGEN --cache-from strings 'Images to consider as cache sources'
-	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
-	COMPGEN --compress Switch 'Compress the build context using gzip'
-	COMPGEN --cpu-period int 'Limit the CPU CFS (Completely Fair Scheduler) period'
-	COMPGEN --cpu-quota int 'Limit the CPU CFS (Completely Fair Scheduler) quota'
-	COMPGEN '-c' int 'CPU shares (relative weight)'
-	COMPGEN --cpu-shares int 'CPU shares (relative weight)'
-	COMPGEN --cpuset-cpus string 'CPUs in which to allow execution (0-3, 0,1)'
-	COMPGEN --cpuset-mems string 'MEMs in which to allow execution (0-3, 0,1)'
-	COMPGEN --disable-content-trust Switch 'Skip image verification'
-	COMPGEN '-f' string 'Name of the Dockerfile (Default is ''PATH/Dockerfile'')'
-	COMPGEN --file string 'Name of the Dockerfile (Default is ''PATH/Dockerfile'')'
-	COMPGEN --force-rm Switch 'Always remove intermediate containers'
-	COMPGEN --iidfile string 'Write the image ID to the file'
-	COMPGEN --isolation string 'Container isolation technology'
-	COMPGEN --label list 'Set metadata for an image'
-	COMPGEN '-m' bytes 'Memory limit'
-	COMPGEN --memory bytes 'Memory limit'
-	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: ''-1'' to enable unlimited swap'
-	COMPGEN --network string 'Set the networking mode for the RUN instructions during build'
-	COMPGEN --no-cache Switch 'Do not use cache when building the image'
-	COMPGEN '-o' stringArray 'Output destination (format: type=local,dest=path)'
-	COMPGEN --output stringArray 'Output destination (format: type=local,dest=path)'
-	COMPGEN --platform string 'Set platform if server is multi-platform capable'
-	COMPGEN --progress string 'Set type of progress output (auto, plain, tty). Use plain to show container output'
-	COMPGEN --pull Switch 'Always attempt to pull a newer version of the image'
-	COMPGEN '-q' Switch 'Suppress the build output and print image ID on success'
-	COMPGEN --quiet Switch 'Suppress the build output and print image ID on success'
-	COMPGEN --rm Switch 'Remove intermediate containers after a successful build'
-	COMPGEN --secret stringArray 'Secret file to expose to the build (only if BuildKit enabled): id=mysecret,src=/local/secret'
-	COMPGEN --security-opt strings 'Security options'
-	COMPGEN --shm-size bytes 'Size of /dev/shm'
-	COMPGEN --squash Switch 'Squash newly built layers into a single new layer'
-	COMPGEN --ssh stringArray 'SSH agent socket or keys to expose to the build (only if BuildKit enabled) (format: default|<id>[=<socket>|<key>[,<key>]])'
-	COMPGEN '-t' list 'Name and optionally a tag in the ''name:tag'' format'
-	COMPGEN --tag list 'Name and optionally a tag in the ''name:tag'' format'
-	COMPGEN --target string 'Set the target build stage to build.'
-	COMPGEN --ulimit ulimit 'Ulimit options'
-}
-
-Register-Completer docker_builder_prune -Option {
-	COMPGEN '-a' Switch 'Remove all unused build cache, not just dangling ones'
-	COMPGEN --all Switch 'Remove all unused build cache, not just dangling ones'
-	COMPGEN --filter filter 'Provide filter values (e.g. ''until=24h'')'
-	COMPGEN '-f' Switch 'Do not prompt for confirmation'
-	COMPGEN --force Switch 'Do not prompt for confirmation'
-	COMPGEN --keep-storage bytes 'Amount of disk space to keep for cache'
 }
 
 Register-Completer docker_exec -Option {
