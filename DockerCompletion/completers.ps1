@@ -649,6 +649,7 @@ Register-Completer docker_context {
 	COMPGEN inspect SubCommand 'Display detailed information on one or more contexts'
 	COMPGEN ls SubCommand 'List contexts'
 	COMPGEN rm SubCommand 'Remove one or more contexts'
+	COMPGEN show SubCommand 'Print the name of the current context'
 	COMPGEN update SubCommand 'Update a context'
 	COMPGEN use SubCommand 'Set the current docker context'
 }
