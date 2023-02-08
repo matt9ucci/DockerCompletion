@@ -457,8 +457,10 @@ Register-Completer docker_container_prune -Option {
 }
 
 Register-Completer docker_container_restart -Option {
-	COMPGEN '-t' int 'Seconds to wait for stop before killing the container'
-	COMPGEN --time int 'Seconds to wait for stop before killing the container'
+	COMPGEN '-s' string 'Signal to send to the container'
+	COMPGEN --signal string 'Signal to send to the container'
+	COMPGEN '-t' int 'Seconds to wait before killing the container'
+	COMPGEN --time int 'Seconds to wait before killing the container'
 }
 
 Register-Completer docker_container_rm -Option {
@@ -614,8 +616,10 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 }
 
 Register-Completer docker_container_stop -Option {
-	COMPGEN '-t' int 'Seconds to wait for stop before killing it'
-	COMPGEN --time int 'Seconds to wait for stop before killing it'
+	COMPGEN '-s' string 'Signal to send to the container'
+	COMPGEN --signal string 'Signal to send to the container'
+	COMPGEN '-t' int 'Seconds to wait before killing the container'
+	COMPGEN --time int 'Seconds to wait before killing the container'
 }
 
 Register-Completer docker_container_update -Option {
@@ -2151,10 +2155,11 @@ Register-Completer docker_logs -Option {
 	COMPGEN --until string 'Show logs before a timestamp (e.g. 2013-01-02T13:23:37Z) or relative (e.g. 42m for 42 minutes)'
 }
 
-
 Register-Completer docker_restart -Option {
-	COMPGEN '-t' int 'Seconds to wait for stop before killing the container'
-	COMPGEN --time int 'Seconds to wait for stop before killing the container'
+	COMPGEN '-s' string 'Signal to send to the container'
+	COMPGEN --signal string 'Signal to send to the container'
+	COMPGEN '-t' int 'Seconds to wait before killing the container'
+	COMPGEN --time int 'Seconds to wait before killing the container'
 }
 
 Register-Completer docker_rm -Option {
@@ -2201,8 +2206,10 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 }
 
 Register-Completer docker_stop -Option {
-	COMPGEN '-t' int 'Seconds to wait for stop before killing it'
-	COMPGEN --time int 'Seconds to wait for stop before killing it'
+	COMPGEN '-s' string 'Signal to send to the container'
+	COMPGEN --signal string 'Signal to send to the container'
+	COMPGEN '-t' int 'Seconds to wait before killing the container'
+	COMPGEN --time int 'Seconds to wait before killing the container'
 }
 
 Register-Completer docker_update -Option {
