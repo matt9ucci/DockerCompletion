@@ -1,4 +1,4 @@
-# docker/cli v20.10.0 https://github.com/docker/cli/tree/v20.10.0
+# docker/cli v23.0.0 https://github.com/docker/cli/tree/v23.0.0
 $managementCommands = @(
 	COMPGEN builder ManagementCommand 'Manage builds'
 	COMPGEN checkpoint ManagementCommand 'Manage checkpoints'
@@ -22,8 +22,14 @@ $managementCommands = @(
 
 $topLevelCommands = @(
 	COMPGEN build TopLevelCommand 'Build an image from a Dockerfile'
+	COMPGEN exec TopLevelCommand 'Execute a command in a running container'
+	COMPGEN images TopLevelCommand 'List images'
+	COMPGEN info TopLevelCommand 'Display system-wide information'
 	COMPGEN login TopLevelCommand 'Log in to a Docker registry'
 	COMPGEN logout TopLevelCommand 'Log out from a Docker registry'
+	COMPGEN ps TopLevelCommand 'List containers'
+	COMPGEN pull TopLevelCommand 'Download an image from a registry'
+	COMPGEN push TopLevelCommand 'Upload an image to a registry'
 	COMPGEN run TopLevelCommand 'Run a command in a new container'
 	COMPGEN search TopLevelCommand 'Search the Docker Hub for images'
 	COMPGEN version TopLevelCommand 'Show the Docker version information'
@@ -36,21 +42,15 @@ $legacyCommands = @(
 	COMPGEN create LegacyCommand 'Create a new container'
 	COMPGEN diff LegacyCommand 'Inspect changes to files or directories on a container''s filesystem'
 	COMPGEN events LegacyCommand 'Get real time events from the server'
-	COMPGEN exec LegacyCommand 'Run a command in a running container'
 	COMPGEN export LegacyCommand 'Export a container''s filesystem as a tar archive'
 	COMPGEN history LegacyCommand 'Show the history of an image'
-	COMPGEN images LegacyCommand 'List images'
 	COMPGEN import LegacyCommand 'Import the contents from a tarball to create a filesystem image'
-	COMPGEN info LegacyCommand 'Display system-wide information'
 	COMPGEN inspect LegacyCommand 'Return low-level information on Docker objects'
 	COMPGEN kill LegacyCommand 'Kill one or more running containers'
 	COMPGEN load LegacyCommand 'Load an image from a tar archive or STDIN'
 	COMPGEN logs LegacyCommand 'Fetch the logs of a container'
 	COMPGEN pause LegacyCommand 'Pause all processes within one or more containers'
 	COMPGEN port LegacyCommand 'List port mappings or a specific mapping for the container'
-	COMPGEN ps LegacyCommand 'List containers'
-	COMPGEN pull LegacyCommand 'Pull an image or a repository from a registry'
-	COMPGEN push LegacyCommand 'Push an image or a repository to a registry'
 	COMPGEN rename LegacyCommand 'Rename a container'
 	COMPGEN restart LegacyCommand 'Restart one or more containers'
 	COMPGEN rm LegacyCommand 'Remove one or more containers'
@@ -1566,12 +1566,81 @@ Register-Completer docker_builder_prune -Option {
 	COMPGEN --keep-storage bytes 'Amount of disk space to keep for cache'
 }
 
+Register-Completer docker_exec -Option {
+	COMPGEN '-d' Switch 'Detached mode: run command in the background'
+	COMPGEN --detach Switch 'Detached mode: run command in the background'
+	COMPGEN --detach-keys string 'Override the key sequence for detaching a container'
+	COMPGEN '-e' list 'Set environment variables'
+	COMPGEN --env list 'Set environment variables'
+	COMPGEN --env-file list 'Read in a file of environment variables'
+	COMPGEN '-i' Switch 'Keep STDIN open even if not attached'
+	COMPGEN --interactive Switch 'Keep STDIN open even if not attached'
+	COMPGEN --privileged Switch 'Give extended privileges to the command'
+	COMPGEN '-t' Switch 'Allocate a pseudo-TTY'
+	COMPGEN --tty Switch 'Allocate a pseudo-TTY'
+	COMPGEN '-u' string 'Username or UID (format: <name|uid>[:<group|gid>])'
+	COMPGEN --user string 'Username or UID (format: <name|uid>[:<group|gid>])'
+	COMPGEN '-w' string 'Working directory inside the container'
+	COMPGEN --workdir string 'Working directory inside the container'
+}
+
+Register-Completer docker_images -Option {
+	COMPGEN '-a' Switch 'Show all images (default hides intermediate images)'
+	COMPGEN --all Switch 'Show all images (default hides intermediate images)'
+	COMPGEN --digests Switch 'Show digests'
+	COMPGEN '-f' filter 'Filter output based on conditions provided'
+	COMPGEN --filter filter 'Filter output based on conditions provided'
+	COMPGEN --format string 'Pretty-print images using a Go template'
+	COMPGEN --no-trunc Switch 'Don''t truncate output'
+	COMPGEN '-q' Switch 'Only show image IDs'
+	COMPGEN --quiet Switch 'Only show image IDs'
+}
+
+Register-Completer docker_info -Option {
+	COMPGEN '-f' string 'Format the output using the given Go template'
+	COMPGEN --format string 'Format the output using the given Go template'
+}
+
 Register-Completer docker_login -Option {
 	COMPGEN '-p' string 'Password'
 	COMPGEN --password string 'Password'
 	COMPGEN --password-stdin Switch 'Take the password from stdin'
 	COMPGEN '-u' string 'Username'
 	COMPGEN --username string 'Username'
+}
+
+Register-Completer docker_ps -Option {
+	COMPGEN '-a' Switch 'Show all containers (default shows just running)'
+	COMPGEN --all Switch 'Show all containers (default shows just running)'
+	COMPGEN '-f' filter 'Filter output based on conditions provided'
+	COMPGEN --filter filter 'Filter output based on conditions provided'
+	COMPGEN --format string 'Pretty-print containers using a Go template'
+	COMPGEN '-n' int 'Show n last created containers (includes all states)'
+	COMPGEN --last int 'Show n last created containers (includes all states)'
+	COMPGEN '-l' Switch 'Show the latest created container (includes all states)'
+	COMPGEN --latest Switch 'Show the latest created container (includes all states)'
+	COMPGEN --no-trunc Switch 'Don''t truncate output'
+	COMPGEN '-q' Switch 'Only display container IDs'
+	COMPGEN --quiet Switch 'Only display container IDs'
+	COMPGEN '-s' Switch 'Display total file sizes'
+	COMPGEN --size Switch 'Display total file sizes'
+}
+
+Register-Completer docker_pull -Option {
+	COMPGEN '-a' Switch 'Download all tagged images in the repository'
+	COMPGEN --all-tags Switch 'Download all tagged images in the repository'
+	COMPGEN --disable-content-trust Switch 'Skip image verification'
+	COMPGEN --platform string 'Set platform if server is multi-platform capable'
+	COMPGEN '-q' Switch 'Suppress verbose output'
+	COMPGEN --quiet Switch 'Suppress verbose output'
+}
+
+Register-Completer docker_push -Option {
+	COMPGEN '-a' Switch 'Push all tagged images in the repository'
+	COMPGEN --all-tags Switch 'Push all tagged images in the repository'
+	COMPGEN --disable-content-trust Switch 'Skip image signing'
+	COMPGEN '-q' Switch 'Suppress verbose output'
+	COMPGEN --quiet Switch 'Suppress verbose output'
 }
 
 Register-Completer docker_run -Option {
@@ -1860,24 +1929,6 @@ Register-Completer docker_events -Option {
 	COMPGEN --until string 'Stream events until this timestamp'
 }
 
-Register-Completer docker_exec -Option {
-	COMPGEN '-d' Switch 'Detached mode: run command in the background'
-	COMPGEN --detach Switch 'Detached mode: run command in the background'
-	COMPGEN --detach-keys string 'Override the key sequence for detaching a container'
-	COMPGEN '-e' list 'Set environment variables'
-	COMPGEN --env list 'Set environment variables'
-	COMPGEN --env-file list 'Read in a file of environment variables'
-	COMPGEN '-i' Switch 'Keep STDIN open even if not attached'
-	COMPGEN --interactive Switch 'Keep STDIN open even if not attached'
-	COMPGEN --privileged Switch 'Give extended privileges to the command'
-	COMPGEN '-t' Switch 'Allocate a pseudo-TTY'
-	COMPGEN --tty Switch 'Allocate a pseudo-TTY'
-	COMPGEN '-u' string 'Username or UID (format: <name|uid>[:<group|gid>])'
-	COMPGEN --user string 'Username or UID (format: <name|uid>[:<group|gid>])'
-	COMPGEN '-w' string 'Working directory inside the container'
-	COMPGEN --workdir string 'Working directory inside the container'
-}
-
 Register-Completer docker_export -Option {
 	COMPGEN '-o' string 'Write to a file, instead of STDOUT'
 	COMPGEN --output string 'Write to a file, instead of STDOUT'
@@ -1892,29 +1943,12 @@ Register-Completer docker_history -Option {
 	COMPGEN --quiet Switch 'Only show image IDs'
 }
 
-Register-Completer docker_images -Option {
-	COMPGEN '-a' Switch 'Show all images (default hides intermediate images)'
-	COMPGEN --all Switch 'Show all images (default hides intermediate images)'
-	COMPGEN --digests Switch 'Show digests'
-	COMPGEN '-f' filter 'Filter output based on conditions provided'
-	COMPGEN --filter filter 'Filter output based on conditions provided'
-	COMPGEN --format string 'Pretty-print images using a Go template'
-	COMPGEN --no-trunc Switch 'Don''t truncate output'
-	COMPGEN '-q' Switch 'Only show image IDs'
-	COMPGEN --quiet Switch 'Only show image IDs'
-}
-
 Register-Completer docker_import -Option {
 	COMPGEN '-c' list 'Apply Dockerfile instruction to the created image'
 	COMPGEN --change list 'Apply Dockerfile instruction to the created image'
 	COMPGEN '-m' string 'Set commit message for imported image'
 	COMPGEN --message string 'Set commit message for imported image'
 	COMPGEN --platform string 'Set platform if server is multi-platform capable'
-}
-
-Register-Completer docker_info -Option {
-	COMPGEN '-f' string 'Format the output using the given Go template'
-	COMPGEN --format string 'Format the output using the given Go template'
 }
 
 Register-Completer docker_inspect -Option {
@@ -1949,39 +1983,6 @@ Register-Completer docker_logs -Option {
 	COMPGEN --until string 'Show logs before a timestamp (e.g. 2013-01-02T13:23:37Z) or relative (e.g. 42m for 42 minutes)'
 }
 
-Register-Completer docker_ps -Option {
-	COMPGEN '-a' Switch 'Show all containers (default shows just running)'
-	COMPGEN --all Switch 'Show all containers (default shows just running)'
-	COMPGEN '-f' filter 'Filter output based on conditions provided'
-	COMPGEN --filter filter 'Filter output based on conditions provided'
-	COMPGEN --format string 'Pretty-print containers using a Go template'
-	COMPGEN '-n' int 'Show n last created containers (includes all states)'
-	COMPGEN --last int 'Show n last created containers (includes all states)'
-	COMPGEN '-l' Switch 'Show the latest created container (includes all states)'
-	COMPGEN --latest Switch 'Show the latest created container (includes all states)'
-	COMPGEN --no-trunc Switch 'Don''t truncate output'
-	COMPGEN '-q' Switch 'Only display container IDs'
-	COMPGEN --quiet Switch 'Only display container IDs'
-	COMPGEN '-s' Switch 'Display total file sizes'
-	COMPGEN --size Switch 'Display total file sizes'
-}
-
-Register-Completer docker_pull -Option {
-	COMPGEN '-a' Switch 'Download all tagged images in the repository'
-	COMPGEN --all-tags Switch 'Download all tagged images in the repository'
-	COMPGEN --disable-content-trust Switch 'Skip image verification'
-	COMPGEN --platform string 'Set platform if server is multi-platform capable'
-	COMPGEN '-q' Switch 'Suppress verbose output'
-	COMPGEN --quiet Switch 'Suppress verbose output'
-}
-
-Register-Completer docker_push -Option {
-	COMPGEN '-a' Switch 'Push all tagged images in the repository'
-	COMPGEN --all-tags Switch 'Push all tagged images in the repository'
-	COMPGEN --disable-content-trust Switch 'Skip image signing'
-	COMPGEN '-q' Switch 'Suppress verbose output'
-	COMPGEN --quiet Switch 'Suppress verbose output'
-}
 
 Register-Completer docker_restart -Option {
 	COMPGEN '-t' int 'Seconds to wait for stop before killing the container'
