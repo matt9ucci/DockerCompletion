@@ -183,15 +183,26 @@ Register-Completer docker_config_create -Option {
 }
 
 Register-Completer docker_config_inspect -Option {
-	COMPGEN '-f' string 'Format the output using the given Go template'
-	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN '-f' string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --format string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN --pretty Switch 'Print the information in a human friendly format'
 }
 
 Register-Completer docker_config_ls -Option {
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
-	COMPGEN --format string 'Pretty-print configs using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN '-q' Switch 'Only display IDs'
 	COMPGEN --quiet Switch 'Only display IDs'
 }
@@ -388,8 +399,14 @@ Register-Completer docker_container_export -Option {
 }
 
 Register-Completer docker_container_inspect -Option {
-	COMPGEN '-f' string 'Format the output using the given Go template'
-	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN '-f' string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --format string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN '-s' Switch 'Display total file sizes'
 	COMPGEN --size Switch 'Display total file sizes'
 }
@@ -416,7 +433,12 @@ Register-Completer docker_container_ls -Option {
 	COMPGEN --all Switch 'Show all containers (default shows just running)'
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
-	COMPGEN --format string 'Pretty-print containers using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN '-n' int 'Show n last created containers (includes all states)'
 	COMPGEN --last int 'Show n last created containers (includes all states)'
 	COMPGEN '-l' Switch 'Show the latest created container (includes all states)'
@@ -581,7 +603,12 @@ Register-Completer docker_container_start -Option {
 Register-Completer docker_container_stats -Option {
 	COMPGEN '-a' Switch 'Show all containers (default shows just running)'
 	COMPGEN --all Switch 'Show all containers (default shows just running)'
-	COMPGEN --format string 'Pretty-print images using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN --no-stream Switch 'Disable streaming stats and only pull the first result'
 	COMPGEN --no-trunc Switch 'Do not truncate output'
 }
@@ -635,12 +662,23 @@ Register-Completer docker_context_export -Option {
 }
 
 Register-Completer docker_context_inspect -Option {
-	COMPGEN '-f' string 'Format the output using the given Go template'
-	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN '-f' string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --format string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 }
 
 Register-Completer docker_context_ls -Option {
-	COMPGEN --format string 'Pretty-print contexts using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN '-q' Switch 'Only show context names'
 	COMPGEN --quiet Switch 'Only show context names'
 }
@@ -716,7 +754,12 @@ Register-Completer docker_image_build -Option {
 }
 
 Register-Completer docker_image_history -Option {
-	COMPGEN --format string 'Pretty-print images using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN '-H' Switch 'Print sizes and dates in human readable format'
 	COMPGEN --human Switch 'Print sizes and dates in human readable format'
 	COMPGEN --no-trunc Switch 'Don''t truncate output'
@@ -733,8 +776,14 @@ Register-Completer docker_image_import -Option {
 }
 
 Register-Completer docker_image_inspect -Option {
-	COMPGEN '-f' string 'Format the output using the given Go template'
-	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN '-f' string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --format string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 }
 
 Register-Completer docker_image_load -Option {
@@ -750,7 +799,12 @@ Register-Completer docker_image_ls -Option {
 	COMPGEN --digests Switch 'Show digests'
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
-	COMPGEN --format string 'Pretty-print images using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN --no-trunc Switch 'Don''t truncate output'
 	COMPGEN '-q' Switch 'Only show image IDs'
 	COMPGEN --quiet Switch 'Only show image IDs'
@@ -872,8 +926,14 @@ Register-Completer docker_network_disconnect -Option {
 }
 
 Register-Completer docker_network_inspect -Option {
-	COMPGEN '-f' string 'Format the output using the given Go template'
-	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN '-f' string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --format string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN '-v' Switch 'Verbose output for diagnostics'
 	COMPGEN --verbose Switch 'Verbose output for diagnostics'
 }
@@ -881,7 +941,12 @@ Register-Completer docker_network_inspect -Option {
 Register-Completer docker_network_ls -Option {
 	COMPGEN '-f' filter 'Provide filter values (e.g. ''driver=bridge'')'
 	COMPGEN --filter filter 'Provide filter values (e.g. ''driver=bridge'')'
-	COMPGEN --format string 'Pretty-print networks using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN --no-trunc Switch 'Do not truncate the output'
 	COMPGEN '-q' Switch 'Only display network IDs'
 	COMPGEN --quiet Switch 'Only display network IDs'
@@ -904,15 +969,26 @@ Register-Completer docker_node {
 }
 
 Register-Completer docker_node_inspect -Option {
-	COMPGEN '-f' string 'Format the output using the given Go template'
-	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN '-f' string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --format string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN --pretty Switch 'Print the information in a human friendly format'
 }
 
 Register-Completer docker_node_ls -Option {
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
-	COMPGEN --format string 'Pretty-print nodes using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN '-q' Switch 'Only display IDs'
 	COMPGEN --quiet Switch 'Only display IDs'
 }
@@ -966,8 +1042,14 @@ Register-Completer docker_plugin_enable -Option {
 }
 
 Register-Completer docker_plugin_inspect -Option {
-	COMPGEN '-f' string 'Format the output using the given Go template'
-	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN '-f' string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --format string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 }
 
 Register-Completer docker_plugin_install -Option {
@@ -980,7 +1062,12 @@ Register-Completer docker_plugin_install -Option {
 Register-Completer docker_plugin_ls -Option {
 	COMPGEN '-f' filter 'Provide filter values (e.g. ''enabled=true'')'
 	COMPGEN --filter filter 'Provide filter values (e.g. ''enabled=true'')'
-	COMPGEN --format string 'Pretty-print plugins using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN --no-trunc Switch 'Don''t truncate output'
 	COMPGEN '-q' Switch 'Only display plugin IDs'
 	COMPGEN --quiet Switch 'Only display plugin IDs'
@@ -1017,15 +1104,26 @@ Register-Completer docker_secret_create -Option {
 }
 
 Register-Completer docker_secret_inspect -Option {
-	COMPGEN '-f' string 'Format the output using the given Go template'
-	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN '-f' string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --format string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN --pretty Switch 'Print the information in a human friendly format'
 }
 
 Register-Completer docker_secret_ls -Option {
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
-	COMPGEN --format string 'Pretty-print secrets using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN '-q' Switch 'Only display IDs'
 	COMPGEN --quiet Switch 'Only display IDs'
 }
@@ -1125,8 +1223,14 @@ Register-Completer docker_service_create -Option {
 }
 
 Register-Completer docker_service_inspect -Option {
-	COMPGEN '-f' string 'Format the output using the given Go template'
-	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN '-f' string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --format string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN --pretty Switch 'Print the information in a human friendly format'
 }
 
@@ -1148,7 +1252,12 @@ Register-Completer docker_service_logs -Option {
 Register-Completer docker_service_ls -Option {
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
-	COMPGEN --format string 'Pretty-print services using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN '-q' Switch 'Only display IDs'
 	COMPGEN --quiet Switch 'Only display IDs'
 }
@@ -1296,14 +1405,24 @@ Register-Completer docker_stack_deploy -Option {
 
 Register-Completer docker_stack_ls -Option {
 	COMPGEN --all-namespaces Switch 'List stacks from all Kubernetes namespaces'
-	COMPGEN --format string 'Pretty-print stacks using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN --namespace strings 'Kubernetes namespaces to use'
 }
 
 Register-Completer docker_stack_ps -Option {
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
-	COMPGEN --format string 'Pretty-print tasks using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN --namespace string 'Kubernetes namespace to use'
 	COMPGEN --no-resolve Switch 'Do not map IDs to Names'
 	COMPGEN --no-trunc Switch 'Do not truncate output'
@@ -1318,7 +1437,12 @@ Register-Completer docker_stack_rm -Option {
 Register-Completer docker_stack_services -Option {
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
-	COMPGEN --format string 'Pretty-print services using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN --namespace string 'Kubernetes namespace to use'
 	COMPGEN '-q' Switch 'Only display IDs'
 	COMPGEN --quiet Switch 'Only display IDs'
@@ -1408,7 +1532,12 @@ Register-Completer docker_system {
 }
 
 Register-Completer docker_system_df -Option {
-	COMPGEN --format string 'Pretty-print images using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN '-v' Switch 'Show detailed information on space usage'
 	COMPGEN --verbose Switch 'Show detailed information on space usage'
 }
@@ -1500,14 +1629,25 @@ Register-Completer docker_volume_create -Option {
 }
 
 Register-Completer docker_volume_inspect -Option {
-	COMPGEN '-f' string 'Format the output using the given Go template'
-	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN '-f' string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --format string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 }
 
 Register-Completer docker_volume_ls -Option {
 	COMPGEN '-f' filter 'Provide filter values (e.g. ''dangling=true'')'
 	COMPGEN --filter filter 'Provide filter values (e.g. ''dangling=true'')'
-	COMPGEN --format string 'Pretty-print volumes using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN '-q' Switch 'Only display volume names'
 	COMPGEN --quiet Switch 'Only display volume names'
 }
@@ -1590,7 +1730,12 @@ Register-Completer docker_images -Option {
 	COMPGEN --digests Switch 'Show digests'
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
-	COMPGEN --format string 'Pretty-print images using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN --no-trunc Switch 'Don''t truncate output'
 	COMPGEN '-q' Switch 'Only show image IDs'
 	COMPGEN --quiet Switch 'Only show image IDs'
@@ -1614,7 +1759,12 @@ Register-Completer docker_ps -Option {
 	COMPGEN --all Switch 'Show all containers (default shows just running)'
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
-	COMPGEN --format string 'Pretty-print containers using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN '-n' int 'Show n last created containers (includes all states)'
 	COMPGEN --last int 'Show n last created containers (includes all states)'
 	COMPGEN '-l' Switch 'Show the latest created container (includes all states)'
@@ -1935,7 +2085,12 @@ Register-Completer docker_export -Option {
 }
 
 Register-Completer docker_history -Option {
-	COMPGEN --format string 'Pretty-print images using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN '-H' Switch 'Print sizes and dates in human readable format'
 	COMPGEN --human Switch 'Print sizes and dates in human readable format'
 	COMPGEN --no-trunc Switch 'Don''t truncate output'
@@ -1952,8 +2107,14 @@ Register-Completer docker_import -Option {
 }
 
 Register-Completer docker_inspect -Option {
-	COMPGEN '-f' string 'Format the output using the given Go template'
-	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN '-f' string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --format string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN '-s' Switch 'Display total file sizes if the type is container'
 	COMPGEN --size Switch 'Display total file sizes if the type is container'
 	COMPGEN --type string 'Return JSON for specified type'
@@ -2022,7 +2183,12 @@ Register-Completer docker_start -Option {
 Register-Completer docker_stats -Option {
 	COMPGEN '-a' Switch 'Show all containers (default shows just running)'
 	COMPGEN --all Switch 'Show all containers (default shows just running)'
-	COMPGEN --format string 'Pretty-print images using a Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN --no-stream Switch 'Disable streaming stats and only pull the first result'
 	COMPGEN --no-trunc Switch 'Do not truncate output'
 }
