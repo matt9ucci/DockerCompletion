@@ -1383,6 +1383,7 @@ Register-Completer docker_service_update -Option {
 }
 
 Register-Completer docker_stack {
+	COMPGEN config SubCommand 'Outputs the final config file, after doing merges and interpolations'
 	COMPGEN deploy SubCommand 'Deploy a new stack or update an existing stack'
 	COMPGEN ls SubCommand 'List stacks'
 	COMPGEN ps SubCommand 'List the tasks in the stack'
@@ -1392,6 +1393,12 @@ Register-Completer docker_stack {
 Register-Completer docker_stack -Option {
 	COMPGEN --kubeconfig string 'Kubernetes config file'
 	COMPGEN --orchestrator string 'Orchestrator to use (swarm|kubernetes|all)'
+}
+
+Register-Completer docker_stack_config -Option {
+	COMPGEN '-c' strings 'Path to a Compose file, or "-" to read from stdin'
+	COMPGEN --compose-file strings 'Path to a Compose file, or "-" to read from stdin'
+	COMPGEN --skip-interpolation Switch 'Skip interpolation and output only merged config'
 }
 
 Register-Completer docker_stack_deploy -Option {
