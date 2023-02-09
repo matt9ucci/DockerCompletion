@@ -257,6 +257,8 @@ Register-Completer docker_container_cp -Option {
 	COMPGEN --archive Switch 'Archive mode (copy all uid/gid information)'
 	COMPGEN '-L' Switch 'Always follow symbol link in SRC_PATH'
 	COMPGEN --follow-link Switch 'Always follow symbol link in SRC_PATH'
+	COMPGEN '-q' Switch 'Suppress progress output during copy. Progress output is automatically suppressed if no terminal is attached'
+	COMPGEN --quiet Switch 'Suppress progress output during copy. Progress output is automatically suppressed if no terminal is attached'
 }
 
 Register-Completer docker_container_create -Option {
@@ -349,6 +351,8 @@ Register-Completer docker_container_create -Option {
 	COMPGEN '-P' Switch 'Publish all exposed ports to random ports'
 	COMPGEN --publish-all Switch 'Publish all exposed ports to random ports'
 	COMPGEN --pull string 'Pull image before creating ("always"|"missing"|"never")'
+	COMPGEN '-q' Switch 'Suppress the pull output'
+	COMPGEN --quiet Switch 'Suppress the pull output'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
 	COMPGEN --rm Switch 'Automatically remove the container when it exits'
@@ -565,6 +569,8 @@ Register-Completer docker_container_run -Option {
 	COMPGEN '-P' Switch 'Publish all exposed ports to random ports'
 	COMPGEN --publish-all Switch 'Publish all exposed ports to random ports'
 	COMPGEN --pull string 'Pull image before running ("always"|"missing"|"never")'
+	COMPGEN '-q' Switch 'Suppress the pull output'
+	COMPGEN --quiet Switch 'Suppress the pull output'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
 	COMPGEN --rm Switch 'Automatically remove the container when it exits'
@@ -1898,6 +1904,8 @@ Register-Completer docker_run -Option {
 	COMPGEN '-P' Switch 'Publish all exposed ports to random ports'
 	COMPGEN --publish-all Switch 'Publish all exposed ports to random ports'
 	COMPGEN --pull string 'Pull image before running ("always"|"missing"|"never")'
+	COMPGEN '-q' Switch 'Suppress the pull output'
+	COMPGEN --quiet Switch 'Suppress the pull output'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
 	COMPGEN --rm Switch 'Automatically remove the container when it exits'
@@ -1965,6 +1973,8 @@ Register-Completer docker_cp -Option {
 	COMPGEN --archive Switch 'Archive mode (copy all uid/gid information)'
 	COMPGEN '-L' Switch 'Always follow symbol link in SRC_PATH'
 	COMPGEN --follow-link Switch 'Always follow symbol link in SRC_PATH'
+	COMPGEN '-q' Switch 'Suppress progress output during copy. Progress output is automatically suppressed if no terminal is attached'
+	COMPGEN --quiet Switch 'Suppress progress output during copy. Progress output is automatically suppressed if no terminal is attached'
 }
 
 Register-Completer docker_create -Option {
@@ -2057,6 +2067,8 @@ Register-Completer docker_create -Option {
 	COMPGEN '-P' Switch 'Publish all exposed ports to random ports'
 	COMPGEN --publish-all Switch 'Publish all exposed ports to random ports'
 	COMPGEN --pull string 'Pull image before creating ("always"|"missing"|"never")'
+	COMPGEN '-q' Switch 'Suppress the pull output'
+	COMPGEN --quiet Switch 'Suppress the pull output'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
 	COMPGEN --rm Switch 'Automatically remove the container when it exits'
