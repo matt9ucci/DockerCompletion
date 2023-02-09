@@ -969,6 +969,11 @@ Register-Completer docker_network_prune -Option {
 	COMPGEN --force Switch 'Do not prompt for confirmation'
 }
 
+Register-Completer docker_network_rm -Option {
+	COMPGEN '-f' Switch 'Do not error if the network does not exist'
+	COMPGEN --force Switch 'Do not error if the network does not exist'
+}
+
 Register-Completer docker_node {
 	COMPGEN demote SubCommand 'Demote one or more nodes from manager in the swarm'
 	COMPGEN inspect SubCommand 'Display detailed information on one or more nodes'
