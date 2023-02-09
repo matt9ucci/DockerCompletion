@@ -1,4 +1,4 @@
-# Docker Compose version v2.0.0
+# Docker Compose version v2.16.0
 Register-Completer docker_compose {
 	COMPGEN build SubCommand 'Build or rebuild services'
 	COMPGEN convert SubCommand 'Converts the compose file to platform''s canonical format'
@@ -54,7 +54,7 @@ Register-Completer docker_compose_build -Option {
 	COMPGEN --no-cache Switch 'Do not use cache when building the image'
 	COMPGEN --no-rm Switch 'Do not remove intermediate containers after a successful build. DEPRECATED'
 	COMPGEN --parallel Switch 'Build images in parallel. DEPRECATED'
-	COMPGEN --progress string 'Set type of progress output ("auto", "plain", "noTty")'
+	COMPGEN --progress string 'Set type of progress output (auto, tty, plain, quiet)'
 	COMPGEN --pull Switch 'Always attempt to pull a newer version of the image.'
 	COMPGEN '-q' Switch 'Don''t print anything to STDOUT'
 	COMPGEN --quiet Switch 'Don''t print anything to STDOUT'
