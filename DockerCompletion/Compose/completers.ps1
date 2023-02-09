@@ -119,6 +119,7 @@ Register-Completer docker_compose_exec -Option {
 }
 
 Register-Completer docker_compose_images -Option {
+	COMPGEN --format string 'Format the output. Values: [table | json].'
 	COMPGEN '-q' Switch 'Only display IDs'
 	COMPGEN --quiet Switch 'Only display IDs'
 }
@@ -144,7 +145,7 @@ Register-Completer docker_compose_ls -Option {
 	COMPGEN '-a' Switch 'Show all stopped Compose projects'
 	COMPGEN --all Switch 'Show all stopped Compose projects'
 	COMPGEN --filter filter 'Filter output based on conditions provided.'
-	COMPGEN --format string 'Format the output. Values: [pretty | json].'
+	COMPGEN --format string 'Format the output. Values: [table | json].'
 	COMPGEN '-q' Switch 'Only display IDs.'
 	COMPGEN --quiet Switch 'Only display IDs.'
 }
@@ -158,7 +159,7 @@ Register-Completer docker_compose_ps -Option {
 	COMPGEN '-a' Switch 'Show all stopped containers (including those created by the run command)'
 	COMPGEN --all Switch 'Show all stopped containers (including those created by the run command)'
 	COMPGEN --filter string 'Filter services by a property. Deprecated, use --status instead'
-	COMPGEN --format string 'Format the output. Values: [pretty | json]'
+	COMPGEN --format string 'Format the output. Values: [table | json]'
 	COMPGEN '-q' Switch 'Only display IDs'
 	COMPGEN --quiet Switch 'Only display IDs'
 	COMPGEN --services Switch 'Display services'

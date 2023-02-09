@@ -66,6 +66,7 @@ Register-Completer docker_compose_down_--rmi { 'all', 'local' }
 Register-Completer docker_compose_events $serviceAll
 Register-Completer docker_compose_exec $serviceRunning
 Register-Completer docker_compose_images $serviceAll
+Register-Completer docker_compose_images_--format { 'json', 'table' }
 Register-Completer docker_compose_kill $serviceRunning
 Register-Completer docker_compose_kill_--signal {
 	'SIGCONT'
@@ -78,12 +79,12 @@ Register-Completer docker_compose_kill_--signal {
 }
 Register-Completer docker_compose_kill_-s (Get-Completer docker_compose_kill_--signal)
 Register-Completer docker_compose_logs $serviceAll
-Register-Completer docker_compose_ls_--format { 'json', 'pretty' }
+Register-Completer docker_compose_ls_--format { 'json', 'table' }
 Register-Completer docker_compose_pause $serviceRunning
 Register-Completer docker_compose_port $serviceAll
 Register-Completer docker_compose_port_--protocol { 'tcp', 'udp' }
 Register-Completer docker_compose_ps $serviceAll
-Register-Completer docker_compose_ps_--format { 'json', 'pretty' }
+Register-Completer docker_compose_ps_--format { 'json', 'table' }
 Register-Completer docker_compose_ps_--status { 'created', 'dead', 'exited', 'paused', 'removing', 'restarting', 'running' }
 Register-Completer docker_compose_pull $serviceAll
 Register-Completer docker_compose_push $serviceAll
