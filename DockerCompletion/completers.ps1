@@ -3,7 +3,7 @@ $managementCommands = @(
 	COMPGEN builder ManagementCommand 'Manage builds'
 	COMPGEN checkpoint ManagementCommand 'Manage checkpoints'
 	COMPGEN compose ManagementCommand 'Docker Compose (Docker Inc., v2.0.0)'
-	COMPGEN config ManagementCommand 'Manage Docker configs'
+	COMPGEN config ManagementCommand 'Manage Swarm configs'
 	COMPGEN container ManagementCommand 'Manage containers'
 	COMPGEN context ManagementCommand 'Manage contexts'
 	COMPGEN image ManagementCommand 'Manage images'
@@ -11,9 +11,9 @@ $managementCommands = @(
 	COMPGEN network ManagementCommand 'Manage networks'
 	COMPGEN node ManagementCommand 'Manage Swarm nodes'
 	COMPGEN plugin ManagementCommand 'Manage plugins'
-	COMPGEN secret ManagementCommand 'Manage Docker secrets'
-	COMPGEN service ManagementCommand 'Manage services'
-	COMPGEN stack ManagementCommand 'Manage Docker stacks'
+	COMPGEN secret ManagementCommand 'Manage Swarm secrets'
+	COMPGEN service ManagementCommand 'Manage Swarm services'
+	COMPGEN stack ManagementCommand 'Manage Swarm stacks'
 	COMPGEN swarm ManagementCommand 'Manage Swarm'
 	COMPGEN system ManagementCommand 'Manage Docker'
 	COMPGEN trust ManagementCommand 'Manage trust on Docker images'
@@ -25,13 +25,13 @@ $topLevelCommands = @(
 	COMPGEN exec TopLevelCommand 'Execute a command in a running container'
 	COMPGEN images TopLevelCommand 'List images'
 	COMPGEN info TopLevelCommand 'Display system-wide information'
-	COMPGEN login TopLevelCommand 'Log in to a Docker registry'
-	COMPGEN logout TopLevelCommand 'Log out from a Docker registry'
+	COMPGEN login TopLevelCommand 'Log in to a registry'
+	COMPGEN logout TopLevelCommand 'Log out from a registry'
 	COMPGEN ps TopLevelCommand 'List containers'
 	COMPGEN pull TopLevelCommand 'Download an image from a registry'
 	COMPGEN push TopLevelCommand 'Upload an image to a registry'
-	COMPGEN run TopLevelCommand 'Run a command in a new container'
-	COMPGEN search TopLevelCommand 'Search the Docker Hub for images'
+	COMPGEN run TopLevelCommand 'Create and run a new container from an image'
+	COMPGEN search TopLevelCommand 'Search Docker Hub for images'
 	COMPGEN version TopLevelCommand 'Show the Docker version information'
 )
 
@@ -82,8 +82,8 @@ Register-Completer docker -Option {
 	COMPGEN --help Switch 'Print usage'
 	COMPGEN '-H' list 'Daemon socket(s) to connect to'
 	COMPGEN --host list 'Daemon socket(s) to connect to'
-	COMPGEN '-l' string 'Set the logging level ("debug"|"info"|"warn"|"error"|"fatal")'
-	COMPGEN --log-level string 'Set the logging level ("debug"|"info"|"warn"|"error"|"fatal")'
+	COMPGEN '-l' string 'Set the logging level ("debug", "info", "warn", "error", "fatal")'
+	COMPGEN --log-level string 'Set the logging level ("debug", "info", "warn", "error", "fatal")'
 	COMPGEN --tls Switch 'Use TLS; implied by --tlsverify'
 	COMPGEN --tlscacert string 'Trust certs signed only by this CA'
 	COMPGEN --tlscert string 'Path to TLS certificate file'
@@ -99,7 +99,7 @@ Register-Completer docker_builder {
 }
 
 Register-Completer docker_builder_build -Option {
-	COMPGEN --add-host list 'Add a custom host-to-IP mapping (host:ip)'
+	COMPGEN --add-host list 'Add a custom host-to-IP mapping ("host:ip")'
 	COMPGEN --build-arg list 'Set build-time variables'
 	COMPGEN --cache-from strings 'Images to consider as cache sources'
 	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
@@ -111,15 +111,15 @@ Register-Completer docker_builder_build -Option {
 	COMPGEN --cpuset-cpus string 'CPUs in which to allow execution (0-3, 0,1)'
 	COMPGEN --cpuset-mems string 'MEMs in which to allow execution (0-3, 0,1)'
 	COMPGEN --disable-content-trust Switch 'Skip image verification'
-	COMPGEN '-f' string 'Name of the Dockerfile (Default is ''PATH/Dockerfile'')'
-	COMPGEN --file string 'Name of the Dockerfile (Default is ''PATH/Dockerfile'')'
+	COMPGEN '-f' string 'Name of the Dockerfile (Default is "PATH/Dockerfile")'
+	COMPGEN --file string 'Name of the Dockerfile (Default is "PATH/Dockerfile")'
 	COMPGEN --force-rm Switch 'Always remove intermediate containers'
 	COMPGEN --iidfile string 'Write the image ID to the file'
 	COMPGEN --isolation string 'Container isolation technology'
 	COMPGEN --label list 'Set metadata for an image'
 	COMPGEN '-m' bytes 'Memory limit'
 	COMPGEN --memory bytes 'Memory limit'
-	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: ''-1'' to enable unlimited swap'
+	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: -1 to enable unlimited swap'
 	COMPGEN --network string 'Set the networking mode for the RUN instructions during build'
 	COMPGEN --no-cache Switch 'Do not use cache when building the image'
 	COMPGEN '-o' stringArray 'Output destination (format: type=local,dest=path)'
@@ -132,11 +132,11 @@ Register-Completer docker_builder_build -Option {
 	COMPGEN --rm Switch 'Remove intermediate containers after a successful build'
 	COMPGEN --secret stringArray 'Secret file to expose to the build (only if BuildKit enabled): id=mysecret,src=/local/secret'
 	COMPGEN --security-opt strings 'Security options'
-	COMPGEN --shm-size bytes 'Size of /dev/shm'
+	COMPGEN --shm-size bytes 'Size of "/dev/shm"'
 	COMPGEN --squash Switch 'Squash newly built layers into a single new layer'
 	COMPGEN --ssh stringArray 'SSH agent socket or keys to expose to the build (only if BuildKit enabled) (format: default|<id>[=<socket>|<key>[,<key>]])'
-	COMPGEN '-t' list 'Name and optionally a tag in the ''name:tag'' format'
-	COMPGEN --tag list 'Name and optionally a tag in the ''name:tag'' format'
+	COMPGEN '-t' list 'Name and optionally a tag in the "name:tag" format'
+	COMPGEN --tag list 'Name and optionally a tag in the "name:tag" format'
 	COMPGEN --target string 'Set the target build stage to build.'
 	COMPGEN --ulimit ulimit 'Ulimit options'
 }
@@ -144,7 +144,7 @@ Register-Completer docker_builder_build -Option {
 Register-Completer docker_builder_prune -Option {
 	COMPGEN '-a' Switch 'Remove all unused build cache, not just dangling ones'
 	COMPGEN --all Switch 'Remove all unused build cache, not just dangling ones'
-	COMPGEN --filter filter 'Provide filter values (e.g. ''until=24h'')'
+	COMPGEN --filter filter 'Provide filter values (e.g. "until=24h")'
 	COMPGEN '-f' Switch 'Do not prompt for confirmation'
 	COMPGEN --force Switch 'Do not prompt for confirmation'
 	COMPGEN --keep-storage bytes 'Amount of disk space to keep for cache'
@@ -213,7 +213,7 @@ Register-Completer docker_container {
 	COMPGEN cp SubCommand 'Copy files/folders between a container and the local filesystem'
 	COMPGEN create SubCommand 'Create a new container'
 	COMPGEN diff SubCommand 'Inspect changes to files or directories on a container''s filesystem'
-	COMPGEN exec SubCommand 'Run a command in a running container'
+	COMPGEN exec SubCommand 'Execute a command in a running container'
 	COMPGEN export SubCommand 'Export a container''s filesystem as a tar archive'
 	COMPGEN inspect SubCommand 'Display detailed information on one or more containers'
 	COMPGEN kill SubCommand 'Kill one or more running containers'
@@ -225,7 +225,7 @@ Register-Completer docker_container {
 	COMPGEN rename SubCommand 'Rename a container'
 	COMPGEN restart SubCommand 'Restart one or more containers'
 	COMPGEN rm SubCommand 'Remove one or more containers'
-	COMPGEN run SubCommand 'Run a command in a new container'
+	COMPGEN run SubCommand 'Create and run a new container from an image'
 	COMPGEN start SubCommand 'Start one or more stopped containers'
 	COMPGEN stats SubCommand 'Display a live stream of container(s) resource usage statistics'
 	COMPGEN stop SubCommand 'Stop one or more running containers'
@@ -350,7 +350,7 @@ Register-Completer docker_container_create -Option {
 	COMPGEN --publish list 'Publish a container''s port(s) to the host'
 	COMPGEN '-P' Switch 'Publish all exposed ports to random ports'
 	COMPGEN --publish-all Switch 'Publish all exposed ports to random ports'
-	COMPGEN --pull string 'Pull image before creating ("always"|"missing"|"never")'
+	COMPGEN --pull string 'Pull image before creating ("always", "|missing", "never")'
 	COMPGEN '-q' Switch 'Suppress the pull output'
 	COMPGEN --quiet Switch 'Suppress the pull output'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
@@ -359,7 +359,7 @@ Register-Completer docker_container_create -Option {
 	COMPGEN --runtime string 'Runtime to use for this container'
 	COMPGEN --security-opt list 'Security Options'
 	COMPGEN --shm-size bytes 'Size of /dev/shm'
-	COMPGEN --stop-signal string 'Signal to stop a container'
+	COMPGEN --stop-signal string 'Signal to stop the container'
 	COMPGEN --stop-timeout int 'Timeout (in seconds) to stop a container'
 	COMPGEN --storage-opt list 'Storage driver options for the container'
 	COMPGEN --sysctl map 'Sysctl options'
@@ -391,8 +391,8 @@ Register-Completer docker_container_exec -Option {
 	COMPGEN --privileged Switch 'Give extended privileges to the command'
 	COMPGEN '-t' Switch 'Allocate a pseudo-TTY'
 	COMPGEN --tty Switch 'Allocate a pseudo-TTY'
-	COMPGEN '-u' string 'Username or UID (format: <name|uid>[:<group|gid>])'
-	COMPGEN --user string 'Username or UID (format: <name|uid>[:<group|gid>])'
+	COMPGEN '-u' string 'Username or UID (format: "<name|uid>[:<group|gid>]")'
+	COMPGEN --user string 'Username or UID (format: "<name|uid>[:<group|gid>]")'
 	COMPGEN '-w' string 'Working directory inside the container'
 	COMPGEN --workdir string 'Working directory inside the container'
 }
@@ -424,12 +424,12 @@ Register-Completer docker_container_logs -Option {
 	COMPGEN --details Switch 'Show extra details provided to logs'
 	COMPGEN '-f' Switch 'Follow log output'
 	COMPGEN --follow Switch 'Follow log output'
-	COMPGEN --since string 'Show logs since timestamp (e.g. 2013-01-02T13:23:37Z) or relative (e.g. 42m for 42 minutes)'
+	COMPGEN --since string 'Show logs since timestamp (e.g. "2013-01-02T13:23:37Z") or relative (e.g. "42m" for 42 minutes)'
 	COMPGEN '-n' string 'Number of lines to show from the end of the logs'
 	COMPGEN --tail string 'Number of lines to show from the end of the logs'
 	COMPGEN '-t' Switch 'Show timestamps'
 	COMPGEN --timestamps Switch 'Show timestamps'
-	COMPGEN --until string 'Show logs before a timestamp (e.g. 2013-01-02T13:23:37Z) or relative (e.g. 42m for 42 minutes)'
+	COMPGEN --until string 'Show logs before a timestamp (e.g. "2013-01-02T13:23:37Z") or relative (e.g. "42m" for 42 minutes)'
 }
 
 Register-Completer docker_container_ls -Option {
@@ -455,7 +455,7 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 }
 
 Register-Completer docker_container_prune -Option {
-	COMPGEN --filter filter 'Provide filter values (e.g. ''until=<timestamp>'')'
+	COMPGEN --filter filter 'Provide filter values (e.g. "until=<timestamp>")'
 	COMPGEN '-f' Switch 'Do not prompt for confirmation'
 	COMPGEN --force Switch 'Do not prompt for confirmation'
 }
@@ -568,7 +568,7 @@ Register-Completer docker_container_run -Option {
 	COMPGEN --publish list 'Publish a container''s port(s) to the host'
 	COMPGEN '-P' Switch 'Publish all exposed ports to random ports'
 	COMPGEN --publish-all Switch 'Publish all exposed ports to random ports'
-	COMPGEN --pull string 'Pull image before running ("always"|"missing"|"never")'
+	COMPGEN --pull string 'Pull image before running ("always", "missing", "never")'
 	COMPGEN '-q' Switch 'Suppress the pull output'
 	COMPGEN --quiet Switch 'Suppress the pull output'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
@@ -578,7 +578,7 @@ Register-Completer docker_container_run -Option {
 	COMPGEN --security-opt list 'Security Options'
 	COMPGEN --shm-size bytes 'Size of /dev/shm'
 	COMPGEN --sig-proxy Switch 'Proxy received signals to the process'
-	COMPGEN --stop-signal string 'Signal to stop a container'
+	COMPGEN --stop-signal string 'Signal to stop the container'
 	COMPGEN --stop-timeout int 'Timeout (in seconds) to stop a container'
 	COMPGEN --storage-opt list 'Storage driver options for the container'
 	COMPGEN --sysctl map 'Sysctl options'
@@ -643,14 +643,14 @@ Register-Completer docker_container_update -Option {
 	COMPGEN '-m' bytes 'Memory limit'
 	COMPGEN --memory bytes 'Memory limit'
 	COMPGEN --memory-reservation bytes 'Memory soft limit'
-	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: ''-1'' to enable unlimited swap'
+	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: -1 to enable unlimited swap'
 	COMPGEN --pids-limit int 'Tune container pids limit (set -1 for unlimited)'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
 }
 
 Register-Completer docker_context {
 	COMPGEN create SubCommand 'Create a context'
-	COMPGEN export SubCommand 'Export a context to a tar or kubeconfig file'
+	COMPGEN export SubCommand 'Export a context to a tar archive FILE or a tar stream on STDOUT.'
 	COMPGEN import SubCommand 'Import a context from a tar or zip file'
 	COMPGEN inspect SubCommand 'Display detailed information on one or more contexts'
 	COMPGEN ls SubCommand 'List contexts'
@@ -714,15 +714,15 @@ Register-Completer docker_image {
 	COMPGEN load SubCommand 'Load an image from a tar archive or STDIN'
 	COMPGEN ls SubCommand 'List images'
 	COMPGEN prune SubCommand 'Remove unused images'
-	COMPGEN pull SubCommand 'Pull an image or a repository from a registry'
-	COMPGEN push SubCommand 'Push an image or a repository to a registry'
+	COMPGEN pull SubCommand 'Download an image from a registry'
+	COMPGEN push SubCommand 'Upload an image to a registry'
 	COMPGEN rm SubCommand 'Remove one or more images'
 	COMPGEN save SubCommand 'Save one or more images to a tar archive (streamed to STDOUT by default)'
 	COMPGEN tag SubCommand 'Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE'
 }
 
 Register-Completer docker_image_build -Option {
-	COMPGEN --add-host list 'Add a custom host-to-IP mapping (host:ip)'
+	COMPGEN --add-host list 'Add a custom host-to-IP mapping ("host:ip")'
 	COMPGEN --build-arg list 'Set build-time variables'
 	COMPGEN --cache-from strings 'Images to consider as cache sources'
 	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
@@ -734,15 +734,15 @@ Register-Completer docker_image_build -Option {
 	COMPGEN --cpuset-cpus string 'CPUs in which to allow execution (0-3, 0,1)'
 	COMPGEN --cpuset-mems string 'MEMs in which to allow execution (0-3, 0,1)'
 	COMPGEN --disable-content-trust Switch 'Skip image verification'
-	COMPGEN '-f' string 'Name of the Dockerfile (Default is ''PATH/Dockerfile'')'
-	COMPGEN --file string 'Name of the Dockerfile (Default is ''PATH/Dockerfile'')'
+	COMPGEN '-f' string 'Name of the Dockerfile (Default is "PATH/Dockerfile")'
+	COMPGEN --file string 'Name of the Dockerfile (Default is "PATH/Dockerfile")'
 	COMPGEN --force-rm Switch 'Always remove intermediate containers'
 	COMPGEN --iidfile string 'Write the image ID to the file'
 	COMPGEN --isolation string 'Container isolation technology'
 	COMPGEN --label list 'Set metadata for an image'
 	COMPGEN '-m' bytes 'Memory limit'
 	COMPGEN --memory bytes 'Memory limit'
-	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: ''-1'' to enable unlimited swap'
+	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: -1 to enable unlimited swap'
 	COMPGEN --network string 'Set the networking mode for the RUN instructions during build'
 	COMPGEN --no-cache Switch 'Do not use cache when building the image'
 	COMPGEN '-o' stringArray 'Output destination (format: type=local,dest=path)'
@@ -755,11 +755,11 @@ Register-Completer docker_image_build -Option {
 	COMPGEN --rm Switch 'Remove intermediate containers after a successful build'
 	COMPGEN --secret stringArray 'Secret file to expose to the build (only if BuildKit enabled): id=mysecret,src=/local/secret'
 	COMPGEN --security-opt strings 'Security options'
-	COMPGEN --shm-size bytes 'Size of /dev/shm'
+	COMPGEN --shm-size bytes 'Size of "/dev/shm"'
 	COMPGEN --squash Switch 'Squash newly built layers into a single new layer'
 	COMPGEN --ssh stringArray 'SSH agent socket or keys to expose to the build (only if BuildKit enabled) (format: default|<id>[=<socket>|<key>[,<key>]])'
-	COMPGEN '-t' list 'Name and optionally a tag in the ''name:tag'' format'
-	COMPGEN --tag list 'Name and optionally a tag in the ''name:tag'' format'
+	COMPGEN '-t' list 'Name and optionally a tag in the "name:tag" format'
+	COMPGEN --tag list 'Name and optionally a tag in the "name:tag" format'
 	COMPGEN --target string 'Set the target build stage to build.'
 	COMPGEN --ulimit ulimit 'Ulimit options'
 }
@@ -824,7 +824,7 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 Register-Completer docker_image_prune -Option {
 	COMPGEN '-a' Switch 'Remove all unused images, not just dangling ones'
 	COMPGEN --all Switch 'Remove all unused images, not just dangling ones'
-	COMPGEN --filter filter 'Provide filter values (e.g. ''until=<timestamp>'')'
+	COMPGEN --filter filter 'Provide filter values (e.g. "until=<timestamp>")'
 	COMPGEN '-f' Switch 'Do not prompt for confirmation'
 	COMPGEN --force Switch 'Do not prompt for confirmation'
 }
@@ -839,8 +839,8 @@ Register-Completer docker_image_pull -Option {
 }
 
 Register-Completer docker_image_push -Option {
-	COMPGEN '-a' Switch 'Push all tagged images in the repository'
-	COMPGEN --all-tags Switch 'Push all tagged images in the repository'
+	COMPGEN '-a' Switch 'Push all tags of an image to the repository'
+	COMPGEN --all-tags Switch 'Push all tags of an image to the repository'
 	COMPGEN --disable-content-trust Switch 'Skip image signing'
 	COMPGEN '-q' Switch 'Suppress verbose output'
 	COMPGEN --quiet Switch 'Suppress verbose output'
@@ -904,8 +904,8 @@ Register-Completer docker_network {
 Register-Completer docker_network_connect -Option {
 	COMPGEN --alias strings 'Add network-scoped alias for the container'
 	COMPGEN --driver-opt strings 'driver options for the network'
-	COMPGEN --ip string 'IPv4 address (e.g., 172.30.100.104)'
-	COMPGEN --ip6 string 'IPv6 address (e.g., 2001:db8::33)'
+	COMPGEN --ip string 'IPv4 address (e.g., "172.30.100.104")'
+	COMPGEN --ip6 string 'IPv6 address (e.g., "2001:db8::33")'
 	COMPGEN --link list 'Add link to another container'
 	COMPGEN --link-local-ip strings 'Add a link-local address for the container'
 }
@@ -950,8 +950,8 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 }
 
 Register-Completer docker_network_ls -Option {
-	COMPGEN '-f' filter 'Provide filter values (e.g. ''driver=bridge'')'
-	COMPGEN --filter filter 'Provide filter values (e.g. ''driver=bridge'')'
+	COMPGEN '-f' filter 'Provide filter values (e.g. "driver=bridge")'
+	COMPGEN --filter filter 'Provide filter values (e.g. "driver=bridge")'
 	COMPGEN --format string 'Format output using a custom template:
 ''table'':            Print output in table format with column headers (default)
 ''table TEMPLATE'':   Print output in table format using the given Go template
@@ -964,7 +964,7 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 }
 
 Register-Completer docker_network_prune -Option {
-	COMPGEN --filter filter 'Provide filter values (e.g. ''until=<timestamp>'')'
+	COMPGEN --filter filter 'Provide filter values (e.g. "until=<timestamp>")'
 	COMPGEN '-f' Switch 'Do not prompt for confirmation'
 	COMPGEN --force Switch 'Do not prompt for confirmation'
 }
@@ -1025,10 +1025,10 @@ Register-Completer docker_node_rm -Option {
 }
 
 Register-Completer docker_node_update -Option {
-	COMPGEN --availability string 'Availability of the node ("active"|"pause"|"drain")'
-	COMPGEN --label-add list 'Add or update a node label (key=value)'
+	COMPGEN --availability string 'Availability of the node ("active", "pause", "drain")'
+	COMPGEN --label-add list 'Add or update a node label ("key=value")'
 	COMPGEN --label-rm list 'Remove a node label if exists'
-	COMPGEN --role string 'Role of the node ("worker"|"manager")'
+	COMPGEN --role string 'Role of the node ("worker", "manager")'
 }
 
 Register-Completer docker_plugin {
@@ -1076,8 +1076,8 @@ Register-Completer docker_plugin_install -Option {
 }
 
 Register-Completer docker_plugin_ls -Option {
-	COMPGEN '-f' filter 'Provide filter values (e.g. ''enabled=true'')'
-	COMPGEN --filter filter 'Provide filter values (e.g. ''enabled=true'')'
+	COMPGEN '-f' filter 'Provide filter values (e.g. "enabled=true")'
+	COMPGEN --filter filter 'Provide filter values (e.g. "enabled=true")'
 	COMPGEN --format string 'Format output using a custom template:
 ''table'':            Print output in table format with column headers (default)
 ''table TEMPLATE'':   Print output in table format using the given Go template
@@ -1192,7 +1192,7 @@ Register-Completer docker_service_create -Option {
 	COMPGEN --log-driver string 'Logging driver for service'
 	COMPGEN --log-opt list 'Logging driver options'
 	COMPGEN --max-concurrent uint 'Number of job tasks to run concurrently (default equal to --replicas)'
-	COMPGEN --mode string 'Service mode (replicated, global, replicated-job, or global-job)'
+	COMPGEN --mode string 'Service mode ("replicated", "global", "replicated-job", "global-job")'
 	COMPGEN --mount mount 'Attach a filesystem mount to the service'
 	COMPGEN --name string 'Service name'
 	COMPGEN --network network 'Network attachments'
@@ -1208,15 +1208,15 @@ Register-Completer docker_service_create -Option {
 	COMPGEN --replicas-max-per-node uint 'Maximum number of tasks per node (default 0 = unlimited)'
 	COMPGEN --reserve-cpu decimal 'Reserve CPUs'
 	COMPGEN --reserve-memory bytes 'Reserve Memory'
-	COMPGEN --restart-condition string 'Restart when condition is met ("none"|"on-failure"|"any") (default "any")'
+	COMPGEN --restart-condition string 'Restart when condition is met ("none", "on-failure", "any") (default "any")'
 	COMPGEN --restart-delay duration 'Delay between restart attempts (ns|us|ms|s|m|h) (default 5s)'
 	COMPGEN --restart-max-attempts uint 'Maximum number of restarts before giving up'
 	COMPGEN --restart-window duration 'Window used to evaluate the restart policy (ns|us|ms|s|m|h)'
 	COMPGEN --rollback-delay duration 'Delay between task rollbacks (ns|us|ms|s|m|h) (default 0s)'
-	COMPGEN --rollback-failure-action string 'Action on rollback failure ("pause"|"continue") (default "pause")'
+	COMPGEN --rollback-failure-action string 'Action on rollback failure ("pause", "continue") (default "pause")'
 	COMPGEN --rollback-max-failure-ratio float 'Failure rate to tolerate during a rollback (default 0)'
 	COMPGEN --rollback-monitor duration 'Duration after each task rollback to monitor for failure (ns|us|ms|s|m|h) (default 5s)'
-	COMPGEN --rollback-order string 'Rollback order ("start-first"|"stop-first") (default "stop-first")'
+	COMPGEN --rollback-order string 'Rollback order ("start-first", "stop-first") (default "stop-first")'
 	COMPGEN --rollback-parallelism uint 'Maximum number of tasks rolled back simultaneously (0 to roll back all at once)'
 	COMPGEN --secret secret 'Specify secrets to expose to the service'
 	COMPGEN --stop-grace-period duration 'Time to wait before force killing a container (ns|us|ms|s|m|h) (default 10s)'
@@ -1226,10 +1226,10 @@ Register-Completer docker_service_create -Option {
 	COMPGEN --tty Switch 'Allocate a pseudo-TTY'
 	COMPGEN --ulimit ulimit 'Ulimit options'
 	COMPGEN --update-delay duration 'Delay between updates (ns|us|ms|s|m|h) (default 0s)'
-	COMPGEN --update-failure-action string 'Action on update failure ("pause"|"continue"|"rollback") (default "pause")'
+	COMPGEN --update-failure-action string 'Action on update failure ("pause", "continue", "rollback") (default "pause")'
 	COMPGEN --update-max-failure-ratio float 'Failure rate to tolerate during an update (default 0)'
 	COMPGEN --update-monitor duration 'Duration after each task update to monitor for failure (ns|us|ms|s|m|h) (default 5s)'
-	COMPGEN --update-order string 'Update order ("start-first"|"stop-first") (default "stop-first")'
+	COMPGEN --update-order string 'Update order ("start-first", "stop-first") (default "stop-first")'
 	COMPGEN --update-parallelism uint 'Maximum number of tasks updated simultaneously (0 to update all at once)'
 	COMPGEN '-u' string 'Username or UID (format: <name|uid>[:<group|gid>])'
 	COMPGEN --user string 'Username or UID (format: <name|uid>[:<group|gid>])'
@@ -1258,7 +1258,7 @@ Register-Completer docker_service_logs -Option {
 	COMPGEN --no-task-ids Switch 'Do not include task IDs in output'
 	COMPGEN --no-trunc Switch 'Do not truncate output'
 	COMPGEN --raw Switch 'Do not neatly format logs'
-	COMPGEN --since string 'Show logs since timestamp (e.g. 2013-01-02T13:23:37Z) or relative (e.g. 42m for 42 minutes)'
+	COMPGEN --since string 'Show logs since timestamp (e.g. "2013-01-02T13:23:37Z") or relative (e.g. "42m" for 42 minutes)'
 	COMPGEN '-n' string 'Number of lines to show from the end of the logs'
 	COMPGEN --tail string 'Number of lines to show from the end of the logs'
 	COMPGEN '-t' Switch 'Show timestamps'
@@ -1333,8 +1333,8 @@ Register-Completer docker_service_update -Option {
 	COMPGEN --health-retries int 'Consecutive failures needed to report unhealthy'
 	COMPGEN --health-start-period duration 'Start period for the container to initialize before counting retries towards unstable (ms|s|m|h)'
 	COMPGEN --health-timeout duration 'Maximum time to allow one check to run (ms|s|m|h)'
-	COMPGEN --host-add list 'Add a custom host-to-IP mapping (host:ip)'
-	COMPGEN --host-rm list 'Remove a custom host-to-IP mapping (host:ip)'
+	COMPGEN --host-add list 'Add a custom host-to-IP mapping ("host:ip")'
+	COMPGEN --host-rm list 'Remove a custom host-to-IP mapping ("host:ip")'
 	COMPGEN --hostname string 'Container hostname'
 	COMPGEN --image string 'Service image tag'
 	COMPGEN --init Switch 'Use an init inside each service container to forward signals and reap processes'
@@ -1364,16 +1364,16 @@ Register-Completer docker_service_update -Option {
 	COMPGEN --replicas-max-per-node uint 'Maximum number of tasks per node (default 0 = unlimited)'
 	COMPGEN --reserve-cpu decimal 'Reserve CPUs'
 	COMPGEN --reserve-memory bytes 'Reserve Memory'
-	COMPGEN --restart-condition string 'Restart when condition is met ("none"|"on-failure"|"any")'
+	COMPGEN --restart-condition string 'Restart when condition is met ("none", "on-failure", "any")'
 	COMPGEN --restart-delay duration 'Delay between restart attempts (ns|us|ms|s|m|h)'
 	COMPGEN --restart-max-attempts uint 'Maximum number of restarts before giving up'
 	COMPGEN --restart-window duration 'Window used to evaluate the restart policy (ns|us|ms|s|m|h)'
 	COMPGEN --rollback Switch 'Rollback to previous specification'
 	COMPGEN --rollback-delay duration 'Delay between task rollbacks (ns|us|ms|s|m|h)'
-	COMPGEN --rollback-failure-action string 'Action on rollback failure ("pause"|"continue")'
+	COMPGEN --rollback-failure-action string 'Action on rollback failure ("pause", "continue")'
 	COMPGEN --rollback-max-failure-ratio float 'Failure rate to tolerate during a rollback'
 	COMPGEN --rollback-monitor duration 'Duration after each task rollback to monitor for failure (ns|us|ms|s|m|h)'
-	COMPGEN --rollback-order string 'Rollback order ("start-first"|"stop-first")'
+	COMPGEN --rollback-order string 'Rollback order ("start-first", "stop-first")'
 	COMPGEN --rollback-parallelism uint 'Maximum number of tasks rolled back simultaneously (0 to roll back all at once)'
 	COMPGEN --secret-add secret 'Add or update a secret on a service'
 	COMPGEN --secret-rm list 'Remove a secret'
@@ -1386,10 +1386,10 @@ Register-Completer docker_service_update -Option {
 	COMPGEN --ulimit-add ulimit 'Add or update a ulimit option'
 	COMPGEN --ulimit-rm list 'Remove a ulimit option'
 	COMPGEN --update-delay duration 'Delay between updates (ns|us|ms|s|m|h)'
-	COMPGEN --update-failure-action string 'Action on update failure ("pause"|"continue"|"rollback")'
+	COMPGEN --update-failure-action string 'Action on update failure ("pause", "continue", "rollback")'
 	COMPGEN --update-max-failure-ratio float 'Failure rate to tolerate during an update'
 	COMPGEN --update-monitor duration 'Duration after each task update to monitor for failure (ns|us|ms|s|m|h)'
-	COMPGEN --update-order string 'Update order ("start-first"|"stop-first")'
+	COMPGEN --update-order string 'Update order ("start-first", "stop-first")'
 	COMPGEN --update-parallelism uint 'Maximum number of tasks updated simultaneously (0 to update all at once)'
 	COMPGEN '-u' string 'Username or UID (format: <name|uid>[:<group|gid>])'
 	COMPGEN --user string 'Username or UID (format: <name|uid>[:<group|gid>])'
@@ -1422,7 +1422,7 @@ Register-Completer docker_stack_deploy -Option {
 	COMPGEN --compose-file strings 'Path to a Compose file, or "-" to read from stdin'
 	COMPGEN --namespace string 'Kubernetes namespace to use'
 	COMPGEN --prune Switch 'Prune services that are no longer referenced'
-	COMPGEN --resolve-image string 'Query the registry to resolve image digest and supported platforms ("always"|"changed"|"never")'
+	COMPGEN --resolve-image string 'Query the registry to resolve image digest and supported platforms ("always", "changed", "never")'
 	COMPGEN --with-registry-auth Switch 'Send registry authentication details to Swarm agents'
 }
 
@@ -1495,28 +1495,28 @@ Register-Completer docker_swarm_ca -Option {
 }
 
 Register-Completer docker_swarm_init -Option {
-	COMPGEN --advertise-addr string 'Advertised address (format: <ip|interface>[:port])'
+	COMPGEN --advertise-addr string 'Advertised address (format: "<ip|interface>[:port]")'
 	COMPGEN --autolock Switch 'Enable manager autolocking (requiring an unlock key to start a stopped manager)'
-	COMPGEN --availability string 'Availability of the node ("active"|"pause"|"drain")'
+	COMPGEN --availability string 'Availability of the node ("active", "pause", "drain")'
 	COMPGEN --cert-expiry duration 'Validity period for node certificates (ns|us|ms|s|m|h)'
-	COMPGEN --data-path-addr string 'Address or interface to use for data path traffic (format: <ip|interface>)'
+	COMPGEN --data-path-addr string 'Address or interface to use for data path traffic (format: "<ip|interface>")'
 	COMPGEN --data-path-port uint32 'Port number to use for data path traffic (1024 - 49151). If no value is set or is set to 0, the default port (4789) is used.'
 	COMPGEN --default-addr-pool ipNetSlice 'default address pool in CIDR format'
 	COMPGEN --default-addr-pool-mask-length uint32 'default address pool subnet mask length'
 	COMPGEN --dispatcher-heartbeat duration 'Dispatcher heartbeat period (ns|us|ms|s|m|h)'
 	COMPGEN --external-ca external-ca 'Specifications of one or more certificate signing endpoints'
 	COMPGEN --force-new-cluster Switch 'Force create a new cluster from current state'
-	COMPGEN --listen-addr node-addr 'Listen address (format: <ip|interface>[:port])'
+	COMPGEN --listen-addr node-addr 'Listen address (format: "<ip|interface>[:port]")'
 	COMPGEN --max-snapshots uint 'Number of additional Raft snapshots to retain'
 	COMPGEN --snapshot-interval uint 'Number of log entries between Raft snapshots'
 	COMPGEN --task-history-limit int 'Task history retention limit'
 }
 
 Register-Completer docker_swarm_join -Option {
-	COMPGEN --advertise-addr string 'Advertised address (format: <ip|interface>[:port])'
-	COMPGEN --availability string 'Availability of the node ("active"|"pause"|"drain")'
-	COMPGEN --data-path-addr string 'Address or interface to use for data path traffic (format: <ip|interface>)'
-	COMPGEN --listen-addr node-addr 'Listen address (format: <ip|interface>[:port])'
+	COMPGEN --advertise-addr string 'Advertised address (format: "<ip|interface>[:port]")'
+	COMPGEN --availability string 'Availability of the node ("active", "pause", "drain")'
+	COMPGEN --data-path-addr string 'Address or interface to use for data path traffic (format: "<ip|interface>")'
+	COMPGEN --listen-addr node-addr 'Listen address (format: "<ip|interface>[:port]")'
 	COMPGEN --token string 'Token for entry into the swarm'
 }
 
@@ -1581,7 +1581,7 @@ Register-Completer docker_system_info -Option {
 Register-Completer docker_system_prune -Option {
 	COMPGEN '-a' Switch 'Remove all unused images not just dangling ones'
 	COMPGEN --all Switch 'Remove all unused images not just dangling ones'
-	COMPGEN --filter filter 'Provide filter values (e.g. ''label=<key>=<value>'')'
+	COMPGEN --filter filter 'Provide filter values (e.g. "label=<key>=<value>")'
 	COMPGEN '-f' Switch 'Do not prompt for confirmation'
 	COMPGEN --force Switch 'Do not prompt for confirmation'
 	COMPGEN --volumes Switch 'Prune volumes'
@@ -1663,8 +1663,8 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 }
 
 Register-Completer docker_volume_ls -Option {
-	COMPGEN '-f' filter 'Provide filter values (e.g. ''dangling=true'')'
-	COMPGEN --filter filter 'Provide filter values (e.g. ''dangling=true'')'
+	COMPGEN '-f' filter 'Provide filter values (e.g. "dangling=true")'
+	COMPGEN --filter filter 'Provide filter values (e.g. "dangling=true")'
 	COMPGEN --format string 'Format output using a custom template:
 ''table'':            Print output in table format with column headers (default)
 ''table TEMPLATE'':   Print output in table format using the given Go template
@@ -1676,7 +1676,7 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 }
 
 Register-Completer docker_volume_prune -Option {
-	COMPGEN --filter filter 'Provide filter values (e.g. ''label=<label>'')'
+	COMPGEN --filter filter 'Provide filter values (e.g. "label=<label>")'
 	COMPGEN '-f' Switch 'Do not prompt for confirmation'
 	COMPGEN --force Switch 'Do not prompt for confirmation'
 }
@@ -1687,7 +1687,7 @@ Register-Completer docker_volume_rm -Option {
 }
 
 Register-Completer docker_build -Option {
-	COMPGEN --add-host list 'Add a custom host-to-IP mapping (host:ip)'
+	COMPGEN --add-host list 'Add a custom host-to-IP mapping ("host:ip")'
 	COMPGEN --build-arg list 'Set build-time variables'
 	COMPGEN --cache-from strings 'Images to consider as cache sources'
 	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
@@ -1699,15 +1699,15 @@ Register-Completer docker_build -Option {
 	COMPGEN --cpuset-cpus string 'CPUs in which to allow execution (0-3, 0,1)'
 	COMPGEN --cpuset-mems string 'MEMs in which to allow execution (0-3, 0,1)'
 	COMPGEN --disable-content-trust Switch 'Skip image verification'
-	COMPGEN '-f' string 'Name of the Dockerfile (Default is ''PATH/Dockerfile'')'
-	COMPGEN --file string 'Name of the Dockerfile (Default is ''PATH/Dockerfile'')'
+	COMPGEN '-f' string 'Name of the Dockerfile (Default is "PATH/Dockerfile")'
+	COMPGEN --file string 'Name of the Dockerfile (Default is "PATH/Dockerfile")'
 	COMPGEN --force-rm Switch 'Always remove intermediate containers'
 	COMPGEN --iidfile string 'Write the image ID to the file'
 	COMPGEN --isolation string 'Container isolation technology'
 	COMPGEN --label list 'Set metadata for an image'
 	COMPGEN '-m' bytes 'Memory limit'
 	COMPGEN --memory bytes 'Memory limit'
-	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: ''-1'' to enable unlimited swap'
+	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: -1 to enable unlimited swap'
 	COMPGEN --network string 'Set the networking mode for the RUN instructions during build'
 	COMPGEN --no-cache Switch 'Do not use cache when building the image'
 	COMPGEN '-o' stringArray 'Output destination (format: type=local,dest=path)'
@@ -1720,11 +1720,11 @@ Register-Completer docker_build -Option {
 	COMPGEN --rm Switch 'Remove intermediate containers after a successful build'
 	COMPGEN --secret stringArray 'Secret file to expose to the build (only if BuildKit enabled): id=mysecret,src=/local/secret'
 	COMPGEN --security-opt strings 'Security options'
-	COMPGEN --shm-size bytes 'Size of /dev/shm'
+	COMPGEN --shm-size bytes 'Size of "/dev/shm"'
 	COMPGEN --squash Switch 'Squash newly built layers into a single new layer'
 	COMPGEN --ssh stringArray 'SSH agent socket or keys to expose to the build (only if BuildKit enabled) (format: default|<id>[=<socket>|<key>[,<key>]])'
-	COMPGEN '-t' list 'Name and optionally a tag in the ''name:tag'' format'
-	COMPGEN --tag list 'Name and optionally a tag in the ''name:tag'' format'
+	COMPGEN '-t' list 'Name and optionally a tag in the "name:tag" format'
+	COMPGEN --tag list 'Name and optionally a tag in the "name:tag" format'
 	COMPGEN --target string 'Set the target build stage to build.'
 	COMPGEN --ulimit ulimit 'Ulimit options'
 }
@@ -1741,8 +1741,8 @@ Register-Completer docker_exec -Option {
 	COMPGEN --privileged Switch 'Give extended privileges to the command'
 	COMPGEN '-t' Switch 'Allocate a pseudo-TTY'
 	COMPGEN --tty Switch 'Allocate a pseudo-TTY'
-	COMPGEN '-u' string 'Username or UID (format: <name|uid>[:<group|gid>])'
-	COMPGEN --user string 'Username or UID (format: <name|uid>[:<group|gid>])'
+	COMPGEN '-u' string 'Username or UID (format: "<name|uid>[:<group|gid>]")'
+	COMPGEN --user string 'Username or UID (format: "<name|uid>[:<group|gid>]")'
 	COMPGEN '-w' string 'Working directory inside the container'
 	COMPGEN --workdir string 'Working directory inside the container'
 }
@@ -1809,8 +1809,8 @@ Register-Completer docker_pull -Option {
 }
 
 Register-Completer docker_push -Option {
-	COMPGEN '-a' Switch 'Push all tagged images in the repository'
-	COMPGEN --all-tags Switch 'Push all tagged images in the repository'
+	COMPGEN '-a' Switch 'Push all tags of an image to the repository'
+	COMPGEN --all-tags Switch 'Push all tags of an image to the repository'
 	COMPGEN --disable-content-trust Switch 'Skip image signing'
 	COMPGEN '-q' Switch 'Suppress verbose output'
 	COMPGEN --quiet Switch 'Suppress verbose output'
@@ -1908,7 +1908,7 @@ Register-Completer docker_run -Option {
 	COMPGEN --publish list 'Publish a container''s port(s) to the host'
 	COMPGEN '-P' Switch 'Publish all exposed ports to random ports'
 	COMPGEN --publish-all Switch 'Publish all exposed ports to random ports'
-	COMPGEN --pull string 'Pull image before running ("always"|"missing"|"never")'
+	COMPGEN --pull string 'Pull image before running ("always", "missing", "never")'
 	COMPGEN '-q' Switch 'Suppress the pull output'
 	COMPGEN --quiet Switch 'Suppress the pull output'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
@@ -1918,7 +1918,7 @@ Register-Completer docker_run -Option {
 	COMPGEN --security-opt list 'Security Options'
 	COMPGEN --shm-size bytes 'Size of /dev/shm'
 	COMPGEN --sig-proxy Switch 'Proxy received signals to the process'
-	COMPGEN --stop-signal string 'Signal to stop a container'
+	COMPGEN --stop-signal string 'Signal to stop the container'
 	COMPGEN --stop-timeout int 'Timeout (in seconds) to stop a container'
 	COMPGEN --storage-opt list 'Storage driver options for the container'
 	COMPGEN --sysctl map 'Sysctl options'
@@ -2071,7 +2071,7 @@ Register-Completer docker_create -Option {
 	COMPGEN --publish list 'Publish a container''s port(s) to the host'
 	COMPGEN '-P' Switch 'Publish all exposed ports to random ports'
 	COMPGEN --publish-all Switch 'Publish all exposed ports to random ports'
-	COMPGEN --pull string 'Pull image before creating ("always"|"missing"|"never")'
+	COMPGEN --pull string 'Pull image before creating ("always", "missing", "never")'
 	COMPGEN '-q' Switch 'Suppress the pull output'
 	COMPGEN --quiet Switch 'Suppress the pull output'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
@@ -2080,7 +2080,7 @@ Register-Completer docker_create -Option {
 	COMPGEN --runtime string 'Runtime to use for this container'
 	COMPGEN --security-opt list 'Security Options'
 	COMPGEN --shm-size bytes 'Size of /dev/shm'
-	COMPGEN --stop-signal string 'Signal to stop a container'
+	COMPGEN --stop-signal string 'Signal to stop the container'
 	COMPGEN --stop-timeout int 'Timeout (in seconds) to stop a container'
 	COMPGEN --storage-opt list 'Storage driver options for the container'
 	COMPGEN --sysctl map 'Sysctl options'
@@ -2165,12 +2165,12 @@ Register-Completer docker_logs -Option {
 	COMPGEN --details Switch 'Show extra details provided to logs'
 	COMPGEN '-f' Switch 'Follow log output'
 	COMPGEN --follow Switch 'Follow log output'
-	COMPGEN --since string 'Show logs since timestamp (e.g. 2013-01-02T13:23:37Z) or relative (e.g. 42m for 42 minutes)'
+	COMPGEN --since string 'Show logs since timestamp (e.g. "2013-01-02T13:23:37Z") or relative (e.g. "42m" for 42 minutes)'
 	COMPGEN '-n' string 'Number of lines to show from the end of the logs'
 	COMPGEN --tail string 'Number of lines to show from the end of the logs'
 	COMPGEN '-t' Switch 'Show timestamps'
 	COMPGEN --timestamps Switch 'Show timestamps'
-	COMPGEN --until string 'Show logs before a timestamp (e.g. 2013-01-02T13:23:37Z) or relative (e.g. 42m for 42 minutes)'
+	COMPGEN --until string 'Show logs before a timestamp (e.g. "2013-01-02T13:23:37Z") or relative (e.g. "42m" for 42 minutes)'
 }
 
 Register-Completer docker_restart -Option {
@@ -2245,7 +2245,7 @@ Register-Completer docker_update -Option {
 	COMPGEN '-m' bytes 'Memory limit'
 	COMPGEN --memory bytes 'Memory limit'
 	COMPGEN --memory-reservation bytes 'Memory soft limit'
-	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: ''-1'' to enable unlimited swap'
+	COMPGEN --memory-swap bytes 'Swap limit equal to memory plus swap: -1 to enable unlimited swap'
 	COMPGEN --pids-limit int 'Tune container pids limit (set -1 for unlimited)'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
 }
