@@ -33,6 +33,7 @@ $serviceAll = { Get-Service }
 $stackAll = { docker stack ls --format '{{.Name}}' }
 
 $volumeAll = { Get-Volume }
+$volumeCluster = { docker volume ls --quiet --cluster }
 
 $capAddable = {
 	COMPGEN ALL string 'All capabilities'
@@ -904,6 +905,10 @@ Register-Completer docker_trust_inspect $imageAll
 Register-Completer docker_trust_revoke $imageAll
 Register-Completer docker_trust_sign { Get-Image -WithTag }
 
+Register-Completer docker_volume_create_--availability { 'active', 'drain', 'pause' }
+Register-Completer docker_volume_create_--scope { 'multi', 'single' }
+Register-Completer docker_volume_create_--sharing { 'all', 'none', 'onewriter', 'readonly' }
+Register-Completer docker_volume_create_--type { 'block', 'mount' }
 Register-Completer docker_volume_inspect $volumeAll
 Register-Completer docker_volume_ls_--filter {
 	Param([string]$wordToComplete)
@@ -938,6 +943,8 @@ Register-Completer docker_volume_ls_--format {
 }
 
 Register-Completer docker_volume_rm $volumeAll
+Register-Completer docker_volume_update $volumeCluster
+Register-Completer docker_volume_update_--availability { 'active', 'drain', 'pause' }
 
 Register-Completer docker_builder_build_--cache-from (Get-Completer docker_image_build_--cache-from)
 Register-Completer docker_builder_build_--isolation (Get-Completer docker_image_build_--isolation)

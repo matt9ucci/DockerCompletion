@@ -1643,14 +1643,25 @@ Register-Completer docker_volume {
 	COMPGEN ls SubCommand 'List volumes'
 	COMPGEN prune SubCommand 'Remove all unused local volumes'
 	COMPGEN rm SubCommand 'Remove one or more volumes'
+	COMPGEN update SubCommand 'Update a volume (cluster volumes only)'
 }
 
 Register-Completer docker_volume_create -Option {
+	COMPGEN --availability string 'Cluster Volume availability ("active", "pause", "drain")'
 	COMPGEN '-d' string 'Specify volume driver name'
 	COMPGEN --driver string 'Specify volume driver name'
+	COMPGEN --group string 'Cluster Volume group (cluster volumes)'
 	COMPGEN --label list 'Set metadata for a volume'
+	COMPGEN --limit-bytes bytes 'Minimum size of the Cluster Volume in bytes'
 	COMPGEN '-o' map 'Set driver specific options'
 	COMPGEN --opt map 'Set driver specific options'
+	COMPGEN --required-bytes bytes 'Maximum size of the Cluster Volume in bytes'
+	COMPGEN --scope string 'Cluster Volume access scope ("single", "multi")'
+	COMPGEN --secret map 'Cluster Volume secrets'
+	COMPGEN --sharing string 'Cluster Volume access sharing ("none", "readonly", "onewriter", "all")'
+	COMPGEN --topology-preferred list 'A topology that the Cluster Volume would be preferred in'
+	COMPGEN --topology-required list 'A topology that the Cluster Volume must be accessible from'
+	COMPGEN --type string 'Cluster Volume access type ("mount", "block")'
 }
 
 Register-Completer docker_volume_inspect -Option {
@@ -1665,6 +1676,7 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 }
 
 Register-Completer docker_volume_ls -Option {
+	COMPGEN --cluster Switch 'Display only cluster volumes, and use cluster volume list formatting'
 	COMPGEN '-f' filter 'Provide filter values (e.g. "dangling=true")'
 	COMPGEN --filter filter 'Provide filter values (e.g. "dangling=true")'
 	COMPGEN --format string 'Format output using a custom template:
@@ -1686,6 +1698,10 @@ Register-Completer docker_volume_prune -Option {
 Register-Completer docker_volume_rm -Option {
 	COMPGEN '-f' Switch 'Force the removal of one or more volumes'
 	COMPGEN --force Switch 'Force the removal of one or more volumes'
+}
+
+Register-Completer docker_volume_update -Option {
+	COMPGEN --availability string 'Cluster Volume availability ("active", "pause", "drain")'
 }
 
 Register-Completer docker_build -Option {
