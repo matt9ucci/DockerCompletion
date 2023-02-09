@@ -1,7 +1,7 @@
 # Docker Compose version v2.16.0
 Register-Completer docker_compose {
 	COMPGEN build SubCommand 'Build or rebuild services'
-	COMPGEN convert SubCommand 'Converts the compose file to platform''s canonical format'
+	COMPGEN config SubCommand 'Parse, resolve and render compose file in canonical format'
 	COMPGEN cp SubCommand 'Copy files/folders between a service container and the local filesystem'
 	COMPGEN create SubCommand 'Creates containers for a service.'
 	COMPGEN down SubCommand 'Stop and remove containers, networks'
@@ -60,7 +60,7 @@ Register-Completer docker_compose_build -Option {
 	COMPGEN --quiet Switch 'Don''t print anything to STDOUT'
 }
 
-Register-Completer docker_compose_convert -Option {
+Register-Completer docker_compose_config -Option {
 	COMPGEN --format string 'Format the output. Values: [yaml | json]'
 	COMPGEN --hash string 'Print the service config hash, one per line.'
 	COMPGEN --no-interpolate Switch 'Don''t interpolate environment variables.'

@@ -60,7 +60,7 @@ Register-Completer docker_compose_--ansi { 'always', 'auto', 'never' }
 Register-Completer docker_compose_--profile $profileAll
 Register-Completer docker_compose_build $serviceAll
 Register-Completer docker_compose_build_--progress { 'auto', 'plain', 'quiet', 'tty' }
-Register-Completer docker_compose_convert_--format { 'json', 'yaml' }
+Register-Completer docker_compose_config_--format { 'json', 'yaml' }
 Register-Completer docker_compose_create $serviceAll
 Register-Completer docker_compose_down_--rmi { 'all', 'local' }
 Register-Completer docker_compose_events $serviceAll

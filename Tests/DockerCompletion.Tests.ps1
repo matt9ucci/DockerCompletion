@@ -53,7 +53,7 @@ Describe 'docker --log-level debug compose' {
 	It 'completes c' {
 		$result = Get-Result 'docker --log-level debug compose c'
 		$result | Should -HaveCount 3
-		$result[0].CompletionText | Should -Be convert
+		$result[0].CompletionText | Should -Be config
 		$result[1].CompletionText | Should -Be cp
 		$result[2].CompletionText | Should -Be create
 	}
