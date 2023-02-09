@@ -62,6 +62,7 @@ Register-Completer docker_compose_build $serviceAll
 Register-Completer docker_compose_build_--progress { 'auto', 'plain', 'quiet', 'tty' }
 Register-Completer docker_compose_config_--format { 'json', 'yaml' }
 Register-Completer docker_compose_create $serviceAll
+Register-Completer docker_compose_create_--pull { 'always', 'missing', 'never' }
 Register-Completer docker_compose_down_--rmi { 'all', 'local' }
 Register-Completer docker_compose_events $serviceAll
 Register-Completer docker_compose_exec $serviceRunning
@@ -98,6 +99,7 @@ Register-Completer docker_compose_top $serviceRunning
 Register-Completer docker_compose_unpause $servicePaused
 Register-Completer docker_compose_up $serviceAll
 Register-Completer docker_compose_up_--exit-code-from $serviceAll
+Register-Completer docker_compose_up_--pull { 'always', 'missing', 'never' }
 Register-Completer docker_compose_up_--scale $serviceAll
 Register-Completer docker_compose_version_--format { 'json', 'pretty' }
 Register-Completer docker_compose_version_-f (Get-Completer docker_compose_version_--format)
