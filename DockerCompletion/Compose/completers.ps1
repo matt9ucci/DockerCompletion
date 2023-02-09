@@ -11,18 +11,18 @@ Register-Completer docker_compose {
 	COMPGEN kill SubCommand 'Force stop service containers.'
 	COMPGEN logs SubCommand 'View output from containers'
 	COMPGEN ls SubCommand 'List running compose projects'
-	COMPGEN pause SubCommand 'pause services'
+	COMPGEN pause SubCommand 'Pause services'
 	COMPGEN port SubCommand 'Print the public port for a port binding.'
 	COMPGEN ps SubCommand 'List containers'
 	COMPGEN pull SubCommand 'Pull service images'
 	COMPGEN push SubCommand 'Push service images'
-	COMPGEN restart SubCommand 'Restart containers'
+	COMPGEN restart SubCommand 'Restart service containers'
 	COMPGEN rm SubCommand 'Removes stopped service containers'
 	COMPGEN run SubCommand 'Run a one-off command on a service.'
 	COMPGEN start SubCommand 'Start services'
 	COMPGEN stop SubCommand 'Stop services'
 	COMPGEN top SubCommand 'Display the running processes'
-	COMPGEN unpause SubCommand 'unpause services'
+	COMPGEN unpause SubCommand 'Unpause services'
 	COMPGEN up SubCommand 'Create and start containers'
 	COMPGEN version SubCommand 'Show the Docker Compose version information'
 }
@@ -36,13 +36,13 @@ Register-Completer docker_compose -Option {
 	COMPGEN --no-ansi Switch 'Do not print ANSI control characters (DEPRECATED)'
 	COMPGEN --profile stringArray 'Specify a profile to enable'
 	COMPGEN --project-directory string 'Specify an alternate working directory
-(default: the path of the Compose file)'
+(default: the path of the, first specified, Compose file)'
 	COMPGEN '-p' string 'Project name'
 	COMPGEN --project-name string 'Project name'
 	COMPGEN --verbose Switch 'Show more output'
 	COMPGEN --workdir string 'DEPRECATED! USE --project-directory INSTEAD.
 Specify an alternate working directory
-(default: the path of the Compose file)'
+(default: the path of the, first specified, Compose file)'
 }
 
 Register-Completer docker_compose_build -Option {
@@ -80,7 +80,7 @@ Register-Completer docker_compose_cp -Option {
 	COMPGEN --archive Switch 'Archive mode (copy all uid/gid information)'
 	COMPGEN '-L' Switch 'Always follow symbol link in SRC_PATH'
 	COMPGEN --follow-link Switch 'Always follow symbol link in SRC_PATH'
-	COMPGEN --index int 'Index of the container if there are multiple instances of a service [default: 1].'
+	COMPGEN --index int 'Index of the container if there are multiple instances of a service .'
 }
 
 Register-Completer docker_compose_create -Option {
@@ -95,8 +95,8 @@ Register-Completer docker_compose_down -Option {
 	COMPGEN --rmi string 'Remove images used by services. "local" remove only images that don''t have a custom tag ("local"|"all")'
 	COMPGEN '-t' int 'Specify a shutdown timeout in seconds'
 	COMPGEN --timeout int 'Specify a shutdown timeout in seconds'
-	COMPGEN '-v' Switch ' Remove named volumes declared in the `volumes` section of the Compose file and anonymous volumes attached to containers.'
-	COMPGEN --volumes Switch ' Remove named volumes declared in the `volumes` section of the Compose file and anonymous volumes attached to containers.'
+	COMPGEN '-v' Switch 'Remove named volumes declared in the `volumes` section of the Compose file and anonymous volumes attached to containers.'
+	COMPGEN --volumes Switch 'Remove named volumes declared in the `volumes` section of the Compose file and anonymous volumes attached to containers.'
 }
 
 Register-Completer docker_compose_events -Option {
@@ -158,7 +158,7 @@ Register-Completer docker_compose_port -Option {
 Register-Completer docker_compose_ps -Option {
 	COMPGEN '-a' Switch 'Show all stopped containers (including those created by the run command)'
 	COMPGEN --all Switch 'Show all stopped containers (including those created by the run command)'
-	COMPGEN --filter string 'Filter services by a property. Deprecated, use --status instead'
+	COMPGEN --filter string 'Filter services by a property (supported filters: status).'
 	COMPGEN --format string 'Format the output. Values: [table | json]'
 	COMPGEN '-q' Switch 'Only display IDs'
 	COMPGEN --quiet Switch 'Only display IDs'
@@ -167,12 +167,12 @@ Register-Completer docker_compose_ps -Option {
 }
 
 Register-Completer docker_compose_pull -Option {
-	COMPGEN --ignore-pull-failures Switch 'Pull what it can and ignores images with pull failures'
-	COMPGEN --include-deps Switch 'Also pull services declared as dependencies'
+	COMPGEN --ignore-pull-failures Switch 'Pull what it can and ignores images with pull failures.'
+	COMPGEN --include-deps Switch 'Also pull services declared as dependencies.'
 	COMPGEN --no-parallel Switch 'DEPRECATED disable parallel pulling.'
 	COMPGEN --parallel Switch 'DEPRECATED pull multiple images in parallel.'
-	COMPGEN '-q' Switch 'Pull without printing progress information'
-	COMPGEN --quiet Switch 'Pull without printing progress information'
+	COMPGEN '-q' Switch 'Pull without printing progress information.'
+	COMPGEN --quiet Switch 'Pull without printing progress information.'
 }
 
 Register-Completer docker_compose_push -Option {
@@ -203,9 +203,9 @@ Register-Completer docker_compose_run -Option {
 	COMPGEN --env stringArray 'Set environment variables'
 	COMPGEN '-l' stringArray 'Add or override a label'
 	COMPGEN --label stringArray 'Add or override a label'
-	COMPGEN --name string ' Assign a name to the container'
-	COMPGEN '-T' Switch 'Disable pseudo-noTty allocation. By default docker compose run allocates a TTY'
-	COMPGEN --no-TTY Switch 'Disable pseudo-noTty allocation. By default docker compose run allocates a TTY'
+	COMPGEN --name string 'Assign a name to the container'
+	COMPGEN '-T' Switch 'Disable pseudo-TTY allocation (default: auto-detected).'
+	COMPGEN --no-TTY Switch 'Disable pseudo-TTY allocation (default: auto-detected).'
 	COMPGEN --no-deps Switch 'Don''t start linked services.'
 	COMPGEN '-p' stringArray 'Publish a container''s port(s) to the host.'
 	COMPGEN --publish stringArray 'Publish a container''s port(s) to the host.'
