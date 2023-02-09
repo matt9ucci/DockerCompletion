@@ -663,15 +663,9 @@ Register-Completer docker_context {
 }
 
 Register-Completer docker_context_create -Option {
-	COMPGEN --default-stack-orchestrator string 'Default orchestrator for stack operations to use with this context (swarm|kubernetes|all)'
 	COMPGEN --description string 'Description of the context'
 	COMPGEN --docker stringToString 'set the docker endpoint'
 	COMPGEN --from string 'create context from a named context'
-	COMPGEN --kubernetes stringToString 'set the kubernetes endpoint'
-}
-
-Register-Completer docker_context_export -Option {
-	COMPGEN --kubeconfig Switch 'Export as a kubeconfig file'
 }
 
 Register-Completer docker_context_inspect -Option {
@@ -702,10 +696,8 @@ Register-Completer docker_context_rm -Option {
 }
 
 Register-Completer docker_context_update -Option {
-	COMPGEN --default-stack-orchestrator string 'Default orchestrator for stack operations to use with this context (swarm|kubernetes|all)'
 	COMPGEN --description string 'Description of the context'
 	COMPGEN --docker stringToString 'set the docker endpoint'
-	COMPGEN --kubernetes stringToString 'set the kubernetes endpoint'
 }
 
 Register-Completer docker_image {
@@ -1408,10 +1400,6 @@ Register-Completer docker_stack {
 	COMPGEN rm SubCommand 'Remove one or more stacks'
 	COMPGEN services SubCommand 'List the services in the stack'
 }
-Register-Completer docker_stack -Option {
-	COMPGEN --kubeconfig string 'Kubernetes config file'
-	COMPGEN --orchestrator string 'Orchestrator to use (swarm|kubernetes|all)'
-}
 
 Register-Completer docker_stack_config -Option {
 	COMPGEN '-c' strings 'Path to a Compose file, or "-" to read from stdin'
@@ -1422,21 +1410,18 @@ Register-Completer docker_stack_config -Option {
 Register-Completer docker_stack_deploy -Option {
 	COMPGEN '-c' strings 'Path to a Compose file, or "-" to read from stdin'
 	COMPGEN --compose-file strings 'Path to a Compose file, or "-" to read from stdin'
-	COMPGEN --namespace string 'Kubernetes namespace to use'
 	COMPGEN --prune Switch 'Prune services that are no longer referenced'
 	COMPGEN --resolve-image string 'Query the registry to resolve image digest and supported platforms ("always", "changed", "never")'
 	COMPGEN --with-registry-auth Switch 'Send registry authentication details to Swarm agents'
 }
 
 Register-Completer docker_stack_ls -Option {
-	COMPGEN --all-namespaces Switch 'List stacks from all Kubernetes namespaces'
 	COMPGEN --format string 'Format output using a custom template:
 ''table'':            Print output in table format with column headers (default)
 ''table TEMPLATE'':   Print output in table format using the given Go template
 ''json'':             Print in JSON format
 ''TEMPLATE'':         Print output using the given Go template.
 Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
-	COMPGEN --namespace strings 'Kubernetes namespaces to use'
 }
 
 Register-Completer docker_stack_ps -Option {
@@ -1448,15 +1433,10 @@ Register-Completer docker_stack_ps -Option {
 ''json'':             Print in JSON format
 ''TEMPLATE'':         Print output using the given Go template.
 Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
-	COMPGEN --namespace string 'Kubernetes namespace to use'
 	COMPGEN --no-resolve Switch 'Do not map IDs to Names'
 	COMPGEN --no-trunc Switch 'Do not truncate output'
 	COMPGEN '-q' Switch 'Only display task IDs'
 	COMPGEN --quiet Switch 'Only display task IDs'
-}
-
-Register-Completer docker_stack_rm -Option {
-	COMPGEN --namespace string 'Kubernetes namespace to use'
 }
 
 Register-Completer docker_stack_services -Option {
@@ -1468,7 +1448,6 @@ Register-Completer docker_stack_services -Option {
 ''json'':             Print in JSON format
 ''TEMPLATE'':         Print output using the given Go template.
 Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
-	COMPGEN --namespace string 'Kubernetes namespace to use'
 	COMPGEN '-q' Switch 'Only display IDs'
 	COMPGEN --quiet Switch 'Only display IDs'
 }
@@ -1968,7 +1947,6 @@ Register-Completer docker_search -Option {
 Register-Completer docker_version -Option {
 	COMPGEN '-f' string 'Format the output using the given Go template'
 	COMPGEN --format string 'Format the output using the given Go template'
-	COMPGEN --kubeconfig string 'Kubernetes config file'
 }
 
 if ($env:DOCKER_HIDE_LEGACY_COMMANDS) {
