@@ -1,5 +1,5 @@
 # docker/cli v23.0.0 https://github.com/docker/cli/tree/v23.0.0
-$managementCommands = @(
+Register-Completer docker {
 	COMPGEN builder ManagementCommand 'Manage builds'
 	COMPGEN checkpoint ManagementCommand 'Manage checkpoints'
 	COMPGEN compose ManagementCommand 'Docker Compose'
@@ -18,9 +18,7 @@ $managementCommands = @(
 	COMPGEN system ManagementCommand 'Manage Docker'
 	COMPGEN trust ManagementCommand 'Manage trust on Docker images'
 	COMPGEN volume ManagementCommand 'Manage volumes'
-)
 
-$topLevelCommands = @(
 	COMPGEN build TopLevelCommand 'Build an image from a Dockerfile'
 	COMPGEN exec TopLevelCommand 'Execute a command in a running container'
 	COMPGEN images TopLevelCommand 'List images'
@@ -33,43 +31,37 @@ $topLevelCommands = @(
 	COMPGEN run TopLevelCommand 'Create and run a new container from an image'
 	COMPGEN search TopLevelCommand 'Search Docker Hub for images'
 	COMPGEN version TopLevelCommand 'Show the Docker version information'
-)
 
-$legacyCommands = @(
-	COMPGEN attach LegacyCommand 'Attach local standard input, output, and error streams to a running container'
-	COMPGEN commit LegacyCommand 'Create a new image from a container''s changes'
-	COMPGEN cp LegacyCommand 'Copy files/folders between a container and the local filesystem'
-	COMPGEN create LegacyCommand 'Create a new container'
-	COMPGEN diff LegacyCommand 'Inspect changes to files or directories on a container''s filesystem'
-	COMPGEN events LegacyCommand 'Get real time events from the server'
-	COMPGEN export LegacyCommand 'Export a container''s filesystem as a tar archive'
-	COMPGEN history LegacyCommand 'Show the history of an image'
-	COMPGEN import LegacyCommand 'Import the contents from a tarball to create a filesystem image'
-	COMPGEN inspect LegacyCommand 'Return low-level information on Docker objects'
-	COMPGEN kill LegacyCommand 'Kill one or more running containers'
-	COMPGEN load LegacyCommand 'Load an image from a tar archive or STDIN'
-	COMPGEN logs LegacyCommand 'Fetch the logs of a container'
-	COMPGEN pause LegacyCommand 'Pause all processes within one or more containers'
-	COMPGEN port LegacyCommand 'List port mappings or a specific mapping for the container'
-	COMPGEN rename LegacyCommand 'Rename a container'
-	COMPGEN restart LegacyCommand 'Restart one or more containers'
-	COMPGEN rm LegacyCommand 'Remove one or more containers'
-	COMPGEN rmi LegacyCommand 'Remove one or more images'
-	COMPGEN save LegacyCommand 'Save one or more images to a tar archive (streamed to STDOUT by default)'
-	COMPGEN start LegacyCommand 'Start one or more stopped containers'
-	COMPGEN stats LegacyCommand 'Display a live stream of container(s) resource usage statistics'
-	COMPGEN stop LegacyCommand 'Stop one or more running containers'
-	COMPGEN tag LegacyCommand 'Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE'
-	COMPGEN top LegacyCommand 'Display the running processes of a container'
-	COMPGEN unpause LegacyCommand 'Unpause all processes within one or more containers'
-	COMPGEN update LegacyCommand 'Update configuration of one or more containers'
-	COMPGEN wait LegacyCommand 'Block until one or more containers stop, then print their exit codes'
-)
-
-if ($env:DOCKER_HIDE_LEGACY_COMMANDS) {
-	Register-Completer docker ($managementCommands + $topLevelCommands)
-} else {
-	Register-Completer docker ($managementCommands + $topLevelCommands + $legacyCommands)
+	if (!$env:DOCKER_HIDE_LEGACY_COMMANDS) {
+		COMPGEN attach LegacyCommand 'Attach local standard input, output, and error streams to a running container'
+		COMPGEN commit LegacyCommand 'Create a new image from a container''s changes'
+		COMPGEN cp LegacyCommand 'Copy files/folders between a container and the local filesystem'
+		COMPGEN create LegacyCommand 'Create a new container'
+		COMPGEN diff LegacyCommand 'Inspect changes to files or directories on a container''s filesystem'
+		COMPGEN events LegacyCommand 'Get real time events from the server'
+		COMPGEN export LegacyCommand 'Export a container''s filesystem as a tar archive'
+		COMPGEN history LegacyCommand 'Show the history of an image'
+		COMPGEN import LegacyCommand 'Import the contents from a tarball to create a filesystem image'
+		COMPGEN inspect LegacyCommand 'Return low-level information on Docker objects'
+		COMPGEN kill LegacyCommand 'Kill one or more running containers'
+		COMPGEN load LegacyCommand 'Load an image from a tar archive or STDIN'
+		COMPGEN logs LegacyCommand 'Fetch the logs of a container'
+		COMPGEN pause LegacyCommand 'Pause all processes within one or more containers'
+		COMPGEN port LegacyCommand 'List port mappings or a specific mapping for the container'
+		COMPGEN rename LegacyCommand 'Rename a container'
+		COMPGEN restart LegacyCommand 'Restart one or more containers'
+		COMPGEN rm LegacyCommand 'Remove one or more containers'
+		COMPGEN rmi LegacyCommand 'Remove one or more images'
+		COMPGEN save LegacyCommand 'Save one or more images to a tar archive (streamed to STDOUT by default)'
+		COMPGEN start LegacyCommand 'Start one or more stopped containers'
+		COMPGEN stats LegacyCommand 'Display a live stream of container(s) resource usage statistics'
+		COMPGEN stop LegacyCommand 'Stop one or more running containers'
+		COMPGEN tag LegacyCommand 'Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE'
+		COMPGEN top LegacyCommand 'Display the running processes of a container'
+		COMPGEN unpause LegacyCommand 'Unpause all processes within one or more containers'
+		COMPGEN update LegacyCommand 'Update configuration of one or more containers'
+		COMPGEN wait LegacyCommand 'Block until one or more containers stop, then print their exit codes'
+	}
 }
 
 Register-Completer docker -Option {
