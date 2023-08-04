@@ -47,6 +47,25 @@ Describe 'docker compose' {
 		$result[0].CompletionText | Should -Be pull
 		$result[1].CompletionText | Should -Be push
 	}
+
+	It 'completes --p' {
+		$result = Get-Result 'docker compose --p'
+		$result | Should -HaveCount 5
+		$result[0].CompletionText | Should -Be --parallel
+		$result[1].CompletionText | Should -Be --profile
+		$result[2].CompletionText | Should -Be --progress
+		$result[3].CompletionText | Should -Be --project-directory
+		$result[4].CompletionText | Should -Be --project-name
+	}
+
+	It 'completes --progress' {
+		$result = Get-Result 'docker compose --progress '
+		$result | Should -HaveCount 4
+		$result[0].CompletionText | Should -Be auto
+		$result[1].CompletionText | Should -Be plain
+		$result[2].CompletionText | Should -Be quiet
+		$result[3].CompletionText | Should -Be tty
+	}
 }
 
 Describe 'docker --log-level debug compose' {

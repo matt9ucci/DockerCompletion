@@ -58,6 +58,7 @@ $servicePaused = {
 
 Register-Completer docker_compose_--ansi { 'always', 'auto', 'never' }
 Register-Completer docker_compose_--profile $profileAll
+Register-Completer docker_compose_--progress { 'auto', 'plain', 'quiet', 'tty' }
 Register-Completer docker_compose_build $serviceAll
 Register-Completer docker_compose_build_--progress { 'auto', 'plain', 'quiet', 'tty' }
 Register-Completer docker_compose_config_--format { 'json', 'yaml' }

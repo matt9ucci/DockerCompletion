@@ -1,4 +1,4 @@
-# Docker Compose version v2.16.0
+# Docker Compose version v2.20.2
 Register-Completer docker_compose {
 	COMPGEN alpha SubCommand 'Experimental commands'
 	COMPGEN build SubCommand 'Build or rebuild services'
@@ -26,18 +26,20 @@ Register-Completer docker_compose {
 	COMPGEN unpause SubCommand 'Unpause services'
 	COMPGEN up SubCommand 'Create and start containers'
 	COMPGEN version SubCommand 'Show the Docker Compose version information'
+	COMPGEN wait SubCommand 'Block until the first service container stops'
 }
 
 Register-Completer docker_compose -Option {
 	COMPGEN --ansi string 'Control when to print ANSI control characters ("never"|"always"|"auto")'
 	COMPGEN --compatibility Switch 'Run compose in backward compatibility mode'
 	COMPGEN --dry-run Switch 'Execute command in dry run mode'
-	COMPGEN --env-file string 'Specify an alternate environment file.'
+	COMPGEN --env-file stringArray 'Specify an alternate environment file.'
 	COMPGEN '-f' stringArray 'Compose configuration files'
 	COMPGEN --file stringArray 'Compose configuration files'
 	COMPGEN --no-ansi Switch 'Do not print ANSI control characters (DEPRECATED)'
 	COMPGEN --parallel int 'Control max parallelism, -1 for unlimited'
 	COMPGEN --profile stringArray 'Specify a profile to enable'
+	COMPGEN --progress string 'Set type of progress output (auto, tty, plain, quiet)'
 	COMPGEN --project-directory string 'Specify an alternate working directory
 (default: the path of the, first specified, Compose file)'
 	COMPGEN '-p' string 'Project name'
@@ -52,14 +54,15 @@ Specify an alternate working directory
 
 Register-Completer docker_compose_build -Option {
 	COMPGEN --build-arg stringArray 'Set build-time variables for services.'
+	COMPGEN --builder string 'Set builder to use.'
 	COMPGEN --compress Switch 'Compress the build context using gzip. DEPRECATED'
 	COMPGEN --force-rm Switch 'Always remove intermediate containers. DEPRECATED'
-	COMPGEN '-m' string 'Set memory limit for the build container. Not supported on buildkit yet.'
-	COMPGEN --memory string 'Set memory limit for the build container. Not supported on buildkit yet.'
+	COMPGEN '-m' bytes 'Set memory limit for the build container. Not supported by BuildKit.'
+	COMPGEN --memory bytes 'Set memory limit for the build container. Not supported by BuildKit.'
 	COMPGEN --no-cache Switch 'Do not use cache when building the image'
 	COMPGEN --no-rm Switch 'Do not remove intermediate containers after a successful build. DEPRECATED'
 	COMPGEN --parallel Switch 'Build images in parallel. DEPRECATED'
-	COMPGEN --progress string 'Set type of progress output (auto, tty, plain, quiet)'
+	COMPGEN --progress string 'Set type of ui output (auto, tty, plain, quiet)'
 	COMPGEN --pull Switch 'Always attempt to pull a newer version of the image.'
 	COMPGEN --push Switch 'Push service images.'
 	COMPGEN '-q' Switch 'Don''t print anything to STDOUT'
@@ -74,6 +77,7 @@ Register-Completer docker_compose_config -Option {
 	COMPGEN --no-consistency Switch 'Don''t check model consistency - warning: may produce invalid Compose output'
 	COMPGEN --no-interpolate Switch 'Don''t interpolate environment variables.'
 	COMPGEN --no-normalize Switch 'Don''t normalize compose model.'
+	COMPGEN --no-path-resolution Switch 'Don''t resolve file paths.'
 	COMPGEN '-o' string 'Save to file (default to stdout)'
 	COMPGEN --output string 'Save to file (default to stdout)'
 	COMPGEN --profiles Switch 'Print the profile names, one per line.'
@@ -90,7 +94,7 @@ Register-Completer docker_compose_cp -Option {
 	COMPGEN --archive Switch 'Archive mode (copy all uid/gid information)'
 	COMPGEN '-L' Switch 'Always follow symbol link in SRC_PATH'
 	COMPGEN --follow-link Switch 'Always follow symbol link in SRC_PATH'
-	COMPGEN --index int 'Index of the container if there are multiple instances of a service .'
+	COMPGEN --index int 'Index of the container if service has multiple replicas'
 }
 
 Register-Completer docker_compose_create -Option {
@@ -108,8 +112,8 @@ Register-Completer docker_compose_down -Option {
 	COMPGEN --rmi string 'Remove images used by services. "local" remove only images that don''t have a custom tag ("local"|"all")'
 	COMPGEN '-t' int 'Specify a shutdown timeout in seconds'
 	COMPGEN --timeout int 'Specify a shutdown timeout in seconds'
-	COMPGEN '-v' Switch 'Remove named volumes declared in the `volumes` section of the Compose file and anonymous volumes attached to containers.'
-	COMPGEN --volumes Switch 'Remove named volumes declared in the `volumes` section of the Compose file and anonymous volumes attached to containers.'
+	COMPGEN '-v' Switch 'Remove named volumes declared in the "volumes" section of the Compose file and anonymous volumes attached to containers.'
+	COMPGEN --volumes Switch 'Remove named volumes declared in the "volumes" section of the Compose file and anonymous volumes attached to containers.'
 }
 
 Register-Completer docker_compose_events -Option {
@@ -121,7 +125,7 @@ Register-Completer docker_compose_exec -Option {
 	COMPGEN --detach Switch 'Detached mode: Run command in the background.'
 	COMPGEN '-e' stringArray 'Set environment variables'
 	COMPGEN --env stringArray 'Set environment variables'
-	COMPGEN --index int 'index of the container if there are multiple instances of a service [default: 1].'
+	COMPGEN --index int 'index of the container if service has multiple replicas'
 	COMPGEN '-i' Switch 'Keep STDIN open even if not attached.'
 	COMPGEN --interactive Switch 'Keep STDIN open even if not attached.'
 	COMPGEN '-T' Switch 'Disable pseudo-TTY allocation. By default `docker compose exec` allocates a TTY.'
@@ -182,7 +186,7 @@ Register-Completer docker_compose_ps -Option {
 	COMPGEN '-q' Switch 'Only display IDs'
 	COMPGEN --quiet Switch 'Only display IDs'
 	COMPGEN --services Switch 'Display services'
-	COMPGEN --status string 'Filter services by status. Values: [paused | restarting | removing | running | dead | created | exited]'
+	COMPGEN --status stringArray 'Filter services by status. Values: [paused | restarting | removing | running | dead | created | exited]'
 }
 
 Register-Completer docker_compose_pull -Option {
@@ -203,6 +207,7 @@ Register-Completer docker_compose_push -Option {
 }
 
 Register-Completer docker_compose_restart -Option {
+	COMPGEN --no-deps Switch 'Don''t restart dependent services.'
 	COMPGEN '-t' int 'Specify a shutdown timeout in seconds'
 	COMPGEN --timeout int 'Specify a shutdown timeout in seconds'
 }
@@ -220,6 +225,8 @@ Register-Completer docker_compose_rm -Option {
 
 Register-Completer docker_compose_run -Option {
 	COMPGEN --build Switch 'Build image before starting container.'
+	COMPGEN --cap-add list 'Add Linux capabilities'
+	COMPGEN --cap-drop list 'Drop Linux capabilities'
 	COMPGEN '-d' Switch 'Run container in background and print container ID'
 	COMPGEN --detach Switch 'Run container in background and print container ID'
 	COMPGEN --entrypoint string 'Override the entrypoint of the image'
@@ -282,10 +289,15 @@ Register-Completer docker_compose_up -Option {
 	COMPGEN --timeout int 'Use this timeout in seconds for container shutdown when attached or when containers are already running.'
 	COMPGEN --timestamps Switch 'Show timestamps.'
 	COMPGEN --wait Switch 'Wait for services to be running|healthy. Implies detached mode.'
+	COMPGEN --wait-timeout int 'timeout waiting for application to be running|healthy.'
 }
 
 Register-Completer docker_compose_version -Option {
 	COMPGEN '-f' string 'Format the output. Values: [pretty | json]. (Default: pretty)'
 	COMPGEN --format string 'Format the output. Values: [pretty | json]. (Default: pretty)'
 	COMPGEN --short Switch 'Shows only Compose''s version number.'
+}
+
+Register-Completer docker_compose_wait -Option {
+	COMPGEN --down-project Switch 'Drops project when the first container stops'
 }
