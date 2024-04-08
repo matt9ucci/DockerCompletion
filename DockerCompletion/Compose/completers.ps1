@@ -165,8 +165,10 @@ Register-Completer docker_compose_kill -Option {
 }
 
 Register-Completer docker_compose_logs -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN '-f' Switch 'Follow log output'
 	COMPGEN --follow Switch 'Follow log output'
+	COMPGEN --index int 'index of the container if service has multiple replicas'
 	COMPGEN --no-color Switch 'Produce monochrome output'
 	COMPGEN --no-log-prefix Switch 'Don''t print prefix in logs'
 	COMPGEN --since string 'Show logs since timestamp (e.g. 2013-01-02T13:23:37Z) or relative (e.g. 42m for 42 minutes)'
