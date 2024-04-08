@@ -213,11 +213,11 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 }
 
 Register-Completer docker_compose_pull -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --ignore-buildable Switch 'Ignore images that can be built'
 	COMPGEN --ignore-pull-failures Switch 'Pull what it can and ignores images with pull failures'
 	COMPGEN --include-deps Switch 'Also pull services declared as dependencies'
-	COMPGEN --no-parallel Switch 'DEPRECATED disable parallel pulling'
-	COMPGEN --parallel Switch 'DEPRECATED pull multiple images in parallel'
+	COMPGEN --policy string 'Apply pull policy ("missing"|"always")'
 	COMPGEN '-q' Switch 'Pull without printing progress information'
 	COMPGEN --quiet Switch 'Pull without printing progress information'
 }
