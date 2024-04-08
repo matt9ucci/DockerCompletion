@@ -21,6 +21,7 @@ Register-Completer docker_compose {
 	COMPGEN restart SubCommand 'Restart service containers'
 	COMPGEN rm SubCommand 'Removes stopped service containers'
 	COMPGEN run SubCommand 'Run a one-off command on a service'
+	COMPGEN scale SubCommand 'Scale services '
 	COMPGEN start SubCommand 'Start services'
 	COMPGEN stats SubCommand 'Display a live stream of container(s) resource usage statistics'
 	COMPGEN stop SubCommand 'Stop services'
@@ -271,6 +272,11 @@ Register-Completer docker_compose_run -Option {
 	COMPGEN --volume stringArray 'Bind mount a volume'
 	COMPGEN '-w' string 'Working directory inside the container'
 	COMPGEN --workdir string 'Working directory inside the container'
+}
+
+Register-Completer docker_compose_scale -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
+	COMPGEN --no-deps Switch 'Don''t start linked services'
 }
 
 Register-Completer docker_compose_stats -Option {
