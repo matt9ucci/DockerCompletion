@@ -68,6 +68,17 @@ Describe 'docker compose' {
 	}
 }
 
+Describe 'docker compose create' {
+	It 'completes --pull' {
+		$result = Get-Result 'docker compose create --pull '
+		$result | Should -HaveCount 4
+		$result[0].CompletionText | Should -Be always
+		$result[1].CompletionText | Should -Be build
+		$result[2].CompletionText | Should -Be missing
+		$result[3].CompletionText | Should -Be never
+	}
+}
+
 Describe 'docker --log-level debug compose' {
 	It 'completes c' {
 		$result = Get-Result 'docker --log-level debug compose c'

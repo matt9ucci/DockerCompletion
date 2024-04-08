@@ -63,7 +63,7 @@ Register-Completer docker_compose_build $serviceAll
 Register-Completer docker_compose_build_--progress { 'auto', 'plain', 'quiet', 'tty' }
 Register-Completer docker_compose_config_--format { 'json', 'yaml' }
 Register-Completer docker_compose_create $serviceAll
-Register-Completer docker_compose_create_--pull { 'always', 'missing', 'never' }
+Register-Completer docker_compose_create_--pull { 'always', 'build', 'missing', 'never' }
 Register-Completer docker_compose_down_--rmi { 'all', 'local' }
 Register-Completer docker_compose_events $serviceAll
 Register-Completer docker_compose_exec $serviceRunning
