@@ -1,4 +1,4 @@
-# docker/cli v23.0.0 https://github.com/docker/cli/tree/v23.0.0
+# docker/cli v26.0.0 https://github.com/docker/cli/tree/v26.0.0
 Register-Completer docker {
 	COMPGEN builder ManagementCommand 'Manage builds'
 	COMPGEN checkpoint ManagementCommand 'Manage checkpoints'
@@ -72,8 +72,8 @@ Register-Completer docker -Option {
 	COMPGEN --debug Switch 'Enable debug mode'
 	COMPGEN '-h' Switch 'Print usage'
 	COMPGEN --help Switch 'Print usage'
-	COMPGEN '-H' list 'Daemon socket(s) to connect to'
-	COMPGEN --host list 'Daemon socket(s) to connect to'
+	COMPGEN '-H' list 'Daemon socket to connect to'
+	COMPGEN --host list 'Daemon socket to connect to'
 	COMPGEN '-l' string 'Set the logging level ("debug", "info", "warn", "error", "fatal")'
 	COMPGEN --log-level string 'Set the logging level ("debug", "info", "warn", "error", "fatal")'
 	COMPGEN --tls Switch 'Use TLS; implied by --tlsverify'
@@ -94,7 +94,7 @@ Register-Completer docker_builder_build -Option {
 	COMPGEN --add-host list 'Add a custom host-to-IP mapping ("host:ip")'
 	COMPGEN --build-arg list 'Set build-time variables'
 	COMPGEN --cache-from strings 'Images to consider as cache sources'
-	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
+	COMPGEN --cgroup-parent string 'Set the parent cgroup for the "RUN" instructions during build'
 	COMPGEN --compress Switch 'Compress the build context using gzip'
 	COMPGEN --cpu-period int 'Limit the CPU CFS (Completely Fair Scheduler) period'
 	COMPGEN --cpu-quota int 'Limit the CPU CFS (Completely Fair Scheduler) quota'
@@ -705,7 +705,7 @@ Register-Completer docker_image_build -Option {
 	COMPGEN --add-host list 'Add a custom host-to-IP mapping ("host:ip")'
 	COMPGEN --build-arg list 'Set build-time variables'
 	COMPGEN --cache-from strings 'Images to consider as cache sources'
-	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
+	COMPGEN --cgroup-parent string 'Set the parent cgroup for the "RUN" instructions during build'
 	COMPGEN --compress Switch 'Compress the build context using gzip'
 	COMPGEN --cpu-period int 'Limit the CPU CFS (Completely Fair Scheduler) period'
 	COMPGEN --cpu-quota int 'Limit the CPU CFS (Completely Fair Scheduler) quota'
@@ -1530,14 +1530,23 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 Register-Completer docker_system_events -Option {
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
-	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN --since string 'Show all events created since timestamp'
 	COMPGEN --until string 'Stream events until this timestamp'
 }
 
 Register-Completer docker_system_info -Option {
-	COMPGEN '-f' string 'Format the output using the given Go template'
-	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN '-f' string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --format string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 }
 
 Register-Completer docker_system_prune -Option {
@@ -1546,7 +1555,7 @@ Register-Completer docker_system_prune -Option {
 	COMPGEN --filter filter 'Provide filter values (e.g. "label=<key>=<value>")'
 	COMPGEN '-f' Switch 'Do not prompt for confirmation'
 	COMPGEN --force Switch 'Do not prompt for confirmation'
-	COMPGEN --volumes Switch 'Prune volumes'
+	COMPGEN --volumes Switch 'Prune anonymous volumes'
 }
 
 Register-Completer docker_trust {
@@ -1601,7 +1610,7 @@ Register-Completer docker_volume {
 	COMPGEN create SubCommand 'Create a volume'
 	COMPGEN inspect SubCommand 'Display detailed information on one or more volumes'
 	COMPGEN ls SubCommand 'List volumes'
-	COMPGEN prune SubCommand 'Remove all unused local volumes'
+	COMPGEN prune SubCommand 'Remove unused local volumes'
 	COMPGEN rm SubCommand 'Remove one or more volumes'
 	COMPGEN update SubCommand 'Update a volume (cluster volumes only)'
 }
@@ -1668,7 +1677,7 @@ Register-Completer docker_build -Option {
 	COMPGEN --add-host list 'Add a custom host-to-IP mapping ("host:ip")'
 	COMPGEN --build-arg list 'Set build-time variables'
 	COMPGEN --cache-from strings 'Images to consider as cache sources'
-	COMPGEN --cgroup-parent string 'Optional parent cgroup for the container'
+	COMPGEN --cgroup-parent string 'Set the parent cgroup for the "RUN" instructions during build'
 	COMPGEN --compress Switch 'Compress the build context using gzip'
 	COMPGEN --cpu-period int 'Limit the CPU CFS (Completely Fair Scheduler) period'
 	COMPGEN --cpu-quota int 'Limit the CPU CFS (Completely Fair Scheduler) quota'
@@ -1738,8 +1747,14 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 }
 
 Register-Completer docker_info -Option {
-	COMPGEN '-f' string 'Format the output using the given Go template'
-	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN '-f' string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --format string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 }
 
 Register-Completer docker_login -Option {
@@ -1921,8 +1936,14 @@ Register-Completer docker_search -Option {
 }
 
 Register-Completer docker_version -Option {
-	COMPGEN '-f' string 'Format the output using the given Go template'
-	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN '-f' string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --format string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 }
 
 if ($env:DOCKER_HIDE_LEGACY_COMMANDS) {
@@ -2077,7 +2098,10 @@ Register-Completer docker_create -Option {
 Register-Completer docker_events -Option {
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
-	COMPGEN --format string 'Format the output using the given Go template'
+	COMPGEN --format string 'Format output using a custom template:
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN --since string 'Show all events created since timestamp'
 	COMPGEN --until string 'Stream events until this timestamp'
 }
