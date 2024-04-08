@@ -1674,6 +1674,8 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 }
 
 Register-Completer docker_volume_prune -Option {
+	COMPGEN '-a' Switch 'Remove all unused volumes, not just anonymous ones'
+	COMPGEN --all Switch 'Remove all unused volumes, not just anonymous ones'
 	COMPGEN --filter filter 'Provide filter values (e.g. "label=<label>")'
 	COMPGEN '-f' Switch 'Do not prompt for confirmation'
 	COMPGEN --force Switch 'Do not prompt for confirmation'
