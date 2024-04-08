@@ -1397,7 +1397,11 @@ Register-Completer docker_stack_config -Option {
 Register-Completer docker_stack_deploy -Option {
 	COMPGEN '-c' strings 'Path to a Compose file, or "-" to read from stdin'
 	COMPGEN --compose-file strings 'Path to a Compose file, or "-" to read from stdin'
+	COMPGEN '-d' Switch 'Exit immediately instead of waiting for the stack services to converge'
+	COMPGEN --detach Switch 'Exit immediately instead of waiting for the stack services to converge'
 	COMPGEN --prune Switch 'Prune services that are no longer referenced'
+	COMPGEN '-q' Switch 'Suppress progress output'
+	COMPGEN --quiet Switch 'Suppress progress output'
 	COMPGEN --resolve-image string 'Query the registry to resolve image digest and supported platforms ("always", "changed", "never")'
 	COMPGEN --with-registry-auth Switch 'Send registry authentication details to Swarm agents'
 }
