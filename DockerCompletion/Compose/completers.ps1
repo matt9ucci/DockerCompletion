@@ -81,6 +81,7 @@ Register-Completer docker_compose_build -Option {
 }
 
 Register-Completer docker_compose_config -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --format string 'Format the output. Values: [yaml | json]'
 	COMPGEN --hash string 'Print the service config hash, one per line.'
 	COMPGEN --images Switch 'Print the image names, one per line.'
@@ -95,6 +96,7 @@ Register-Completer docker_compose_config -Option {
 	COMPGEN --quiet Switch 'Only validate the configuration, don''t print anything'
 	COMPGEN --resolve-image-digests Switch 'Pin image tags to digests'
 	COMPGEN --services Switch 'Print the service names, one per line.'
+	COMPGEN --variables Switch 'Print model variables and default values.'
 	COMPGEN --volumes Switch 'Print the volume names, one per line.'
 }
 
