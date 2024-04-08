@@ -194,6 +194,7 @@ Register-Completer docker_compose_port -Option {
 Register-Completer docker_compose_ps -Option {
 	COMPGEN '-a' Switch 'Show all stopped containers (including those created by the run command)'
 	COMPGEN --all Switch 'Show all stopped containers (including those created by the run command)'
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --filter string 'Filter services by a property (supported filters: status)'
 	COMPGEN --format string 'Format output using a custom template:
 ''table'':            Print output in table format with column headers (default)
@@ -201,6 +202,8 @@ Register-Completer docker_compose_ps -Option {
 ''json'':             Print in JSON format
 ''TEMPLATE'':         Print output using the given Go template.
 Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --no-trunc Switch 'Don''t truncate output'
+	COMPGEN --orphans Switch 'Include orphaned services (not declared by project)'
 	COMPGEN '-q' Switch 'Only display IDs'
 	COMPGEN --quiet Switch 'Only display IDs'
 	COMPGEN --services Switch 'Display services'
