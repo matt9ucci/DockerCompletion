@@ -22,6 +22,7 @@ Register-Completer docker_compose {
 	COMPGEN rm SubCommand 'Removes stopped service containers'
 	COMPGEN run SubCommand 'Run a one-off command on a service'
 	COMPGEN start SubCommand 'Start services'
+	COMPGEN stats SubCommand 'Display a live stream of container(s) resource usage statistics'
 	COMPGEN stop SubCommand 'Stop services'
 	COMPGEN top SubCommand 'Display the running processes'
 	COMPGEN unpause SubCommand 'Unpause services'
@@ -270,6 +271,20 @@ Register-Completer docker_compose_run -Option {
 	COMPGEN --volume stringArray 'Bind mount a volume'
 	COMPGEN '-w' string 'Working directory inside the container'
 	COMPGEN --workdir string 'Working directory inside the container'
+}
+
+Register-Completer docker_compose_stats -Option {
+	COMPGEN '-a' Switch 'Show all containers (default shows just running)'
+	COMPGEN --all Switch 'Show all containers (default shows just running)'
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --no-stream Switch 'Disable streaming stats and only pull the first result'
+	COMPGEN --no-trunc Switch 'Do not truncate output'
 }
 
 Register-Completer docker_compose_stop -Option {
