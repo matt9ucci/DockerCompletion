@@ -309,6 +309,7 @@ Register-Completer docker_compose_up -Option {
 	COMPGEN --detach Switch 'Detached mode: Run containers in the background'
 	COMPGEN --exit-code-from string 'Return the exit code of the selected service container. Implies --abort-on-container-exit'
 	COMPGEN --force-recreate Switch 'Recreate containers even if their configuration and image haven''t changed'
+	COMPGEN --menu Switch 'Enable interactive shortcuts when running attached (Experimental). Incompatible with --detach.'
 	COMPGEN --no-attach stringArray 'Do not attach (stream logs) to the specified services'
 	COMPGEN --no-build Switch 'Don''t build an image, even if it''s policy'
 	COMPGEN --no-color Switch 'Produce monochrome output'
