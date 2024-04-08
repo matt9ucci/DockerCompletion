@@ -295,6 +295,8 @@ Register-Completer docker_compose_up -Option {
 	COMPGEN --timestamps Switch 'Show timestamps'
 	COMPGEN --wait Switch 'Wait for services to be running|healthy. Implies detached mode.'
 	COMPGEN --wait-timeout int 'Maximum duration to wait for the project to be running|healthy'
+	COMPGEN '-w' Switch 'Watch source code and rebuild/refresh containers when files are updated.'
+	COMPGEN --watch Switch 'Watch source code and rebuild/refresh containers when files are updated.'
 }
 
 Register-Completer docker_compose_version -Option {
