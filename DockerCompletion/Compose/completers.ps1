@@ -1,6 +1,7 @@
 # Docker Compose version v2.26.1
 Register-Completer docker_compose {
 	COMPGEN alpha SubCommand 'Experimental commands'
+	COMPGEN attach SubCommand 'Attach local standard input, output, and error streams to a service''s running container'
 	COMPGEN build SubCommand 'Build or rebuild services'
 	COMPGEN config SubCommand 'Parse, resolve and render compose file in canonical format'
 	COMPGEN cp SubCommand 'Copy files/folders between a service container and the local filesystem'
@@ -51,6 +52,14 @@ Register-Completer docker_compose -Option {
 	COMPGEN --workdir string 'DEPRECATED! USE --project-directory INSTEAD.
 Specify an alternate working directory
 (default: the path of the, first specified, Compose file)'
+}
+
+Register-Completer docker_compose_attach -Option {
+	COMPGEN --detach-keys string 'Override the key sequence for detaching from a container.'
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
+	COMPGEN --index int 'index of the container if service has multiple replicas.'
+	COMPGEN --no-stdin Switch 'Do not attach STDIN'
+	COMPGEN --sig-proxy Switch 'Proxy all received signals to the process'
 }
 
 Register-Completer docker_compose_build -Option {
