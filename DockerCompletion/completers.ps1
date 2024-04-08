@@ -250,6 +250,7 @@ Register-Completer docker_container_cp -Option {
 
 Register-Completer docker_container_create -Option {
 	COMPGEN --add-host list 'Add a custom host-to-IP mapping (host:ip)'
+	COMPGEN --annotation map 'Add an annotation to the container (passed through to the OCI runtime)'
 	COMPGEN '-a' list 'Attach to STDIN, STDOUT or STDERR'
 	COMPGEN --attach list 'Attach to STDIN, STDOUT or STDERR'
 	COMPGEN --blkio-weight uint16 'Block IO (relative weight), between 10 and 1000, or 0 to disable (default 0)'
@@ -466,6 +467,7 @@ Register-Completer docker_container_rm -Option {
 
 Register-Completer docker_container_run -Option {
 	COMPGEN --add-host list 'Add a custom host-to-IP mapping (host:ip)'
+	COMPGEN --annotation map 'Add an annotation to the container (passed through to the OCI runtime)'
 	COMPGEN '-a' list 'Attach to STDIN, STDOUT or STDERR'
 	COMPGEN --attach list 'Attach to STDIN, STDOUT or STDERR'
 	COMPGEN --blkio-weight uint16 'Block IO (relative weight), between 10 and 1000, or 0 to disable (default 0)'
@@ -1811,6 +1813,7 @@ Register-Completer docker_push -Option {
 
 Register-Completer docker_run -Option {
 	COMPGEN --add-host list 'Add a custom host-to-IP mapping (host:ip)'
+	COMPGEN --annotation map 'Add an annotation to the container (passed through to the OCI runtime)'
 	COMPGEN '-a' list 'Attach to STDIN, STDOUT or STDERR'
 	COMPGEN --attach list 'Attach to STDIN, STDOUT or STDERR'
 	COMPGEN --blkio-weight uint16 'Block IO (relative weight), between 10 and 1000, or 0 to disable (default 0)'
@@ -1983,6 +1986,7 @@ Register-Completer docker_cp -Option {
 
 Register-Completer docker_create -Option {
 	COMPGEN --add-host list 'Add a custom host-to-IP mapping (host:ip)'
+	COMPGEN --annotation map 'Add an annotation to the container (passed through to the OCI runtime)'
 	COMPGEN '-a' list 'Attach to STDIN, STDOUT or STDERR'
 	COMPGEN --attach list 'Attach to STDIN, STDOUT or STDERR'
 	COMPGEN --blkio-weight uint16 'Block IO (relative weight), between 10 and 1000, or 0 to disable (default 0)'
