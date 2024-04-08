@@ -1420,6 +1420,11 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 	COMPGEN --quiet Switch 'Only display task IDs'
 }
 
+Register-Completer docker_stack_rm -Option {
+	COMPGEN '-d' Switch 'Do not wait for stack removal'
+	COMPGEN --detach Switch 'Do not wait for stack removal'
+}
+
 Register-Completer docker_stack_services -Option {
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
