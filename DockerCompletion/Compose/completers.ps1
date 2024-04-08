@@ -67,19 +67,17 @@ Register-Completer docker_compose_attach -Option {
 Register-Completer docker_compose_build -Option {
 	COMPGEN --build-arg stringArray 'Set build-time variables for services'
 	COMPGEN --builder string 'Set builder to use'
-	COMPGEN --compress Switch 'Compress the build context using gzip. DEPRECATED'
-	COMPGEN --force-rm Switch 'Always remove intermediate containers. DEPRECATED'
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN '-m' bytes 'Set memory limit for the build container. Not supported by BuildKit.'
 	COMPGEN --memory bytes 'Set memory limit for the build container. Not supported by BuildKit.'
 	COMPGEN --no-cache Switch 'Do not use cache when building the image'
-	COMPGEN --no-rm Switch 'Do not remove intermediate containers after a successful build. DEPRECATED'
-	COMPGEN --parallel Switch 'Build images in parallel. DEPRECATED'
 	COMPGEN --progress string 'Set type of ui output (auto, tty, plain, quiet)'
 	COMPGEN --pull Switch 'Always attempt to pull a newer version of the image'
 	COMPGEN --push Switch 'Push service images'
 	COMPGEN '-q' Switch 'Don''t print anything to STDOUT'
 	COMPGEN --quiet Switch 'Don''t print anything to STDOUT'
 	COMPGEN --ssh string 'Set SSH authentications used when building service images. (use ''default'' for using your default SSH Agent)'
+	COMPGEN --with-dependencies Switch 'Also build dependencies (transitively)'
 }
 
 Register-Completer docker_compose_config -Option {
