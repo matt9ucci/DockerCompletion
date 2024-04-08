@@ -27,6 +27,7 @@ Register-Completer docker_compose {
 	COMPGEN up SubCommand 'Create and start containers'
 	COMPGEN version SubCommand 'Show the Docker Compose version information'
 	COMPGEN wait SubCommand 'Block until the first service container stops'
+	COMPGEN watch SubCommand 'Watch build context for service and rebuild/refresh containers when files are updated'
 }
 
 Register-Completer docker_compose -Option {
@@ -307,4 +308,10 @@ Register-Completer docker_compose_version -Option {
 
 Register-Completer docker_compose_wait -Option {
 	COMPGEN --down-project Switch 'Drops project when the first container stops'
+}
+
+Register-Completer docker_compose_watch -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
+	COMPGEN --no-up Switch 'Do not build & start services before watching'
+	COMPGEN --quiet Switch 'hide build output'
 }
