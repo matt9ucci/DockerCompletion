@@ -115,6 +115,7 @@ Register-Completer docker_compose_create -Option {
 	COMPGEN --no-build Switch 'Don''t build an image, even if it''s policy'
 	COMPGEN --no-recreate Switch 'If containers already exist, don''t recreate them. Incompatible with --force-recreate.'
 	COMPGEN --pull string 'Pull image before running ("always"|"missing"|"never")'
+	COMPGEN --quiet-pull Switch 'Pull without printing progress information'
 	COMPGEN --remove-orphans Switch 'Remove containers for services not defined in the Compose file'
 	COMPGEN --scale stringArray 'Scale SERVICE to NUM instances. Overrides the `scale` setting in the Compose file if present.'
 }
