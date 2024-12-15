@@ -1,14 +1,16 @@
-# Docker Compose version v2.26.1
+# Docker Compose version v2.32.0
 Register-Completer docker_compose {
 	COMPGEN alpha SubCommand 'Experimental commands'
 	COMPGEN attach SubCommand 'Attach local standard input, output, and error streams to a service''s running container'
 	COMPGEN build SubCommand 'Build or rebuild services'
+	COMPGEN commit SubCommand 'Create a new image from a service container''s changes'
 	COMPGEN config SubCommand 'Parse, resolve and render compose file in canonical format'
 	COMPGEN cp SubCommand 'Copy files/folders between a service container and the local filesystem'
 	COMPGEN create SubCommand 'Creates containers for a service'
 	COMPGEN down SubCommand 'Stop and remove containers, networks'
 	COMPGEN events SubCommand 'Receive real time events from containers'
 	COMPGEN exec SubCommand 'Execute a command in a running container'
+	COMPGEN export SubCommand 'Export a service container''s filesystem as a tar archive'
 	COMPGEN images SubCommand 'List images used by the created containers'
 	COMPGEN kill SubCommand 'Force stop service containers'
 	COMPGEN logs SubCommand 'View output from containers'
@@ -29,11 +31,12 @@ Register-Completer docker_compose {
 	COMPGEN unpause SubCommand 'Unpause services'
 	COMPGEN up SubCommand 'Create and start containers'
 	COMPGEN version SubCommand 'Show the Docker Compose version information'
-	COMPGEN wait SubCommand 'Block until the first service container stops'
+	COMPGEN wait SubCommand 'Block until containers of all (or specified) services stop.'
 	COMPGEN watch SubCommand 'Watch build context for service and rebuild/refresh containers when files are updated'
 }
 
 Register-Completer docker_compose -Option {
+	COMPGEN --all-resources Switch 'Include all resources, even those not used by services'
 	COMPGEN --ansi string 'Control when to print ANSI control characters ("never"|"always"|"auto")'
 	COMPGEN --compatibility Switch 'Run compose in backward compatibility mode'
 	COMPGEN --dry-run Switch 'Execute command in dry run mode'
@@ -43,7 +46,7 @@ Register-Completer docker_compose -Option {
 	COMPGEN --no-ansi Switch 'Do not print ANSI control characters (DEPRECATED)'
 	COMPGEN --parallel int 'Control max parallelism, -1 for unlimited'
 	COMPGEN --profile stringArray 'Specify a profile to enable'
-	COMPGEN --progress string 'Set type of progress output (auto, tty, plain, quiet)'
+	COMPGEN --progress string 'Set type of progress output (auto, tty, plain, json, quiet)'
 	COMPGEN --project-directory string 'Specify an alternate working directory
 (default: the path of the, first specified, Compose file)'
 	COMPGEN '-p' string 'Project name'
@@ -67,11 +70,15 @@ Register-Completer docker_compose_attach -Option {
 Register-Completer docker_compose_build -Option {
 	COMPGEN --build-arg stringArray 'Set build-time variables for services'
 	COMPGEN --builder string 'Set builder to use'
+	COMPGEN --compress Switch 'Compress the build context using gzip. DEPRECATED'
 	COMPGEN --dry-run Switch 'Execute command in dry run mode'
+	COMPGEN --force-rm Switch 'Always remove intermediate containers. DEPRECATED'
 	COMPGEN '-m' bytes 'Set memory limit for the build container. Not supported by BuildKit.'
 	COMPGEN --memory bytes 'Set memory limit for the build container. Not supported by BuildKit.'
 	COMPGEN --no-cache Switch 'Do not use cache when building the image'
-	COMPGEN --progress string 'Set type of ui output (auto, tty, plain, quiet)'
+	COMPGEN --no-rm Switch 'Do not remove intermediate containers after a successful build. DEPRECATED'
+	COMPGEN --parallel Switch 'Build images in parallel. DEPRECATED'
+	COMPGEN --progress string 'Set type of ui output (auto, tty, plain, json, quiet)'
 	COMPGEN --pull Switch 'Always attempt to pull a newer version of the image'
 	COMPGEN --push Switch 'Push service images'
 	COMPGEN '-q' Switch 'Don''t print anything to STDOUT'
@@ -80,8 +87,22 @@ Register-Completer docker_compose_build -Option {
 	COMPGEN --with-dependencies Switch 'Also build dependencies (transitively)'
 }
 
+Register-Completer docker_compose_commit -Option {
+	COMPGEN '-a' string 'Author (e.g., "John Hannibal Smith <hannibal@a-team.com>")'
+	COMPGEN --author string 'Author (e.g., "John Hannibal Smith <hannibal@a-team.com>")'
+	COMPGEN '-c' list 'Apply Dockerfile instruction to the created image'
+	COMPGEN --change list 'Apply Dockerfile instruction to the created image'
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
+	COMPGEN --index int 'index of the container if service has multiple replicas.'
+	COMPGEN '-m' string 'Commit message'
+	COMPGEN --message string 'Commit message'
+	COMPGEN '-p' Switch 'Pause container during commit'
+	COMPGEN --pause Switch 'Pause container during commit'
+}
+
 Register-Completer docker_compose_config -Option {
 	COMPGEN --dry-run Switch 'Execute command in dry run mode'
+	COMPGEN --environment Switch 'Print environment used for interpolation.'
 	COMPGEN --format string 'Format the output. Values: [yaml | json]'
 	COMPGEN --hash string 'Print the service config hash, one per line.'
 	COMPGEN --images Switch 'Print the image names, one per line.'
@@ -101,9 +122,10 @@ Register-Completer docker_compose_config -Option {
 }
 
 Register-Completer docker_compose_cp -Option {
-	COMPGEN --all Switch 'Copy to all the containers of the service'
+	COMPGEN --all Switch 'Include containers created by the run command'
 	COMPGEN '-a' Switch 'Archive mode (copy all uid/gid information)'
 	COMPGEN --archive Switch 'Archive mode (copy all uid/gid information)'
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN '-L' Switch 'Always follow symbol link in SRC_PATH'
 	COMPGEN --follow-link Switch 'Always follow symbol link in SRC_PATH'
 	COMPGEN --index int 'Index of the container if service has multiple replicas'
@@ -111,6 +133,7 @@ Register-Completer docker_compose_cp -Option {
 
 Register-Completer docker_compose_create -Option {
 	COMPGEN --build Switch 'Build images before starting containers'
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --force-recreate Switch 'Recreate containers even if their configuration and image haven''t changed'
 	COMPGEN --no-build Switch 'Don''t build an image, even if it''s policy'
 	COMPGEN --no-recreate Switch 'If containers already exist, don''t recreate them. Incompatible with --force-recreate.'
@@ -118,9 +141,12 @@ Register-Completer docker_compose_create -Option {
 	COMPGEN --quiet-pull Switch 'Pull without printing progress information'
 	COMPGEN --remove-orphans Switch 'Remove containers for services not defined in the Compose file'
 	COMPGEN --scale stringArray 'Scale SERVICE to NUM instances. Overrides the `scale` setting in the Compose file if present.'
+	COMPGEN '-y' Switch 'Assume "yes" as answer to all prompts and run non-interactively'
+	COMPGEN --y Switch 'Assume "yes" as answer to all prompts and run non-interactively'
 }
 
 Register-Completer docker_compose_down -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --remove-orphans Switch 'Remove containers for services not defined in the Compose file'
 	COMPGEN --rmi string 'Remove images used by services. "local" remove only images that don''t have a custom tag ("local"|"all")'
 	COMPGEN '-t' int 'Specify a shutdown timeout in seconds'
@@ -130,12 +156,14 @@ Register-Completer docker_compose_down -Option {
 }
 
 Register-Completer docker_compose_events -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --json Switch 'Output events as a stream of json objects'
 }
 
 Register-Completer docker_compose_exec -Option {
 	COMPGEN '-d' Switch 'Detached mode: Run command in the background'
 	COMPGEN --detach Switch 'Detached mode: Run command in the background'
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN '-e' stringArray 'Set environment variables'
 	COMPGEN --env stringArray 'Set environment variables'
 	COMPGEN --index int 'Index of the container if service has multiple replicas'
@@ -152,13 +180,22 @@ Register-Completer docker_compose_exec -Option {
 	COMPGEN --workdir string 'Path to workdir directory for this command'
 }
 
+Register-Completer docker_compose_export -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
+	COMPGEN --index int 'index of the container if service has multiple replicas.'
+	COMPGEN '-o' string 'Write to a file, instead of STDOUT'
+	COMPGEN --output string 'Write to a file, instead of STDOUT'
+}
+
 Register-Completer docker_compose_images -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --format string 'Format the output. Values: [table | json]'
 	COMPGEN '-q' Switch 'Only display IDs'
 	COMPGEN --quiet Switch 'Only display IDs'
 }
 
 Register-Completer docker_compose_kill -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --remove-orphans Switch 'Remove containers for services not defined in the Compose file'
 	COMPGEN '-s' string 'SIGNAL to send to the container'
 	COMPGEN --signal string 'SIGNAL to send to the container'
@@ -182,6 +219,7 @@ Register-Completer docker_compose_logs -Option {
 Register-Completer docker_compose_ls -Option {
 	COMPGEN '-a' Switch 'Show all stopped Compose projects'
 	COMPGEN --all Switch 'Show all stopped Compose projects'
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
 	COMPGEN --format string 'Format the output. Values: [table | json]'
 	COMPGEN '-q' Switch 'Only display IDs'
@@ -189,6 +227,7 @@ Register-Completer docker_compose_ls -Option {
 }
 
 Register-Completer docker_compose_port -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --index int 'Index of the container if service has multiple replicas'
 	COMPGEN --protocol string 'tcp or udp'
 }
@@ -217,12 +256,15 @@ Register-Completer docker_compose_pull -Option {
 	COMPGEN --ignore-buildable Switch 'Ignore images that can be built'
 	COMPGEN --ignore-pull-failures Switch 'Pull what it can and ignores images with pull failures'
 	COMPGEN --include-deps Switch 'Also pull services declared as dependencies'
+	COMPGEN --no-parallel Switch 'DEPRECATED disable parallel pulling'
+	COMPGEN --parallel Switch 'DEPRECATED pull multiple images in parallel'
 	COMPGEN --policy string 'Apply pull policy ("missing"|"always")'
 	COMPGEN '-q' Switch 'Pull without printing progress information'
 	COMPGEN --quiet Switch 'Pull without printing progress information'
 }
 
 Register-Completer docker_compose_push -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --ignore-push-failures Switch 'Push what it can and ignores images with push failures'
 	COMPGEN --include-deps Switch 'Also push images of services declared as dependencies'
 	COMPGEN '-q' Switch 'Push without printing progress information'
@@ -230,6 +272,7 @@ Register-Completer docker_compose_push -Option {
 }
 
 Register-Completer docker_compose_restart -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --no-deps Switch 'Don''t restart dependent services'
 	COMPGEN '-t' int 'Specify a shutdown timeout in seconds'
 	COMPGEN --timeout int 'Specify a shutdown timeout in seconds'
@@ -238,6 +281,7 @@ Register-Completer docker_compose_restart -Option {
 Register-Completer docker_compose_rm -Option {
 	COMPGEN '-a' Switch 'Deprecated - no effect'
 	COMPGEN --all Switch 'Deprecated - no effect'
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN '-f' Switch 'Don''t ask to confirm removal'
 	COMPGEN --force Switch 'Don''t ask to confirm removal'
 	COMPGEN '-s' Switch 'Stop the containers, if required, before removing'
@@ -252,6 +296,7 @@ Register-Completer docker_compose_run -Option {
 	COMPGEN --cap-drop list 'Drop Linux capabilities'
 	COMPGEN '-d' Switch 'Run container in background and print container ID'
 	COMPGEN --detach Switch 'Run container in background and print container ID'
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --entrypoint string 'Override the entrypoint of the image'
 	COMPGEN '-e' stringArray 'Set environment variables'
 	COMPGEN --env stringArray 'Set environment variables'
@@ -301,21 +346,24 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 }
 
 Register-Completer docker_compose_stop -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN '-t' int 'Specify a shutdown timeout in seconds'
 	COMPGEN --timeout int 'Specify a shutdown timeout in seconds'
 }
 
 Register-Completer docker_compose_up -Option {
 	COMPGEN --abort-on-container-exit Switch 'Stops all containers if any container was stopped. Incompatible with -d'
+	COMPGEN --abort-on-container-failure Switch 'Stops all containers if any container exited with failure. Incompatible with -d'
 	COMPGEN --always-recreate-deps Switch 'Recreate dependent containers. Incompatible with --no-recreate.'
 	COMPGEN --attach stringArray 'Restrict attaching to the specified services. Incompatible with --attach-dependencies.'
 	COMPGEN --attach-dependencies Switch 'Automatically attach to log output of dependent services'
 	COMPGEN --build Switch 'Build images before starting containers'
 	COMPGEN '-d' Switch 'Detached mode: Run containers in the background'
 	COMPGEN --detach Switch 'Detached mode: Run containers in the background'
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --exit-code-from string 'Return the exit code of the selected service container. Implies --abort-on-container-exit'
 	COMPGEN --force-recreate Switch 'Recreate containers even if their configuration and image haven''t changed'
-	COMPGEN --menu Switch 'Enable interactive shortcuts when running attached (Experimental). Incompatible with --detach.'
+	COMPGEN --menu Switch 'Enable interactive shortcuts when running attached. Incompatible with --detach. Can also be enable/disable by setting COMPOSE_MENU environment var.'
 	COMPGEN --no-attach stringArray 'Do not attach (stream logs) to the specified services'
 	COMPGEN --no-build Switch 'Don''t build an image, even if it''s policy'
 	COMPGEN --no-color Switch 'Produce monochrome output'
@@ -333,9 +381,11 @@ Register-Completer docker_compose_up -Option {
 	COMPGEN --timeout int 'Use this timeout in seconds for container shutdown when attached or when containers are already running'
 	COMPGEN --timestamps Switch 'Show timestamps'
 	COMPGEN --wait Switch 'Wait for services to be running|healthy. Implies detached mode.'
-	COMPGEN --wait-timeout int 'Maximum duration to wait for the project to be running|healthy'
+	COMPGEN --wait-timeout int 'Maximum duration in seconds to wait for the project to be running|healthy'
 	COMPGEN '-w' Switch 'Watch source code and rebuild/refresh containers when files are updated.'
 	COMPGEN --watch Switch 'Watch source code and rebuild/refresh containers when files are updated.'
+	COMPGEN '-y' Switch 'Assume "yes" as answer to all prompts and run non-interactively'
+	COMPGEN --y Switch 'Assume "yes" as answer to all prompts and run non-interactively'
 }
 
 Register-Completer docker_compose_version -Option {
@@ -346,10 +396,12 @@ Register-Completer docker_compose_version -Option {
 
 Register-Completer docker_compose_wait -Option {
 	COMPGEN --down-project Switch 'Drops project when the first container stops'
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 }
 
 Register-Completer docker_compose_watch -Option {
 	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --no-up Switch 'Do not build & start services before watching'
+	COMPGEN --prune Switch 'Prune dangling images on rebuild'
 	COMPGEN --quiet Switch 'hide build output'
 }
