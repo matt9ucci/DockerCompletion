@@ -84,6 +84,25 @@ $capDroppable = {
 	COMPGEN SYS_CHROOT string 'Use chroot(2), change root directory'
 }
 
+$platform = {
+	'linux'
+	'linux/386'
+	'linux/amd64'
+	'linux/arm'
+	'linux/arm/v5'
+	'linux/arm/v6'
+	'linux/arm/v7'
+	'linux/arm64'
+	'linux/arm64/v8'
+	'linux/ppc64le'
+	'linux/riscv64'
+	'linux/s390x'
+	'wasip1'
+	'wasip1/wasm'
+	'windows'
+	'windows/amd64'
+}
+
 $mount = {
 	Param($wordToComplete, $commandAst, $cursorPosition)
 
@@ -207,6 +226,7 @@ Register-Completer docker_container_create_--cgroupns { 'host', 'private' }
 Register-Completer docker_container_create_--isolation $isolation
 Register-Completer docker_container_create_--log-driver $logDriver
 Register-Completer docker_container_create_--mount $mount
+Register-Completer docker_container_create_--platform $platform
 Register-Completer docker_container_create_--pull { 'always', 'missing', 'never' }
 Register-Completer docker_container_create_--volume $volumeAll
 Register-Completer docker_container_create_-v (Get-Completer docker_container_create_--volume)
@@ -313,6 +333,7 @@ Register-Completer docker_container_run_--network {
 		COMPGEN "container:$v" string $v $v ([System.Management.Automation.CompletionResultType]::ParameterValue)
 	}
 }
+Register-Completer docker_container_run_--platform $platform
 Register-Completer docker_container_run_--pull { 'always', 'missing', 'never' }
 Register-Completer docker_container_start { Get-Container -Status created, exited }
 Register-Completer docker_container_run_--mount $mount
@@ -340,6 +361,7 @@ Register-Completer docker_context_use $contextAll
 
 Register-Completer docker_image_build_--cache-from $imageAll
 Register-Completer docker_image_build_--isolation $isolation
+Register-Completer docker_image_build_--platform $platform
 Register-Completer docker_image_build_--progress { 'auto', 'plain', 'tty' }
 Register-Completer docker_image_build_--network {
 	Param([string]$wordToComplete)
@@ -401,6 +423,7 @@ Register-Completer docker_image_import {
 		}
 	}
 }
+Register-Completer docker_image_import_--platform $platform
 Register-Completer docker_image_inspect $imageAll
 Register-Completer docker_image_ls $imageAll
 Register-Completer docker_image_ls_--filter {
@@ -432,7 +455,9 @@ Register-Completer docker_image_ls_--format $formatBasic
 Register-Completer docker_image_pull $imageAll
 Register-Completer docker_image_pull_--all-tags { Get-ImageRepository }
 Register-Completer docker_image_pull_-a { Get-ImageRepository }
+Register-Completer docker_image_pull_--platform $platform
 Register-Completer docker_image_push $imageAll
+Register-Completer docker_image_push_--platform $platform
 Register-Completer docker_image_rm $imageAll
 Register-Completer docker_image_save $imageAll
 Register-Completer docker_image_tag $imageAll
@@ -948,6 +973,7 @@ Register-Completer docker_volume_update_--availability { 'active', 'drain', 'pau
 
 Register-Completer docker_builder_build_--cache-from (Get-Completer docker_image_build_--cache-from)
 Register-Completer docker_builder_build_--isolation (Get-Completer docker_image_build_--isolation)
+Register-Completer docker_builder_build_--platform $platform
 Register-Completer docker_builder_build_--progress (Get-Completer docker_image_build_--progress)
 Register-Completer docker_builder_build_--network (Get-Completer docker_image_build_--network)
 Register-Completer docker_builder_build_--secret (Get-Completer docker_image_build_--secret)
@@ -956,6 +982,7 @@ Register-Completer docker_builder_build_-t (Get-Completer docker_image_build_-t)
 
 Register-Completer docker_build_--cache-from (Get-Completer docker_image_build_--cache-from)
 Register-Completer docker_build_--isolation (Get-Completer docker_image_build_--isolation)
+Register-Completer docker_build_--platform (Get-Completer docker_image_build_--platform)
 Register-Completer docker_build_--progress (Get-Completer docker_image_build_--progress)
 Register-Completer docker_build_--network (Get-Completer docker_image_build_--network)
 Register-Completer docker_build_--secret (Get-Completer docker_image_build_--secret)
@@ -970,6 +997,7 @@ Register-Completer docker_run_--isolation (Get-Completer docker_container_run_--
 Register-Completer docker_run_--mount (Get-Completer docker_container_run_--mount)
 Register-Completer docker_run_--network (Get-Completer docker_container_run_--network)
 Register-Completer docker_run_--log-driver (Get-Completer docker_container_run_--log-driver)
+Register-Completer docker_run_--platform (Get-Completer docker_container_run_--platform)
 Register-Completer docker_run_--pull (Get-Completer docker_container_run_--pull)
 Register-Completer docker_run_--volume (Get-Completer docker_container_run_--volume)
 Register-Completer docker_run_-v (Get-Completer docker_run_--volume)
@@ -988,6 +1016,7 @@ Register-Completer docker_create_--cgroupns (Get-Completer docker_container_crea
 Register-Completer docker_create_--isolation (Get-Completer docker_container_create_--isolation)
 Register-Completer docker_create_--log-driver (Get-Completer docker_container_create_--log-driver)
 Register-Completer docker_create_--mount (Get-Completer docker_container_create_--mount)
+Register-Completer docker_create_--platform (Get-Completer docker_container_create_--platform)
 Register-Completer docker_create_--pull (Get-Completer docker_container_create_--pull)
 Register-Completer docker_create_--volume (Get-Completer docker_container_create_--volume)
 Register-Completer docker_create_-v (Get-Completer docker_create_--volume)
@@ -1002,6 +1031,7 @@ Register-Completer docker_history (Get-Completer docker_image_history)
 Register-Completer docker_history_--format (Get-Completer docker_image_history_--format)
 Register-Completer docker_images (Get-Completer docker_image_ls)
 Register-Completer docker_import (Get-Completer docker_image_import)
+Register-Completer docker_import_--platform (Get-Completer docker_image_import_--platform)
 Register-Completer docker_images_--filter (Get-Completer docker_image_ls_--filter)
 Register-Completer docker_images_-f (Get-Completer docker_images_--filter)
 Register-Completer docker_images_--format (Get-Completer docker_image_ls_--format)
@@ -1050,7 +1080,9 @@ Register-Completer docker_ps_--format (Get-Completer docker_container_ls_--forma
 Register-Completer docker_pull (Get-Completer docker_image_pull)
 Register-Completer docker_pull_--all-tags (Get-Completer docker_image_pull_--all-tags)
 Register-Completer docker_pull_-a (Get-Completer docker_pull_--all-tags)
+Register-Completer docker_pull_--platform (Get-Completer docker_image_pull_--platform)
 Register-Completer docker_push (Get-Completer docker_image_push)
+Register-Completer docker_push_--platform (Get-Completer docker_image_push_--platform)
 Register-Completer docker_rename (Get-Completer docker_container_rename)
 Register-Completer docker_restart (Get-Completer docker_container_restart)
 Register-Completer docker_rm (Get-Completer docker_container_rm)

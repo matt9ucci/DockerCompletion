@@ -1,4 +1,4 @@
-# docker/cli v26.0.0 https://github.com/docker/cli/tree/v26.0.0
+# docker/cli v27.4.0 https://github.com/docker/cli/tree/v27.4.0
 Register-Completer docker {
 	COMPGEN builder ManagementCommand 'Manage builds'
 	COMPGEN checkpoint ManagementCommand 'Manage checkpoints'
@@ -23,7 +23,7 @@ Register-Completer docker {
 	COMPGEN exec TopLevelCommand 'Execute a command in a running container'
 	COMPGEN images TopLevelCommand 'List images'
 	COMPGEN info TopLevelCommand 'Display system-wide information'
-	COMPGEN login TopLevelCommand 'Log in to a registry'
+	COMPGEN login TopLevelCommand 'Authenticate to a registry'
 	COMPGEN logout TopLevelCommand 'Log out from a registry'
 	COMPGEN ps TopLevelCommand 'List containers'
 	COMPGEN pull TopLevelCommand 'Download an image from a registry'
@@ -345,7 +345,7 @@ Register-Completer docker_container_create -Option {
 	COMPGEN --quiet Switch 'Suppress the pull output'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
-	COMPGEN --rm Switch 'Automatically remove the container when it exits'
+	COMPGEN --rm Switch 'Automatically remove the container and its associated anonymous volumes when it exits'
 	COMPGEN --runtime string 'Runtime to use for this container'
 	COMPGEN --security-opt list 'Security Options'
 	COMPGEN --shm-size bytes 'Size of /dev/shm'
@@ -566,7 +566,7 @@ Register-Completer docker_container_run -Option {
 	COMPGEN --quiet Switch 'Suppress the pull output'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
-	COMPGEN --rm Switch 'Automatically remove the container when it exits'
+	COMPGEN --rm Switch 'Automatically remove the container and its associated anonymous volumes when it exits'
 	COMPGEN --runtime string 'Runtime to use for this container'
 	COMPGEN --security-opt list 'Security Options'
 	COMPGEN --shm-size bytes 'Size of /dev/shm'
@@ -798,6 +798,7 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 	COMPGEN --no-trunc Switch 'Don''t truncate output'
 	COMPGEN '-q' Switch 'Only show image IDs'
 	COMPGEN --quiet Switch 'Only show image IDs'
+	COMPGEN --tree Switch 'List multi-platform images as a tree (EXPERIMENTAL)'
 }
 
 Register-Completer docker_image_prune -Option {
@@ -821,6 +822,9 @@ Register-Completer docker_image_push -Option {
 	COMPGEN '-a' Switch 'Push all tags of an image to the repository'
 	COMPGEN --all-tags Switch 'Push all tags of an image to the repository'
 	COMPGEN --disable-content-trust Switch 'Skip image signing'
+	COMPGEN --platform string 'Push a platform-specific manifest as a single-platform image to the registry.
+Image index won''t be pushed, meaning that other manifests, including attestations won''t be preserved.
+''os[/arch[/variant]]'': Explicit platform (eg. linux/amd64)'
 	COMPGEN '-q' Switch 'Suppress verbose output'
 	COMPGEN --quiet Switch 'Suppress verbose output'
 }
@@ -902,7 +906,7 @@ Register-Completer docker_network_create -Option {
 	COMPGEN --ip-range strings 'Allocate container ip from a sub-range'
 	COMPGEN --ipam-driver string 'IP Address Management Driver'
 	COMPGEN --ipam-opt map 'Set IPAM driver specific options'
-	COMPGEN --ipv6 Switch 'Enable IPv6 networking'
+	COMPGEN --ipv6 Switch 'Enable or disable IPv6 networking'
 	COMPGEN --label list 'Set metadata on a network'
 	COMPGEN '-o' map 'Set driver specific options'
 	COMPGEN --opt map 'Set driver specific options'
@@ -1178,6 +1182,7 @@ Register-Completer docker_service_create -Option {
 	COMPGEN --network network 'Network attachments'
 	COMPGEN --no-healthcheck Switch 'Disable any container-specified HEALTHCHECK'
 	COMPGEN --no-resolve-image Switch 'Do not query the registry to resolve image digest and supported platforms'
+	COMPGEN --oom-score-adj int 'Tune host''s OOM preferences (-1000 to 1000) '
 	COMPGEN --placement-pref pref 'Add a placement preference'
 	COMPGEN '-p' port 'Publish a port as a node port'
 	COMPGEN --publish port 'Publish a port as a node port'
@@ -1334,6 +1339,7 @@ Register-Completer docker_service_update -Option {
 	COMPGEN --network-rm list 'Remove a network'
 	COMPGEN --no-healthcheck Switch 'Disable any container-specified HEALTHCHECK'
 	COMPGEN --no-resolve-image Switch 'Do not query the registry to resolve image digest and supported platforms'
+	COMPGEN --oom-score-adj int 'Tune host''s OOM preferences (-1000 to 1000) '
 	COMPGEN --placement-pref-add pref 'Add a placement preference'
 	COMPGEN --placement-pref-rm pref 'Remove a placement preference'
 	COMPGEN --publish-add port 'Add or update a published port'
@@ -1761,6 +1767,7 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 	COMPGEN --no-trunc Switch 'Don''t truncate output'
 	COMPGEN '-q' Switch 'Only show image IDs'
 	COMPGEN --quiet Switch 'Only show image IDs'
+	COMPGEN --tree Switch 'List multi-platform images as a tree (EXPERIMENTAL)'
 }
 
 Register-Completer docker_info -Option {
@@ -1817,6 +1824,9 @@ Register-Completer docker_push -Option {
 	COMPGEN '-a' Switch 'Push all tags of an image to the repository'
 	COMPGEN --all-tags Switch 'Push all tags of an image to the repository'
 	COMPGEN --disable-content-trust Switch 'Skip image signing'
+	COMPGEN --platform string 'Push a platform-specific manifest as a single-platform image to the registry.
+Image index won''t be pushed, meaning that other manifests, including attestations won''t be preserved.
+''os[/arch[/variant]]'': Explicit platform (eg. linux/amd64)'
 	COMPGEN '-q' Switch 'Suppress verbose output'
 	COMPGEN --quiet Switch 'Suppress verbose output'
 }
@@ -1921,7 +1931,7 @@ Register-Completer docker_run -Option {
 	COMPGEN --quiet Switch 'Suppress the pull output'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
-	COMPGEN --rm Switch 'Automatically remove the container when it exits'
+	COMPGEN --rm Switch 'Automatically remove the container and its associated anonymous volumes when it exits'
 	COMPGEN --runtime string 'Runtime to use for this container'
 	COMPGEN --security-opt list 'Security Options'
 	COMPGEN --shm-size bytes 'Size of /dev/shm'
@@ -2092,7 +2102,7 @@ Register-Completer docker_create -Option {
 	COMPGEN --quiet Switch 'Suppress the pull output'
 	COMPGEN --read-only Switch 'Mount the container''s root filesystem as read only'
 	COMPGEN --restart string 'Restart policy to apply when a container exits'
-	COMPGEN --rm Switch 'Automatically remove the container when it exits'
+	COMPGEN --rm Switch 'Automatically remove the container and its associated anonymous volumes when it exits'
 	COMPGEN --runtime string 'Runtime to use for this container'
 	COMPGEN --security-opt list 'Security Options'
 	COMPGEN --shm-size bytes 'Size of /dev/shm'
