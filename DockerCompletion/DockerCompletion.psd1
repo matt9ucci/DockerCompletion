@@ -1,7 +1,7 @@
 @{
 
 RootModule        = 'DockerCompletion.psm1'
-ModuleVersion     = '1.2600.0.240409'
+ModuleVersion     = '1.2704.0.241216'
 GUID              = '3c963cd2-8dce-445a-b7b7-778726965d7d'
 Author            = 'Masatoshi Higuchi'
 CompanyName       = 'N/A'
@@ -23,8 +23,8 @@ PrivateData = @{ PSData = @{
 	LicenseUri   = 'https://github.com/matt9ucci/DockerCompletion/blob/master/LICENSE'
 	ProjectUri   = 'https://github.com/matt9ucci/DockerCompletion'
 	ReleaseNotes = @'
-CLI v26.0.0
-Compose v2.26.1
+CLI v27.4.0
+Compose v2.32.0
 '@
 } }
 
