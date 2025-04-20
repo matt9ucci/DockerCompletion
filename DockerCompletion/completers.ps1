@@ -454,7 +454,7 @@ Register-Completer docker_container_restart -Option {
 	COMPGEN '-s' string 'Signal to send to the container'
 	COMPGEN --signal string 'Signal to send to the container'
 	COMPGEN '-t' int 'Seconds to wait before killing the container'
-	COMPGEN --time int 'Seconds to wait before killing the container'
+	COMPGEN --timeout int 'Seconds to wait before killing the container'
 }
 
 Register-Completer docker_container_rm -Option {
@@ -618,7 +618,7 @@ Register-Completer docker_container_stop -Option {
 	COMPGEN '-s' string 'Signal to send to the container'
 	COMPGEN --signal string 'Signal to send to the container'
 	COMPGEN '-t' int 'Seconds to wait before killing the container'
-	COMPGEN --time int 'Seconds to wait before killing the container'
+	COMPGEN --timeout int 'Seconds to wait before killing the container'
 }
 
 Register-Completer docker_container_update -Option {
@@ -2206,7 +2206,7 @@ Register-Completer docker_restart -Option {
 	COMPGEN '-s' string 'Signal to send to the container'
 	COMPGEN --signal string 'Signal to send to the container'
 	COMPGEN '-t' int 'Seconds to wait before killing the container'
-	COMPGEN --time int 'Seconds to wait before killing the container'
+	COMPGEN --timeout int 'Seconds to wait before killing the container'
 }
 
 Register-Completer docker_rm -Option {
@@ -2256,7 +2256,7 @@ Register-Completer docker_stop -Option {
 	COMPGEN '-s' string 'Signal to send to the container'
 	COMPGEN --signal string 'Signal to send to the container'
 	COMPGEN '-t' int 'Seconds to wait before killing the container'
-	COMPGEN --time int 'Seconds to wait before killing the container'
+	COMPGEN --timeout int 'Seconds to wait before killing the container'
 }
 
 Register-Completer docker_update -Option {
