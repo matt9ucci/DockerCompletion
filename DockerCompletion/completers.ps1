@@ -1782,9 +1782,9 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 }
 
 Register-Completer docker_login -Option {
-	COMPGEN '-p' string 'Password'
-	COMPGEN --password string 'Password'
-	COMPGEN --password-stdin Switch 'Take the password from stdin'
+	COMPGEN '-p' string 'Password or Personal Access Token (PAT)'
+	COMPGEN --password string 'Password or Personal Access Token (PAT)'
+	COMPGEN --password-stdin Switch 'Take the Password or Personal Access Token (PAT) from stdin'
 	COMPGEN '-u' string 'Username'
 	COMPGEN --username string 'Username'
 }
