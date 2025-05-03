@@ -33,19 +33,21 @@ Describe 'docker' {
 Describe 'docker compose' {
 	It 'completes p' {
 		$result = Get-Result 'docker compose p'
-		$result | Should -HaveCount 5
+		$result | Should -HaveCount 6
 		$result[0].CompletionText | Should -Be pause
 		$result[1].CompletionText | Should -Be port
 		$result[2].CompletionText | Should -Be ps
-		$result[3].CompletionText | Should -Be pull
-		$result[4].CompletionText | Should -Be push
+		$result[3].CompletionText | Should -Be publish
+		$result[4].CompletionText | Should -Be pull
+		$result[5].CompletionText | Should -Be push
 	}
 
 	It 'completes pu' {
 		$result = Get-Result 'docker compose pu'
-		$result | Should -HaveCount 2
-		$result[0].CompletionText | Should -Be pull
-		$result[1].CompletionText | Should -Be push
+		$result | Should -HaveCount 3
+		$result[0].CompletionText | Should -Be publish
+		$result[1].CompletionText | Should -Be pull
+		$result[2].CompletionText | Should -Be push
 	}
 
 	It 'completes --p' {

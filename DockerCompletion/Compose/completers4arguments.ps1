@@ -93,6 +93,7 @@ Register-Completer docker_compose_push $serviceAll
 Register-Completer docker_compose_restart $serviceRunning
 Register-Completer docker_compose_rm $serviceAll
 Register-Completer docker_compose_run $serviceAll
+Register-Completer docker_compose_run_--pull { 'always', 'missing', 'never' }
 Register-Completer docker_compose_scale $serviceAll
 Register-Completer docker_compose_start $serviceStartable
 Register-Completer docker_compose_stop $serviceRunning

@@ -1,4 +1,4 @@
-# Docker Compose version v2.32.0
+# Docker Compose version v2.35.1
 Register-Completer docker_compose {
 	COMPGEN alpha SubCommand 'Experimental commands'
 	COMPGEN attach SubCommand 'Attach local standard input, output, and error streams to a service''s running container'
@@ -18,6 +18,7 @@ Register-Completer docker_compose {
 	COMPGEN pause SubCommand 'Pause services'
 	COMPGEN port SubCommand 'Print the public port for a port binding'
 	COMPGEN ps SubCommand 'List containers'
+	COMPGEN publish SubCommand 'Publish compose application'
 	COMPGEN pull SubCommand 'Pull service images'
 	COMPGEN push SubCommand 'Push service images'
 	COMPGEN restart SubCommand 'Restart service containers'
@@ -78,6 +79,7 @@ Register-Completer docker_compose_build -Option {
 	COMPGEN --no-cache Switch 'Do not use cache when building the image'
 	COMPGEN --no-rm Switch 'Do not remove intermediate containers after a successful build. DEPRECATED'
 	COMPGEN --parallel Switch 'Build images in parallel. DEPRECATED'
+	COMPGEN --print Switch 'Print equivalent bake file'
 	COMPGEN --progress string 'Set type of ui output (auto, tty, plain, json, quiet)'
 	COMPGEN --pull Switch 'Always attempt to pull a newer version of the image'
 	COMPGEN --push Switch 'Push service images'
@@ -107,6 +109,7 @@ Register-Completer docker_compose_config -Option {
 	COMPGEN --hash string 'Print the service config hash, one per line.'
 	COMPGEN --images Switch 'Print the image names, one per line.'
 	COMPGEN --no-consistency Switch 'Don''t check model consistency - warning: may produce invalid Compose output'
+	COMPGEN --no-env-resolution Switch 'Don''t resolve service env files'
 	COMPGEN --no-interpolate Switch 'Don''t interpolate environment variables'
 	COMPGEN --no-normalize Switch 'Don''t normalize compose model'
 	COMPGEN --no-path-resolution Switch 'Don''t resolve file paths'
@@ -142,7 +145,7 @@ Register-Completer docker_compose_create -Option {
 	COMPGEN --remove-orphans Switch 'Remove containers for services not defined in the Compose file'
 	COMPGEN --scale stringArray 'Scale SERVICE to NUM instances. Overrides the `scale` setting in the Compose file if present.'
 	COMPGEN '-y' Switch 'Assume "yes" as answer to all prompts and run non-interactively'
-	COMPGEN --y Switch 'Assume "yes" as answer to all prompts and run non-interactively'
+	COMPGEN --yes Switch 'Assume "yes" as answer to all prompts and run non-interactively'
 }
 
 Register-Completer docker_compose_down -Option {
@@ -222,8 +225,8 @@ Register-Completer docker_compose_ls -Option {
 	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
 	COMPGEN --format string 'Format the output. Values: [table | json]'
-	COMPGEN '-q' Switch 'Only display IDs'
-	COMPGEN --quiet Switch 'Only display IDs'
+	COMPGEN '-q' Switch 'Only display project names'
+	COMPGEN --quiet Switch 'Only display project names'
 }
 
 Register-Completer docker_compose_port -Option {
@@ -249,6 +252,15 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 	COMPGEN --quiet Switch 'Only display IDs'
 	COMPGEN --services Switch 'Display services'
 	COMPGEN --status stringArray 'Filter services by status. Values: [paused | restarting | removing | running | dead | created | exited]'
+}
+
+Register-Completer docker_compose_publish -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
+	COMPGEN --oci-version string 'OCI image/artifact specification version (automatically determined by default)'
+	COMPGEN --resolve-image-digests Switch 'Pin image tags to digests'
+	COMPGEN --with-env Switch 'Include environment variables in the published OCI artifact'
+	COMPGEN '-y' Switch 'Assume "yes" as answer to all prompts'
+	COMPGEN --yes Switch 'Assume "yes" as answer to all prompts'
 }
 
 Register-Completer docker_compose_pull -Option {
@@ -300,6 +312,7 @@ Register-Completer docker_compose_run -Option {
 	COMPGEN --entrypoint string 'Override the entrypoint of the image'
 	COMPGEN '-e' stringArray 'Set environment variables'
 	COMPGEN --env stringArray 'Set environment variables'
+	COMPGEN --env-from-file stringArray 'Set environment variables from file'
 	COMPGEN '-i' Switch 'Keep STDIN open even if not attached'
 	COMPGEN --interactive Switch 'Keep STDIN open even if not attached'
 	COMPGEN '-l' stringArray 'Add or override a label'
@@ -310,6 +323,10 @@ Register-Completer docker_compose_run -Option {
 	COMPGEN --no-deps Switch 'Don''t start linked services'
 	COMPGEN '-p' stringArray 'Publish a container''s port(s) to the host'
 	COMPGEN --publish stringArray 'Publish a container''s port(s) to the host'
+	COMPGEN --pull string 'Pull image before running ("always"|"missing"|"never")'
+	COMPGEN '-q' Switch 'Don''t print anything to STDOUT'
+	COMPGEN --quiet Switch 'Don''t print anything to STDOUT'
+	COMPGEN --quiet-build Switch 'Suppress progress output from the build process'
 	COMPGEN --quiet-pull Switch 'Pull without printing progress information'
 	COMPGEN --remove-orphans Switch 'Remove containers for services not defined in the Compose file'
 	COMPGEN --rm Switch 'Automatically remove the container when it exits'
@@ -340,7 +357,7 @@ Register-Completer docker_compose_stats -Option {
 ''table TEMPLATE'':   Print output in table format using the given Go template
 ''json'':             Print in JSON format
 ''TEMPLATE'':         Print output using the given Go template.
-Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+Refer to https://docs.docker.com/engine/cli/formatting/ for more information about formatting output with templates'
 	COMPGEN --no-stream Switch 'Disable streaming stats and only pull the first result'
 	COMPGEN --no-trunc Switch 'Do not truncate output'
 }
@@ -385,7 +402,7 @@ Register-Completer docker_compose_up -Option {
 	COMPGEN '-w' Switch 'Watch source code and rebuild/refresh containers when files are updated.'
 	COMPGEN --watch Switch 'Watch source code and rebuild/refresh containers when files are updated.'
 	COMPGEN '-y' Switch 'Assume "yes" as answer to all prompts and run non-interactively'
-	COMPGEN --y Switch 'Assume "yes" as answer to all prompts and run non-interactively'
+	COMPGEN --yes Switch 'Assume "yes" as answer to all prompts and run non-interactively'
 }
 
 Register-Completer docker_compose_version -Option {
