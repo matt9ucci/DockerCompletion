@@ -413,6 +413,7 @@ Register-Completer docker_image_history_--format {
 	"'{{.ID}}'"
 	"'{{.Size}}'"
 }
+Register-Completer docker_image_history_--platform $platform
 Register-Completer docker_image_import {
 	Param([string]$wordToComplete, $commandAst, $cursorPosition, $indexOfFirstArg)
 
@@ -425,6 +426,8 @@ Register-Completer docker_image_import {
 }
 Register-Completer docker_image_import_--platform $platform
 Register-Completer docker_image_inspect $imageAll
+Register-Completer docker_image_inspect_--platform $platform
+Register-Completer docker_image_load_--platform $platform
 Register-Completer docker_image_ls $imageAll
 Register-Completer docker_image_ls_--filter {
 	Param([string]$wordToComplete)
@@ -460,6 +463,7 @@ Register-Completer docker_image_push $imageAll
 Register-Completer docker_image_push_--platform $platform
 Register-Completer docker_image_rm $imageAll
 Register-Completer docker_image_save $imageAll
+Register-Completer docker_image_save_--platform $platform
 Register-Completer docker_image_tag $imageAll
 
 Register-Completer docker_network_connect {
@@ -1029,6 +1033,7 @@ Register-Completer docker_exec (Get-Completer docker_container_exec)
 Register-Completer docker_export (Get-Completer docker_container_export)
 Register-Completer docker_history (Get-Completer docker_image_history)
 Register-Completer docker_history_--format (Get-Completer docker_image_history_--format)
+Register-Completer docker_history_--platform (Get-Completer docker_image_history_--platform)
 Register-Completer docker_images (Get-Completer docker_image_ls)
 Register-Completer docker_import (Get-Completer docker_image_import)
 Register-Completer docker_import_--platform (Get-Completer docker_image_import_--platform)
@@ -1071,6 +1076,7 @@ Register-Completer docker_inspect {
 }
 Register-Completer docker_inspect_--type { 'container', 'image', 'network', 'node', 'plugin', 'secret', 'service', 'volume' }
 Register-Completer docker_kill (Get-Completer docker_container_kill)
+Register-Completer docker_load_--platform (Get-Completer docker_image_load_--platform)
 Register-Completer docker_logs (Get-Completer docker_container_logs)
 Register-Completer docker_pause (Get-Completer docker_container_pause)
 Register-Completer docker_port (Get-Completer docker_container_port)
@@ -1088,6 +1094,7 @@ Register-Completer docker_restart (Get-Completer docker_container_restart)
 Register-Completer docker_rm (Get-Completer docker_container_rm)
 Register-Completer docker_rmi (Get-Completer docker_image_rm)
 Register-Completer docker_save (Get-Completer docker_image_save)
+Register-Completer docker_save_--platform (Get-Completer docker_image_save_--platform)
 Register-Completer docker_start (Get-Completer docker_container_start)
 Register-Completer docker_stats (Get-Completer docker_container_stats)
 Register-Completer docker_stop (Get-Completer docker_container_stop)

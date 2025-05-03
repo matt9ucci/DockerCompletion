@@ -1,4 +1,4 @@
-# docker/cli v27.4.0 https://github.com/docker/cli/tree/v27.4.0
+# docker/cli v28.1.0 https://github.com/docker/cli/tree/v28.1.0
 Register-Completer docker {
 	COMPGEN builder ManagementCommand 'Manage builds'
 	COMPGEN checkpoint ManagementCommand 'Manage checkpoints'
@@ -357,6 +357,7 @@ Register-Completer docker_container_create -Option {
 	COMPGEN '-t' Switch 'Allocate a pseudo-TTY'
 	COMPGEN --tty Switch 'Allocate a pseudo-TTY'
 	COMPGEN --ulimit ulimit 'Ulimit options'
+	COMPGEN --use-api-socket Switch 'Bind mount Docker API socket and required auth'
 	COMPGEN '-u' string 'Username or UID (format: <name|uid>[:<group|gid>])'
 	COMPGEN --user string 'Username or UID (format: <name|uid>[:<group|gid>])'
 	COMPGEN --userns string 'User namespace to use'
@@ -579,6 +580,7 @@ Register-Completer docker_container_run -Option {
 	COMPGEN '-t' Switch 'Allocate a pseudo-TTY'
 	COMPGEN --tty Switch 'Allocate a pseudo-TTY'
 	COMPGEN --ulimit ulimit 'Ulimit options'
+	COMPGEN --use-api-socket Switch 'Bind mount Docker API socket and required auth'
 	COMPGEN '-u' string 'Username or UID (format: <name|uid>[:<group|gid>])'
 	COMPGEN --user string 'Username or UID (format: <name|uid>[:<group|gid>])'
 	COMPGEN --userns string 'User namespace to use'
@@ -753,6 +755,7 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 	COMPGEN '-H' Switch 'Print sizes and dates in human readable format'
 	COMPGEN --human Switch 'Print sizes and dates in human readable format'
 	COMPGEN --no-trunc Switch 'Don''t truncate output'
+	COMPGEN --platform string 'Show history for the given platform. Formatted as "os[/arch[/variant]]" (e.g., "linux/amd64")'
 	COMPGEN '-q' Switch 'Only show image IDs'
 	COMPGEN --quiet Switch 'Only show image IDs'
 }
@@ -774,11 +777,15 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 ''json'':             Print in JSON format
 ''TEMPLATE'':         Print output using the given Go template.
 Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN --platform string 'Inspect a specific platform of the multi-platform image.
+If the image or the server is not multi-platform capable, the command will error out if the platform does not match.
+''os[/arch[/variant]]'': Explicit platform (eg. linux/amd64)'
 }
 
 Register-Completer docker_image_load -Option {
 	COMPGEN '-i' string 'Read from tar archive file, instead of STDIN'
 	COMPGEN --input string 'Read from tar archive file, instead of STDIN'
+	COMPGEN --platform string 'Load only the given platform variant. Formatted as "os[/arch[/variant]]" (e.g., "linux/amd64")'
 	COMPGEN '-q' Switch 'Suppress the load output'
 	COMPGEN --quiet Switch 'Suppress the load output'
 }
@@ -838,6 +845,7 @@ Register-Completer docker_image_rm -Option {
 Register-Completer docker_image_save -Option {
 	COMPGEN '-o' string 'Write to a file, instead of STDOUT'
 	COMPGEN --output string 'Write to a file, instead of STDOUT'
+	COMPGEN --platform string 'Save only the given platform variant. Formatted as "os[/arch[/variant]]" (e.g., "linux/amd64")'
 }
 
 Register-Completer docker_manifest {
@@ -887,6 +895,7 @@ Register-Completer docker_network {
 Register-Completer docker_network_connect -Option {
 	COMPGEN --alias strings 'Add network-scoped alias for the container'
 	COMPGEN --driver-opt strings 'driver options for the network'
+	COMPGEN --gw-priority int 'Highest gw-priority provides the default gateway. Accepts positive and negative values.'
 	COMPGEN --ip string 'IPv4 address (e.g., "172.30.100.104")'
 	COMPGEN --ip6 string 'IPv6 address (e.g., "2001:db8::33")'
 	COMPGEN --link list 'Add link to another container'
@@ -906,7 +915,8 @@ Register-Completer docker_network_create -Option {
 	COMPGEN --ip-range strings 'Allocate container ip from a sub-range'
 	COMPGEN --ipam-driver string 'IP Address Management Driver'
 	COMPGEN --ipam-opt map 'Set IPAM driver specific options'
-	COMPGEN --ipv6 Switch 'Enable or disable IPv6 networking'
+	COMPGEN --ipv4 Switch 'Enable or disable IPv4 address assignment'
+	COMPGEN --ipv6 Switch 'Enable or disable IPv6 address assignment'
 	COMPGEN --label list 'Set metadata on a network'
 	COMPGEN '-o' map 'Set driver specific options'
 	COMPGEN --opt map 'Set driver specific options'
@@ -1944,6 +1954,7 @@ Register-Completer docker_run -Option {
 	COMPGEN '-t' Switch 'Allocate a pseudo-TTY'
 	COMPGEN --tty Switch 'Allocate a pseudo-TTY'
 	COMPGEN --ulimit ulimit 'Ulimit options'
+	COMPGEN --use-api-socket Switch 'Bind mount Docker API socket and required auth'
 	COMPGEN '-u' string 'Username or UID (format: <name|uid>[:<group|gid>])'
 	COMPGEN --user string 'Username or UID (format: <name|uid>[:<group|gid>])'
 	COMPGEN --userns string 'User namespace to use'
@@ -2114,6 +2125,7 @@ Register-Completer docker_create -Option {
 	COMPGEN '-t' Switch 'Allocate a pseudo-TTY'
 	COMPGEN --tty Switch 'Allocate a pseudo-TTY'
 	COMPGEN --ulimit ulimit 'Ulimit options'
+	COMPGEN --use-api-socket Switch 'Bind mount Docker API socket and required auth'
 	COMPGEN '-u' string 'Username or UID (format: <name|uid>[:<group|gid>])'
 	COMPGEN --user string 'Username or UID (format: <name|uid>[:<group|gid>])'
 	COMPGEN --userns string 'User namespace to use'
@@ -2152,6 +2164,7 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 	COMPGEN '-H' Switch 'Print sizes and dates in human readable format'
 	COMPGEN --human Switch 'Print sizes and dates in human readable format'
 	COMPGEN --no-trunc Switch 'Don''t truncate output'
+	COMPGEN --platform string 'Show history for the given platform. Formatted as "os[/arch[/variant]]" (e.g., "linux/amd64")'
 	COMPGEN '-q' Switch 'Only show image IDs'
 	COMPGEN --quiet Switch 'Only show image IDs'
 }
@@ -2186,6 +2199,7 @@ Register-Completer docker_kill -Option {
 Register-Completer docker_load -Option {
 	COMPGEN '-i' string 'Read from tar archive file, instead of STDIN'
 	COMPGEN --input string 'Read from tar archive file, instead of STDIN'
+	COMPGEN --platform string 'Load only the given platform variant. Formatted as "os[/arch[/variant]]" (e.g., "linux/amd64")'
 	COMPGEN '-q' Switch 'Suppress the load output'
 	COMPGEN --quiet Switch 'Suppress the load output'
 }
@@ -2227,6 +2241,7 @@ Register-Completer docker_rmi -Option {
 Register-Completer docker_save -Option {
 	COMPGEN '-o' string 'Write to a file, instead of STDOUT'
 	COMPGEN --output string 'Write to a file, instead of STDOUT'
+	COMPGEN --platform string 'Save only the given platform variant. Formatted as "os[/arch[/variant]]" (e.g., "linux/amd64")'
 }
 
 Register-Completer docker_start -Option {
