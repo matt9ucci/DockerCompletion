@@ -102,7 +102,6 @@ Register-Completer docker_builder_build -Option {
 	COMPGEN --cpu-shares int 'CPU shares (relative weight)'
 	COMPGEN --cpuset-cpus string 'CPUs in which to allow execution (0-3, 0,1)'
 	COMPGEN --cpuset-mems string 'MEMs in which to allow execution (0-3, 0,1)'
-	COMPGEN --disable-content-trust Switch 'Skip image verification'
 	COMPGEN '-f' string 'Name of the Dockerfile (Default is "PATH/Dockerfile")'
 	COMPGEN --file string 'Name of the Dockerfile (Default is "PATH/Dockerfile")'
 	COMPGEN --force-rm Switch 'Always remove intermediate containers'
@@ -281,7 +280,6 @@ Register-Completer docker_container_create -Option {
 	COMPGEN --device-read-iops list 'Limit read rate (IO per second) from a device'
 	COMPGEN --device-write-bps list 'Limit write rate (bytes per second) to a device'
 	COMPGEN --device-write-iops list 'Limit write rate (IO per second) to a device'
-	COMPGEN --disable-content-trust Switch 'Skip image verification'
 	COMPGEN --dns list 'Set custom DNS servers'
 	COMPGEN --dns-option list 'Set DNS options'
 	COMPGEN --dns-search list 'Set custom DNS search domains'
@@ -503,7 +501,6 @@ Register-Completer docker_container_run -Option {
 	COMPGEN --device-read-iops list 'Limit read rate (IO per second) from a device'
 	COMPGEN --device-write-bps list 'Limit write rate (bytes per second) to a device'
 	COMPGEN --device-write-iops list 'Limit write rate (IO per second) to a device'
-	COMPGEN --disable-content-trust Switch 'Skip image verification'
 	COMPGEN --dns list 'Set custom DNS servers'
 	COMPGEN --dns-option list 'Set DNS options'
 	COMPGEN --dns-search list 'Set custom DNS search domains'
@@ -719,7 +716,6 @@ Register-Completer docker_image_build -Option {
 	COMPGEN --cpu-shares int 'CPU shares (relative weight)'
 	COMPGEN --cpuset-cpus string 'CPUs in which to allow execution (0-3, 0,1)'
 	COMPGEN --cpuset-mems string 'MEMs in which to allow execution (0-3, 0,1)'
-	COMPGEN --disable-content-trust Switch 'Skip image verification'
 	COMPGEN '-f' string 'Name of the Dockerfile (Default is "PATH/Dockerfile")'
 	COMPGEN --file string 'Name of the Dockerfile (Default is "PATH/Dockerfile")'
 	COMPGEN --force-rm Switch 'Always remove intermediate containers'
@@ -819,7 +815,6 @@ Register-Completer docker_image_prune -Option {
 Register-Completer docker_image_pull -Option {
 	COMPGEN '-a' Switch 'Download all tagged images in the repository'
 	COMPGEN --all-tags Switch 'Download all tagged images in the repository'
-	COMPGEN --disable-content-trust Switch 'Skip image verification'
 	COMPGEN --platform string 'Set platform if server is multi-platform capable'
 	COMPGEN '-q' Switch 'Suppress verbose output'
 	COMPGEN --quiet Switch 'Suppress verbose output'
@@ -828,7 +823,6 @@ Register-Completer docker_image_pull -Option {
 Register-Completer docker_image_push -Option {
 	COMPGEN '-a' Switch 'Push all tags of an image to the repository'
 	COMPGEN --all-tags Switch 'Push all tags of an image to the repository'
-	COMPGEN --disable-content-trust Switch 'Skip image signing'
 	COMPGEN --platform string 'Push a platform-specific manifest as a single-platform image to the registry.
 Image index won''t be pushed, meaning that other manifests, including attestations won''t be preserved.
 ''os[/arch[/variant]]'': Explicit platform (eg. linux/amd64)'
@@ -1064,7 +1058,6 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 Register-Completer docker_plugin_install -Option {
 	COMPGEN --alias string 'Local name for plugin'
 	COMPGEN --disable Switch 'Do not enable the plugin on install'
-	COMPGEN --disable-content-trust Switch 'Skip image verification'
 	COMPGEN --grant-all-permissions Switch 'Grant all permissions necessary to run the plugin'
 }
 
@@ -1082,17 +1075,12 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 	COMPGEN --quiet Switch 'Only display plugin IDs'
 }
 
-Register-Completer docker_plugin_push -Option {
-	COMPGEN --disable-content-trust Switch 'Skip image signing'
-}
-
 Register-Completer docker_plugin_rm -Option {
 	COMPGEN '-f' Switch 'Force the removal of an active plugin'
 	COMPGEN --force Switch 'Force the removal of an active plugin'
 }
 
 Register-Completer docker_plugin_upgrade -Option {
-	COMPGEN --disable-content-trust Switch 'Skip image verification'
 	COMPGEN --grant-all-permissions Switch 'Grant all permissions necessary to run the plugin'
 	COMPGEN --skip-remote-check Switch 'Do not check if specified remote plugin matches existing plugin image'
 }
@@ -1718,7 +1706,6 @@ Register-Completer docker_build -Option {
 	COMPGEN --cpu-shares int 'CPU shares (relative weight)'
 	COMPGEN --cpuset-cpus string 'CPUs in which to allow execution (0-3, 0,1)'
 	COMPGEN --cpuset-mems string 'MEMs in which to allow execution (0-3, 0,1)'
-	COMPGEN --disable-content-trust Switch 'Skip image verification'
 	COMPGEN '-f' string 'Name of the Dockerfile (Default is "PATH/Dockerfile")'
 	COMPGEN --file string 'Name of the Dockerfile (Default is "PATH/Dockerfile")'
 	COMPGEN --force-rm Switch 'Always remove intermediate containers'
@@ -1824,7 +1811,6 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 Register-Completer docker_pull -Option {
 	COMPGEN '-a' Switch 'Download all tagged images in the repository'
 	COMPGEN --all-tags Switch 'Download all tagged images in the repository'
-	COMPGEN --disable-content-trust Switch 'Skip image verification'
 	COMPGEN --platform string 'Set platform if server is multi-platform capable'
 	COMPGEN '-q' Switch 'Suppress verbose output'
 	COMPGEN --quiet Switch 'Suppress verbose output'
@@ -1833,7 +1819,6 @@ Register-Completer docker_pull -Option {
 Register-Completer docker_push -Option {
 	COMPGEN '-a' Switch 'Push all tags of an image to the repository'
 	COMPGEN --all-tags Switch 'Push all tags of an image to the repository'
-	COMPGEN --disable-content-trust Switch 'Skip image signing'
 	COMPGEN --platform string 'Push a platform-specific manifest as a single-platform image to the registry.
 Image index won''t be pushed, meaning that other manifests, including attestations won''t be preserved.
 ''os[/arch[/variant]]'': Explicit platform (eg. linux/amd64)'
@@ -1877,7 +1862,6 @@ Register-Completer docker_run -Option {
 	COMPGEN --device-read-iops list 'Limit read rate (IO per second) from a device'
 	COMPGEN --device-write-bps list 'Limit write rate (bytes per second) to a device'
 	COMPGEN --device-write-iops list 'Limit write rate (IO per second) to a device'
-	COMPGEN --disable-content-trust Switch 'Skip image verification'
 	COMPGEN --dns list 'Set custom DNS servers'
 	COMPGEN --dns-option list 'Set DNS options'
 	COMPGEN --dns-search list 'Set custom DNS search domains'
@@ -2049,7 +2033,6 @@ Register-Completer docker_create -Option {
 	COMPGEN --device-read-iops list 'Limit read rate (IO per second) from a device'
 	COMPGEN --device-write-bps list 'Limit write rate (bytes per second) to a device'
 	COMPGEN --device-write-iops list 'Limit write rate (IO per second) to a device'
-	COMPGEN --disable-content-trust Switch 'Skip image verification'
 	COMPGEN --dns list 'Set custom DNS servers'
 	COMPGEN --dns-option list 'Set DNS options'
 	COMPGEN --dns-search list 'Set custom DNS search domains'
