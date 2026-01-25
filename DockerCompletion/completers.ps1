@@ -1,4 +1,4 @@
-# docker/cli v28.1.0 https://github.com/docker/cli/tree/v28.1.0
+# docker/cli v29.1.5 https://github.com/docker/cli/tree/v29.1.5
 Register-Completer docker {
 	COMPGEN builder ManagementCommand 'Manage builds'
 	COMPGEN checkpoint ManagementCommand 'Manage checkpoints'
@@ -69,10 +69,9 @@ Register-Completer docker -Option {
 	COMPGEN --context string 'Name of the context to use to connect to the daemon (overrides DOCKER_HOST env var and default context set with "docker context use")'
 	COMPGEN '-D' Switch 'Enable debug mode'
 	COMPGEN --debug Switch 'Enable debug mode'
-	COMPGEN '-h' Switch 'Print usage'
 	COMPGEN --help Switch 'Print usage'
-	COMPGEN '-H' list 'Daemon socket to connect to'
-	COMPGEN --host list 'Daemon socket to connect to'
+	COMPGEN '-H' string 'Daemon socket to connect to'
+	COMPGEN --host string 'Daemon socket to connect to'
 	COMPGEN '-l' string 'Set the logging level ("debug", "info", "warn", "error", "fatal")'
 	COMPGEN --log-level string 'Set the logging level ("debug", "info", "warn", "error", "fatal")'
 	COMPGEN --tls Switch 'Use TLS; implied by --tlsverify'
@@ -233,8 +232,7 @@ Register-Completer docker_container_commit -Option {
 	COMPGEN --change list 'Apply Dockerfile instruction to the created image'
 	COMPGEN '-m' string 'Commit message'
 	COMPGEN --message string 'Commit message'
-	COMPGEN '-p' Switch 'Pause container during commit'
-	COMPGEN --pause Switch 'Pause container during commit'
+	COMPGEN --no-pause Switch 'Disable pausing container during commit'
 }
 
 Register-Completer docker_container_cp -Option {
@@ -304,11 +302,10 @@ Register-Completer docker_container_create -Option {
 	COMPGEN --interactive Switch 'Keep STDIN open even if not attached'
 	COMPGEN --io-maxbandwidth bytes 'Maximum IO bandwidth limit for the system drive (Windows only)'
 	COMPGEN --io-maxiops uint 'Maximum IOps limit for the system drive (Windows only)'
-	COMPGEN --ip string 'IPv4 address (e.g., 172.30.100.104)'
-	COMPGEN --ip6 string 'IPv6 address (e.g., 2001:db8::33)'
+	COMPGEN --ip ip 'IPv4 address (e.g., 172.30.100.104)'
+	COMPGEN --ip6 ip 'IPv6 address (e.g., 2001:db8::33)'
 	COMPGEN --ipc string 'IPC mode to use'
 	COMPGEN --isolation string 'Container isolation technology'
-	COMPGEN --kernel-memory bytes 'Kernel memory limit'
 	COMPGEN '-l' list 'Set meta data on a container'
 	COMPGEN --label list 'Set meta data on a container'
 	COMPGEN --label-file list 'Read in a line delimited file of labels'
@@ -525,11 +522,10 @@ Register-Completer docker_container_run -Option {
 	COMPGEN --interactive Switch 'Keep STDIN open even if not attached'
 	COMPGEN --io-maxbandwidth bytes 'Maximum IO bandwidth limit for the system drive (Windows only)'
 	COMPGEN --io-maxiops uint 'Maximum IOps limit for the system drive (Windows only)'
-	COMPGEN --ip string 'IPv4 address (e.g., 172.30.100.104)'
-	COMPGEN --ip6 string 'IPv6 address (e.g., 2001:db8::33)'
+	COMPGEN --ip ip 'IPv4 address (e.g., 172.30.100.104)'
+	COMPGEN --ip6 ip 'IPv6 address (e.g., 2001:db8::33)'
 	COMPGEN --ipc string 'IPC mode to use'
 	COMPGEN --isolation string 'Container isolation technology'
-	COMPGEN --kernel-memory bytes 'Kernel memory limit'
 	COMPGEN '-l' list 'Set meta data on a container'
 	COMPGEN --label list 'Set meta data on a container'
 	COMPGEN --label-file list 'Read in a line delimited file of labels'
@@ -780,14 +776,14 @@ If the image or the server is not multi-platform capable, the command will error
 Register-Completer docker_image_load -Option {
 	COMPGEN '-i' string 'Read from tar archive file, instead of STDIN'
 	COMPGEN --input string 'Read from tar archive file, instead of STDIN'
-	COMPGEN --platform string 'Load only the given platform variant. Formatted as "os[/arch[/variant]]" (e.g., "linux/amd64")'
+	COMPGEN --platform strings 'Load only the given platform(s). Formatted as a comma-separated list of "os[/arch[/variant]]" (e.g., "linux/amd64,linux/arm64/v8").'
 	COMPGEN '-q' Switch 'Suppress the load output'
 	COMPGEN --quiet Switch 'Suppress the load output'
 }
 
 Register-Completer docker_image_ls -Option {
-	COMPGEN '-a' Switch 'Show all images (default hides intermediate images)'
-	COMPGEN --all Switch 'Show all images (default hides intermediate images)'
+	COMPGEN '-a' Switch 'Show all images (default hides intermediate and dangling images)'
+	COMPGEN --all Switch 'Show all images (default hides intermediate and dangling images)'
 	COMPGEN --digests Switch 'Show digests'
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
@@ -833,12 +829,13 @@ Register-Completer docker_image_rm -Option {
 	COMPGEN '-f' Switch 'Force removal of the image'
 	COMPGEN --force Switch 'Force removal of the image'
 	COMPGEN --no-prune Switch 'Do not delete untagged parents'
+	COMPGEN --platform strings 'Remove only the given platform variant. Formatted as "os[/arch[/variant]]" (e.g., "linux/amd64")'
 }
 
 Register-Completer docker_image_save -Option {
 	COMPGEN '-o' string 'Write to a file, instead of STDOUT'
 	COMPGEN --output string 'Write to a file, instead of STDOUT'
-	COMPGEN --platform string 'Save only the given platform variant. Formatted as "os[/arch[/variant]]" (e.g., "linux/amd64")'
+	COMPGEN --platform strings 'Save only the given platform(s). Formatted as a comma-separated list of "os[/arch[/variant]]" (e.g., "linux/amd64,linux/arm64/v8")'
 }
 
 Register-Completer docker_manifest {
@@ -889,10 +886,10 @@ Register-Completer docker_network_connect -Option {
 	COMPGEN --alias strings 'Add network-scoped alias for the container'
 	COMPGEN --driver-opt strings 'driver options for the network'
 	COMPGEN --gw-priority int 'Highest gw-priority provides the default gateway. Accepts positive and negative values.'
-	COMPGEN --ip string 'IPv4 address (e.g., "172.30.100.104")'
-	COMPGEN --ip6 string 'IPv6 address (e.g., "2001:db8::33")'
+	COMPGEN --ip ip 'IPv4 address (e.g., "172.30.100.104")'
+	COMPGEN --ip6 ip 'IPv6 address (e.g., "2001:db8::33")'
 	COMPGEN --link list 'Add link to another container'
-	COMPGEN --link-local-ip strings 'Add a link-local address for the container'
+	COMPGEN --link-local-ip ipSlice 'Add a link-local address for the container'
 }
 
 Register-Completer docker_network_create -Option {
@@ -902,10 +899,10 @@ Register-Completer docker_network_create -Option {
 	COMPGEN --config-only Switch 'Create a configuration only network'
 	COMPGEN '-d' string 'Driver to manage the Network'
 	COMPGEN --driver string 'Driver to manage the Network'
-	COMPGEN --gateway strings 'IPv4 or IPv6 Gateway for the master subnet'
+	COMPGEN --gateway ipSlice 'IPv4 or IPv6 Gateway for the master subnet'
 	COMPGEN --ingress Switch 'Create swarm routing-mesh network'
 	COMPGEN --internal Switch 'Restrict external access to the network'
-	COMPGEN --ip-range strings 'Allocate container ip from a sub-range'
+	COMPGEN --ip-range ipNetSlice 'Allocate container ip from a sub-range'
 	COMPGEN --ipam-driver string 'IP Address Management Driver'
 	COMPGEN --ipam-opt map 'Set IPAM driver specific options'
 	COMPGEN --ipv4 Switch 'Enable or disable IPv4 address assignment'
@@ -1173,6 +1170,8 @@ Register-Completer docker_service_create -Option {
 	COMPGEN --log-driver string 'Logging driver for service'
 	COMPGEN --log-opt list 'Logging driver options'
 	COMPGEN --max-concurrent uint 'Number of job tasks to run concurrently (default equal to --replicas)'
+	COMPGEN --memory-swap bytes 'Swap Bytes (-1 for unlimited)'
+	COMPGEN --memory-swappiness int 'Tune memory swappiness (0-100), -1 to reset to default'
 	COMPGEN --mode string 'Service mode ("replicated", "global", "replicated-job", "global-job")'
 	COMPGEN --mount mount 'Attach a filesystem mount to the service'
 	COMPGEN --name string 'Service name'
@@ -1330,6 +1329,8 @@ Register-Completer docker_service_update -Option {
 	COMPGEN --log-driver string 'Logging driver for service'
 	COMPGEN --log-opt list 'Logging driver options'
 	COMPGEN --max-concurrent uint 'Number of job tasks to run concurrently (default equal to --replicas)'
+	COMPGEN --memory-swap bytes 'Swap Bytes (-1 for unlimited)'
+	COMPGEN --memory-swappiness int 'Tune memory swappiness (0-100), -1 to reset to default'
 	COMPGEN --mount-add mount 'Add or update a mount on a service'
 	COMPGEN --mount-rm list 'Remove a mount by its target path'
 	COMPGEN --network-add network 'Add a network'
@@ -1701,8 +1702,8 @@ Register-Completer docker_exec -Option {
 }
 
 Register-Completer docker_images -Option {
-	COMPGEN '-a' Switch 'Show all images (default hides intermediate images)'
-	COMPGEN --all Switch 'Show all images (default hides intermediate images)'
+	COMPGEN '-a' Switch 'Show all images (default hides intermediate and dangling images)'
+	COMPGEN --all Switch 'Show all images (default hides intermediate and dangling images)'
 	COMPGEN --digests Switch 'Show digests'
 	COMPGEN '-f' filter 'Filter output based on conditions provided'
 	COMPGEN --filter filter 'Filter output based on conditions provided'
@@ -1838,11 +1839,10 @@ Register-Completer docker_run -Option {
 	COMPGEN --interactive Switch 'Keep STDIN open even if not attached'
 	COMPGEN --io-maxbandwidth bytes 'Maximum IO bandwidth limit for the system drive (Windows only)'
 	COMPGEN --io-maxiops uint 'Maximum IOps limit for the system drive (Windows only)'
-	COMPGEN --ip string 'IPv4 address (e.g., 172.30.100.104)'
-	COMPGEN --ip6 string 'IPv6 address (e.g., 2001:db8::33)'
+	COMPGEN --ip ip 'IPv4 address (e.g., 172.30.100.104)'
+	COMPGEN --ip6 ip 'IPv6 address (e.g., 2001:db8::33)'
 	COMPGEN --ipc string 'IPC mode to use'
 	COMPGEN --isolation string 'Container isolation technology'
-	COMPGEN --kernel-memory bytes 'Kernel memory limit'
 	COMPGEN '-l' list 'Set meta data on a container'
 	COMPGEN --label list 'Set meta data on a container'
 	COMPGEN --label-file list 'Read in a line delimited file of labels'
@@ -1938,8 +1938,7 @@ Register-Completer docker_commit -Option {
 	COMPGEN --change list 'Apply Dockerfile instruction to the created image'
 	COMPGEN '-m' string 'Commit message'
 	COMPGEN --message string 'Commit message'
-	COMPGEN '-p' Switch 'Pause container during commit'
-	COMPGEN --pause Switch 'Pause container during commit'
+	COMPGEN --no-pause Switch 'Disable pausing container during commit'
 }
 
 Register-Completer docker_cp -Option {
@@ -2009,11 +2008,10 @@ Register-Completer docker_create -Option {
 	COMPGEN --interactive Switch 'Keep STDIN open even if not attached'
 	COMPGEN --io-maxbandwidth bytes 'Maximum IO bandwidth limit for the system drive (Windows only)'
 	COMPGEN --io-maxiops uint 'Maximum IOps limit for the system drive (Windows only)'
-	COMPGEN --ip string 'IPv4 address (e.g., 172.30.100.104)'
-	COMPGEN --ip6 string 'IPv6 address (e.g., 2001:db8::33)'
+	COMPGEN --ip ip 'IPv4 address (e.g., 172.30.100.104)'
+	COMPGEN --ip6 ip 'IPv6 address (e.g., 2001:db8::33)'
 	COMPGEN --ipc string 'IPC mode to use'
 	COMPGEN --isolation string 'Container isolation technology'
-	COMPGEN --kernel-memory bytes 'Kernel memory limit'
 	COMPGEN '-l' list 'Set meta data on a container'
 	COMPGEN --label list 'Set meta data on a container'
 	COMPGEN --label-file list 'Read in a line delimited file of labels'
@@ -2122,7 +2120,7 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
 	COMPGEN '-s' Switch 'Display total file sizes if the type is container'
 	COMPGEN --size Switch 'Display total file sizes if the type is container'
-	COMPGEN --type string 'Return JSON for specified type'
+	COMPGEN --type string 'Only inspect objects of the given type'
 }
 
 Register-Completer docker_kill -Option {
@@ -2133,7 +2131,7 @@ Register-Completer docker_kill -Option {
 Register-Completer docker_load -Option {
 	COMPGEN '-i' string 'Read from tar archive file, instead of STDIN'
 	COMPGEN --input string 'Read from tar archive file, instead of STDIN'
-	COMPGEN --platform string 'Load only the given platform variant. Formatted as "os[/arch[/variant]]" (e.g., "linux/amd64")'
+	COMPGEN --platform strings 'Load only the given platform(s). Formatted as a comma-separated list of "os[/arch[/variant]]" (e.g., "linux/amd64,linux/arm64/v8").'
 	COMPGEN '-q' Switch 'Suppress the load output'
 	COMPGEN --quiet Switch 'Suppress the load output'
 }
@@ -2170,12 +2168,13 @@ Register-Completer docker_rmi -Option {
 	COMPGEN '-f' Switch 'Force removal of the image'
 	COMPGEN --force Switch 'Force removal of the image'
 	COMPGEN --no-prune Switch 'Do not delete untagged parents'
+	COMPGEN --platform strings 'Remove only the given platform variant. Formatted as "os[/arch[/variant]]" (e.g., "linux/amd64")'
 }
 
 Register-Completer docker_save -Option {
 	COMPGEN '-o' string 'Write to a file, instead of STDOUT'
 	COMPGEN --output string 'Write to a file, instead of STDOUT'
-	COMPGEN --platform string 'Save only the given platform variant. Formatted as "os[/arch[/variant]]" (e.g., "linux/amd64")'
+	COMPGEN --platform strings 'Save only the given platform(s). Formatted as a comma-separated list of "os[/arch[/variant]]" (e.g., "linux/amd64,linux/arm64/v8")'
 }
 
 Register-Completer docker_start -Option {
