@@ -20,14 +20,14 @@ $profileAll = {
 		}
 	}
 
-	Invoke-Expression -Command ("{0} convert --profiles" -f ($commandTexts -join ' ')) | Sort-Object
+	Invoke-Expression -Command ("{0} config --profiles" -f ($commandTexts -join ' ')) | Sort-Object
 }
 
 $serviceAll = {
 	param ($WordToComplete, $CommandAst)
 
 	$commandTexts = Get-ComposeCommandText -CommandAst $CommandAst
-	Invoke-Expression -Command ("{0} convert --services" -f ($commandTexts -join ' ')) | Sort-Object
+	Invoke-Expression -Command ("{0} config --services" -f ($commandTexts -join ' ')) | Sort-Object
 }
 
 $serviceRunning = {
