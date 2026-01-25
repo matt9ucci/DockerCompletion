@@ -33,6 +33,7 @@ Register-Completer docker_compose {
 	COMPGEN unpause SubCommand 'Unpause services'
 	COMPGEN up SubCommand 'Create and start containers'
 	COMPGEN version SubCommand 'Show the Docker Compose version information'
+	COMPGEN volumes SubCommand 'List volumes'
 	COMPGEN wait SubCommand 'Block until containers of all (or specified) services stop.'
 	COMPGEN watch SubCommand 'Watch build context for service and rebuild/refresh containers when files are updated'
 }
@@ -445,6 +446,18 @@ Register-Completer docker_compose_version -Option {
 	COMPGEN '-f' string 'Format the output. Values: [pretty | json]. (Default: pretty)'
 	COMPGEN --format string 'Format the output. Values: [pretty | json]. (Default: pretty)'
 	COMPGEN --short Switch 'Shows only Compose''s version number'
+}
+
+Register-Completer docker_compose_volumes -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
+	COMPGEN --format string 'Format output using a custom template:
+''table'':            Print output in table format with column headers (default)
+''table TEMPLATE'':   Print output in table format using the given Go template
+''json'':             Print in JSON format
+''TEMPLATE'':         Print output using the given Go template.
+Refer to https://docs.docker.com/go/formatting/ for more information about formatting output with templates'
+	COMPGEN '-q' Switch 'Only display volume names'
+	COMPGEN --quiet Switch 'Only display volume names'
 }
 
 Register-Completer docker_compose_wait -Option {
