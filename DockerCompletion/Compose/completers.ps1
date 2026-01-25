@@ -1,5 +1,6 @@
 # Docker Compose version v2.35.1
 Register-Completer docker_compose {
+	COMPGEN bridge ManagementCommand 'Convert compose files into another model'
 	COMPGEN alpha SubCommand 'Experimental commands'
 	COMPGEN attach SubCommand 'Attach local standard input, output, and error streams to a service''s running container'
 	COMPGEN build SubCommand 'Build or rebuild services'
@@ -58,6 +59,41 @@ Register-Completer docker_compose -Option {
 	COMPGEN --workdir string 'DEPRECATED! USE --project-directory INSTEAD.
 Specify an alternate working directory
 (default: the path of the, first specified, Compose file)'
+}
+
+Register-Completer docker_compose_bridge {
+	COMPGEN transformations ManagementCommand 'Manage transformation images'
+	COMPGEN convert SubCommand 'Convert compose files to Kubernetes manifests, Helm charts, or another model'
+}
+
+Register-Completer docker_compose_bridge_convert -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
+	COMPGEN '-o' string 'The output directory for the Kubernetes resources'
+	COMPGEN --output string 'The output directory for the Kubernetes resources'
+	COMPGEN --templates string 'Directory containing transformation templates'
+	COMPGEN '-t' stringArray 'Transformation to apply to compose model (default: docker/compose-bridge-kubernetes)'
+	COMPGEN --transformation stringArray 'Transformation to apply to compose model (default: docker/compose-bridge-kubernetes)'
+}
+
+Register-Completer docker_compose_bridge_transformations {
+	COMPGEN create SubCommand 'Create a new transformation'
+	COMPGEN list SubCommand 'List available transformations'
+}
+
+Register-Completer docker_compose_bridge_transformations -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
+}
+
+Register-Completer docker_compose_bridge_transformations_create -Option {
+	COMPGEN '-f' string 'Existing transformation to copy (default: docker/compose-bridge-kubernetes)'
+	COMPGEN --from string 'Existing transformation to copy (default: docker/compose-bridge-kubernetes)'
+}
+
+Register-Completer docker_compose_bridge_transformations_list -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
+	COMPGEN --format string 'Format the output. Values: [table | json]'
+	COMPGEN '-q' Switch 'Only display transformer names'
+	COMPGEN --quiet Switch 'Only display transformer names'
 }
 
 Register-Completer docker_compose_attach -Option {

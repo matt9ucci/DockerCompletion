@@ -71,6 +71,33 @@ Describe 'docker compose' {
 	}
 }
 
+Describe 'docker compose bridge' {
+	It 'completes t' {
+		$result = Get-Result 'docker compose bridge t'
+		$result | Should -HaveCount 1
+		$result[0].CompletionText | Should -Be transformations
+	}
+
+	It 'completes transformations --d' {
+		$result = Get-Result 'docker compose bridge transformations --d'
+		$result | Should -HaveCount 1
+		$result[0].CompletionText | Should -Be --dry-run
+	}
+
+	It 'completes transformations --dry-run ' {
+		$result = Get-Result 'docker compose bridge transformations --dry-run '
+		$result | Should -HaveCount 2
+		$result[0].CompletionText | Should -Be create
+		$result[1].CompletionText | Should -Be list
+	}
+
+	It 'completes transformations --dry-run create ' {
+		$result = Get-Result 'docker compose bridge transformations --dry-run create --f'
+		$result | Should -HaveCount 1
+		$result[0].CompletionText | Should -Be --from
+	}
+}
+
 Describe 'docker compose create' {
 	It 'completes --pull' {
 		$result = Get-Result 'docker compose create --pull '
