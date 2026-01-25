@@ -16,7 +16,6 @@ Register-Completer docker {
 	COMPGEN stack ManagementCommand 'Manage Swarm stacks'
 	COMPGEN swarm ManagementCommand 'Manage Swarm'
 	COMPGEN system ManagementCommand 'Manage Docker'
-	COMPGEN trust ManagementCommand 'Manage trust on Docker images'
 	COMPGEN volume ManagementCommand 'Manage volumes'
 
 	COMPGEN build TopLevelCommand 'Build an image from a Dockerfile'
@@ -1575,54 +1574,6 @@ Register-Completer docker_system_prune -Option {
 	COMPGEN '-f' Switch 'Do not prompt for confirmation'
 	COMPGEN --force Switch 'Do not prompt for confirmation'
 	COMPGEN --volumes Switch 'Prune anonymous volumes'
-}
-
-Register-Completer docker_trust {
-	COMPGEN key ManagementCommand 'Manage keys for signing Docker images'
-	COMPGEN signer ManagementCommand 'Manage entities who can sign Docker images'
-	COMPGEN inspect SubCommand 'Return low-level information about keys and signatures'
-	COMPGEN revoke SubCommand 'Remove trust for an image'
-	COMPGEN sign SubCommand 'Sign an image'
-}
-
-Register-Completer docker_trust_inspect -Option {
-	COMPGEN --pretty Switch 'Print the information in a human friendly format'
-}
-
-Register-Completer docker_trust_key {
-	COMPGEN generate SubCommand 'Generate and load a signing key-pair'
-	COMPGEN load SubCommand 'Load a private key file for signing'
-}
-
-Register-Completer docker_trust_key_generate -Option {
-	COMPGEN --dir string 'Directory to generate key in, defaults to current directory'
-}
-
-Register-Completer docker_trust_key_load -Option {
-	COMPGEN --name string 'Name for the loaded key'
-}
-
-Register-Completer docker_trust_revoke -Option {
-	COMPGEN '-y' Switch 'Do not prompt for confirmation'
-	COMPGEN --yes Switch 'Do not prompt for confirmation'
-}
-
-Register-Completer docker_trust_sign -Option {
-	COMPGEN --local Switch 'Sign a locally tagged image'
-}
-
-Register-Completer docker_trust_signer {
-	COMPGEN add SubCommand 'Add a signer'
-	COMPGEN remove SubCommand 'Remove a signer'
-}
-
-Register-Completer docker_trust_signer_add -Option {
-	COMPGEN --key list 'Path to the signer''s public key file'
-}
-
-Register-Completer docker_trust_signer_remove -Option {
-	COMPGEN '-f' Switch 'Do not prompt for confirmation before removing the most recent signer'
-	COMPGEN --force Switch 'Do not prompt for confirmation before removing the most recent signer'
 }
 
 Register-Completer docker_volume {
