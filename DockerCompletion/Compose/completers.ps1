@@ -1,4 +1,4 @@
-# Docker Compose version v2.35.1
+# Docker Compose version v5.0.2
 Register-Completer docker_compose {
 	COMPGEN bridge ManagementCommand 'Convert compose files into another model'
 	COMPGEN alpha SubCommand 'Experimental commands'
@@ -46,6 +46,7 @@ Register-Completer docker_compose -Option {
 	COMPGEN --env-file stringArray 'Specify an alternate environment file'
 	COMPGEN '-f' stringArray 'Compose configuration files'
 	COMPGEN --file stringArray 'Compose configuration files'
+	COMPGEN --insecure-registry stringArray 'Use insecure registry to pull Compose OCI artifacts. Doesn''t apply to images'
 	COMPGEN --no-ansi Switch 'Do not print ANSI control characters (DEPRECATED)'
 	COMPGEN --parallel int 'Control max parallelism, -1 for unlimited'
 	COMPGEN --profile stringArray 'Specify a profile to enable'
@@ -108,6 +109,7 @@ Register-Completer docker_compose_attach -Option {
 Register-Completer docker_compose_build -Option {
 	COMPGEN --build-arg stringArray 'Set build-time variables for services'
 	COMPGEN --builder string 'Set builder to use'
+	COMPGEN --check Switch 'Check build configuration'
 	COMPGEN --compress Switch 'Compress the build context using gzip. DEPRECATED'
 	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --force-rm Switch 'Always remove intermediate containers. DEPRECATED'
@@ -118,10 +120,12 @@ Register-Completer docker_compose_build -Option {
 	COMPGEN --parallel Switch 'Build images in parallel. DEPRECATED'
 	COMPGEN --print Switch 'Print equivalent bake file'
 	COMPGEN --progress string 'Set type of ui output (auto, tty, plain, json, quiet)'
+	COMPGEN --provenance string 'Add a provenance attestation'
 	COMPGEN --pull Switch 'Always attempt to pull a newer version of the image'
 	COMPGEN --push Switch 'Push service images'
-	COMPGEN '-q' Switch 'Don''t print anything to STDOUT'
-	COMPGEN --quiet Switch 'Don''t print anything to STDOUT'
+	COMPGEN '-q' Switch 'Suppress the build output'
+	COMPGEN --quiet Switch 'Suppress the build output'
+	COMPGEN --sbom string 'Add a SBOM attestation'
 	COMPGEN --ssh string 'Set SSH authentications used when building service images. (use ''default'' for using your default SSH Agent)'
 	COMPGEN --with-dependencies Switch 'Also build dependencies (transitively)'
 }
@@ -145,6 +149,9 @@ Register-Completer docker_compose_config -Option {
 	COMPGEN --format string 'Format the output. Values: [yaml | json]'
 	COMPGEN --hash string 'Print the service config hash, one per line.'
 	COMPGEN --images Switch 'Print the image names, one per line.'
+	COMPGEN --lock-image-digests Switch 'Produces an override file with image digests'
+	COMPGEN --models Switch 'Print the model names, one per line.'
+	COMPGEN --networks Switch 'Print the network names, one per line.'
 	COMPGEN --no-consistency Switch 'Don''t check model consistency - warning: may produce invalid Compose output'
 	COMPGEN --no-env-resolution Switch 'Don''t resolve service env files'
 	COMPGEN --no-interpolate Switch 'Don''t interpolate environment variables'
@@ -198,6 +205,8 @@ Register-Completer docker_compose_down -Option {
 Register-Completer docker_compose_events -Option {
 	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN --json Switch 'Output events as a stream of json objects'
+	COMPGEN --since string 'Show all events created since timestamp'
+	COMPGEN --until string 'Stream events until this timestamp'
 }
 
 Register-Completer docker_compose_exec -Option {
@@ -209,8 +218,8 @@ Register-Completer docker_compose_exec -Option {
 	COMPGEN --index int 'Index of the container if service has multiple replicas'
 	COMPGEN '-i' Switch 'Keep STDIN open even if not attached'
 	COMPGEN --interactive Switch 'Keep STDIN open even if not attached'
-	COMPGEN '-T' Switch 'Disable pseudo-TTY allocation. By default `docker compose exec` allocates a TTY.'
-	COMPGEN --no-TTY Switch 'Disable pseudo-TTY allocation. By default `docker compose exec` allocates a TTY.'
+	COMPGEN '-T' Switch 'Disable pseudo-TTY allocation. By default ''docker compose exec'' allocates a TTY.'
+	COMPGEN --no-tty Switch 'Disable pseudo-TTY allocation. By default ''docker compose exec'' allocates a TTY.'
 	COMPGEN --privileged Switch 'Give extended privileges to the process'
 	COMPGEN '-t' Switch 'Allocate a pseudo-TTY'
 	COMPGEN --tty Switch 'Allocate a pseudo-TTY'
@@ -292,7 +301,9 @@ Refer to https://docs.docker.com/go/formatting/ for more information about forma
 }
 
 Register-Completer docker_compose_publish -Option {
+	COMPGEN --app Switch 'Published compose application (includes referenced images)'
 	COMPGEN --dry-run Switch 'Execute command in dry run mode'
+	COMPGEN --insecure-registry Switch 'Use insecure registry'
 	COMPGEN --oci-version string 'OCI image/artifact specification version (automatically determined by default)'
 	COMPGEN --resolve-image-digests Switch 'Pin image tags to digests'
 	COMPGEN --with-env Switch 'Include environment variables in the published OCI artifact'
@@ -385,6 +396,12 @@ Register-Completer docker_compose_scale -Option {
 	COMPGEN --no-deps Switch 'Don''t start linked services'
 }
 
+Register-Completer docker_compose_start -Option {
+	COMPGEN --dry-run Switch 'Execute command in dry run mode'
+	COMPGEN --wait Switch 'Wait for services to be running|healthy. Implies detached mode.'
+	COMPGEN --wait-timeout int 'Maximum duration in seconds to wait for the project to be running|healthy'
+}
+
 Register-Completer docker_compose_stats -Option {
 	COMPGEN '-a' Switch 'Show all containers (default shows just running)'
 	COMPGEN --all Switch 'Show all containers (default shows just running)'
@@ -426,6 +443,7 @@ Register-Completer docker_compose_up -Option {
 	COMPGEN --no-recreate Switch 'If containers already exist, don''t recreate them. Incompatible with --force-recreate.'
 	COMPGEN --no-start Switch 'Don''t start the services after creating them'
 	COMPGEN --pull string 'Pull image before running ("always"|"missing"|"never")'
+	COMPGEN --quiet-build Switch 'Suppress the build output'
 	COMPGEN --quiet-pull Switch 'Pull without printing progress information'
 	COMPGEN --remove-orphans Switch 'Remove containers for services not defined in the Compose file'
 	COMPGEN '-V' Switch 'Recreate anonymous volumes instead of retrieving data from the previous containers'
