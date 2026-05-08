@@ -1,4 +1,4 @@
-# docker/cli v29.1.5 https://github.com/docker/cli/tree/v29.1.5
+# docker/cli v29.4.3 https://github.com/docker/cli/tree/v29.4.3
 Register-Completer docker {
 	COMPGEN builder ManagementCommand 'Manage builds'
 	COMPGEN checkpoint ManagementCommand 'Manage checkpoints'
@@ -18,6 +18,7 @@ Register-Completer docker {
 	COMPGEN system ManagementCommand 'Manage Docker'
 	COMPGEN volume ManagementCommand 'Manage volumes'
 
+	COMPGEN bake TopLevelCommand 'Build from a file'
 	COMPGEN build TopLevelCommand 'Build an image from a Dockerfile'
 	COMPGEN exec TopLevelCommand 'Execute a command in a running container'
 	COMPGEN images TopLevelCommand 'List images'
@@ -1644,6 +1645,24 @@ Register-Completer docker_volume_rm -Option {
 
 Register-Completer docker_volume_update -Option {
 	COMPGEN --availability string 'Cluster Volume availability ("active", "pause", "drain")'
+}
+
+Register-Completer docker_bake -Option {
+	COMPGEN --builder string 'Override the configured builder instance'
+	COMPGEN --call string 'Set method for evaluating build ("check", "outline", "targets")'
+	COMPGEN --check strings 'Shorthand for "--call=check"'
+	COMPGEN '-f' Switch 'Build definition file'
+	COMPGEN --file Switch 'Build definition file'
+	COMPGEN --load Switch 'Shorthand for "--set=*.output=type=docker"'
+	COMPGEN --metadata-file string 'Write build result metadata to a file'
+	COMPGEN --no-cache Switch 'Do not use cache when building the image'
+	COMPGEN --print Switch 'Print the options without building'
+	COMPGEN --progress string 'Set type of progress output ("auto", "plain", "tty", "rawjson"). Use plain to show container output'
+	COMPGEN --provenance string 'Shorthand for "--set=*.attest=type=provenance"'
+	COMPGEN --pull Switch 'Always attempt to pull all referenced images'
+	COMPGEN --push Switch 'Shorthand for "--set=*.output=type=registry"'
+	COMPGEN --sbom string 'Shorthand for "--set=*.attest=type=sbom"'
+	COMPGEN --set strings 'Override target value (e.g., "targetpattern.key=value")'
 }
 
 Register-Completer docker_build -Option {

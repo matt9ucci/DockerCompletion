@@ -362,7 +362,7 @@ Register-Completer docker_context_use $contextAll
 Register-Completer docker_image_build_--cache-from $imageAll
 Register-Completer docker_image_build_--isolation $isolation
 Register-Completer docker_image_build_--platform $platform
-Register-Completer docker_image_build_--progress { 'auto', 'plain', 'tty' }
+Register-Completer docker_image_build_--progress { 'auto', 'plain', 'rawjson', 'tty' }
 Register-Completer docker_image_build_--network {
 	Param([string]$wordToComplete)
 
@@ -974,6 +974,9 @@ Register-Completer docker_volume_ls_--format {
 Register-Completer docker_volume_rm $volumeAll
 Register-Completer docker_volume_update $volumeCluster
 Register-Completer docker_volume_update_--availability { 'active', 'drain', 'pause' }
+
+Register-Completer docker_bake_--call { 'build', 'check', 'outline', 'targets' }
+Register-Completer docker_bake_--progress { 'auto', 'plain', 'rawjson', 'tty' }
 
 Register-Completer docker_builder_build_--cache-from (Get-Completer docker_image_build_--cache-from)
 Register-Completer docker_builder_build_--isolation (Get-Completer docker_image_build_--isolation)

@@ -1,4 +1,4 @@
-# Docker Compose version v5.0.2
+# Docker Compose version v5.1.3
 Register-Completer docker_compose {
 	COMPGEN bridge ManagementCommand 'Convert compose files into another model'
 	COMPGEN alpha SubCommand 'Experimental commands'
@@ -110,14 +110,10 @@ Register-Completer docker_compose_build -Option {
 	COMPGEN --build-arg stringArray 'Set build-time variables for services'
 	COMPGEN --builder string 'Set builder to use'
 	COMPGEN --check Switch 'Check build configuration'
-	COMPGEN --compress Switch 'Compress the build context using gzip. DEPRECATED'
 	COMPGEN --dry-run Switch 'Execute command in dry run mode'
-	COMPGEN --force-rm Switch 'Always remove intermediate containers. DEPRECATED'
 	COMPGEN '-m' bytes 'Set memory limit for the build container. Not supported by BuildKit.'
 	COMPGEN --memory bytes 'Set memory limit for the build container. Not supported by BuildKit.'
 	COMPGEN --no-cache Switch 'Do not use cache when building the image'
-	COMPGEN --no-rm Switch 'Do not remove intermediate containers after a successful build. DEPRECATED'
-	COMPGEN --parallel Switch 'Build images in parallel. DEPRECATED'
 	COMPGEN --print Switch 'Print equivalent bake file'
 	COMPGEN --progress string 'Set type of ui output (auto, tty, plain, json, quiet)'
 	COMPGEN --provenance string 'Add a provenance attestation'
@@ -316,8 +312,6 @@ Register-Completer docker_compose_pull -Option {
 	COMPGEN --ignore-buildable Switch 'Ignore images that can be built'
 	COMPGEN --ignore-pull-failures Switch 'Pull what it can and ignores images with pull failures'
 	COMPGEN --include-deps Switch 'Also pull services declared as dependencies'
-	COMPGEN --no-parallel Switch 'DEPRECATED disable parallel pulling'
-	COMPGEN --parallel Switch 'DEPRECATED pull multiple images in parallel'
 	COMPGEN --policy string 'Apply pull policy ("missing"|"always")'
 	COMPGEN '-q' Switch 'Pull without printing progress information'
 	COMPGEN --quiet Switch 'Pull without printing progress information'
@@ -339,8 +333,6 @@ Register-Completer docker_compose_restart -Option {
 }
 
 Register-Completer docker_compose_rm -Option {
-	COMPGEN '-a' Switch 'Deprecated - no effect'
-	COMPGEN --all Switch 'Deprecated - no effect'
 	COMPGEN --dry-run Switch 'Execute command in dry run mode'
 	COMPGEN '-f' Switch 'Don''t ask to confirm removal'
 	COMPGEN --force Switch 'Don''t ask to confirm removal'

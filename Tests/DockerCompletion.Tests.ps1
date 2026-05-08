@@ -19,6 +19,14 @@ Describe 'docker' {
 		$result[4].CompletionText | Should -Be --tlsverify
 	}
 
+	It 'completes b' {
+		$result = Get-Result 'docker b'
+		$result | Should -HaveCount 3
+		$result[0].CompletionText | Should -Be builder
+		$result[1].CompletionText | Should -Be bake
+		$result[2].CompletionText | Should -Be build
+	}
+
 	It 'completes co' {
 		$result = Get-Result 'docker co'
 		$result | Should -HaveCount 5
